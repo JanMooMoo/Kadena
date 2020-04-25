@@ -121,7 +121,7 @@ async loadBlockchainData() {
 	console.log('Web3 Detected!')
 	 window.web3 = new Web3(web3.currentProvider);
 	 this.getAccount()
-	 }
+	 }	
 
  	else{console.log('No Web3 Detected')
  	window.web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/72e114745bbf4822b987489c119f858b'));

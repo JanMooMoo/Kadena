@@ -156,14 +156,14 @@ class AdminPage extends Component
 
     accept = (address) =>{
       if(this.props.account.length !== 0){
-        this.contracts['Kadena'].methods.register.cacheSend(address,true,{from:this.props.account})
+        this.contracts['Kadena'].methods.register.cacheSend(address,true)
         console.log("accept",address)
       }
     }
 
     decline = (address) =>{
       if(this.props.account.length !== 0){
-        this.contracts['Kadena'].methods.register.cacheSend(address,false,{from:this.props.account})
+        this.contracts['Kadena'].methods.register.cacheSend(address,false)
       }
     }
 
