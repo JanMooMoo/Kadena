@@ -1,17 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { DrizzleProvider } from "drizzle-react";
+import App from './components/App';
+import Web3 from "web3";
 
+import Kadena from './config/Kadena.json';
+
+
+const options = {
+	web3:{
+		customProvider: new Web3(('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'))
+	},
+
+	contracts: [Kadena],
+	
+	polls:{
+		blocks:2500
+	},
+	
+};
+//debugger;
+//const rootElement = document.getElementById("root")
+//ReactDOM.render(<App/>,rootElement);
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <DrizzleProvider options={options}>
+		<App />
+	</DrizzleProvider>,
+    document.getElementById("root")
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
