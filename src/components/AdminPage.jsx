@@ -83,7 +83,6 @@ class AdminPage extends Component
 
         this.setState({Registration:newsort,event_copy:newsort});
         this.setState({active_length:this.state.Registration.length})
-        console.log(Date(parseInt(this.state.Registration[0].returnValues.time, 10) * 1000))
     })
 
   }
@@ -157,13 +156,14 @@ class AdminPage extends Component
 
     accept = (address) =>{
       if(this.props.account.length !== 0){
-      this.contracts['Kadena'].methods.register(address,true).send({from:this.props.account})
+        this.contracts['Kadena'].methods.register.cacheSend(address,true,{from:this.props.account})
+        console.log("accept",address)
       }
     }
 
     decline = (address) =>{
       if(this.props.account.length !== 0){
-        this.contracts['Kadena'].methods.register(address,false).send({from:this.props.account})
+        this.contracts['Kadena'].methods.register.cacheSend(address,false,{from:this.props.account})
       }
     }
 
@@ -171,14 +171,11 @@ class AdminPage extends Component
         let date = new Date(parseInt(Registration_date, 10) * 1000);
 		let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
         let RegistrationDate = months[date.getMonth()]+ ". " + date.getDate() + ", " + date.getFullYear() 
-        console.log(RegistrationDate)
         return RegistrationDate    
     }
 
 	render()
   {
-    let x = this.props.account
-    console.log("admin",this.props.account)
     
     let body = '';
     let loader = <HydroLoader/>

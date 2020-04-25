@@ -60,7 +60,7 @@ class App extends Component
 			block:500000,
 
 		};
-		//this.loadBlockchainData = this.loadBlockchainData.bind(this);
+		this.loadBlockchainData = this.loadBlockchainData.bind(this);
 	}
 
 	componentDidMount(){
@@ -106,34 +106,39 @@ async loadBlockchainData() {
 	// console.log("metamask")
 	 await ethereum.enable();
 	 web3 = new Web3(ethereum);
-
- 	}
-
- 	else if (typeof web3 !== 'undefined'){
-	console.log('Web3 Detected!')
- 	window.web3 = new Web3(web3.currentProvider);
-	 }
-
- 	else{console.log('No Web3 Detected')
- 	window.web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/72e114745bbf4822b987489c119f858b'));
-
-	}
-
-	const accounts = await web3.eth.getAccounts()
-	this.setState({account: accounts[0]});
-	window.ethereum.on('accountsChanged', function (accounts) {
+	 this.getAccount()
+	 window.ethereum.on('accountsChanged', function (accounts) {
 		window.location.reload();
 	   })
    
 	   window.ethereum.on('networkChanged', function (netId) {
 		window.location.reload();
 	   })
+
+ 	}
+
+ 	else if (typeof web3 !== 'undefined'){
+	console.log('Web3 Detected!')
+	 window.web3 = new Web3(web3.currentProvider);
+	 this.getAccount()
+	 }
+
+ 	else{console.log('No Web3 Detected')
+ 	window.web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/72e114745bbf4822b987489c119f858b'));
+console.log("wondowweb",window.web3)
+	}
+
+	
+		
 	console.log(this.state.account,'details')
-	this.getAccount()
+	
 	}
 
 
 	async getAccount(){
+
+		const accounts = await web3.eth.getAccounts()
+		this.setState({account: accounts[0]});
 		const Kadena  =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
 		this.setState({Kadena:Kadena});
 		setInterval(async()=>{

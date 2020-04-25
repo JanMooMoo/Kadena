@@ -109,7 +109,6 @@ class Sidebar extends Component
 		;
 
 		if (this.props.connection === true && this.props.account.length !== 0) {
-			console.log(this.props.account)
 			user =
 				<div>
 					<div className="user-status-icon">

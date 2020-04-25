@@ -131,8 +131,7 @@ class Event extends Component {
 				disabled = true;
 				buttonText = <span><span role="img" aria-label="alert"> </span> Filled</span>;
 			}
-
-			console.log("EVent ",this.props.account)	
+	
 	  //Friendly URL Title
 	  let rawTitle = event_data[0];
       var titleRemovedSpaces = rawTitle;

@@ -44,9 +44,8 @@ constructor(props,context){
 }
 
 pledge = ()=>{
-    console.log("MOdalPage",this.props.account)
-    if(this.props.account.length !== 0){
-    let pledge = this.contracts['Kadena'].methods.pledge(this.props.id,this.state.amount).send({from:this.props.account})
+  if(this.props.account.length !== 0){
+    let pledge = this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount,{from:this.props.account})
     }
   }
   
@@ -54,7 +53,7 @@ pledge = ()=>{
     render(){
         const{loading} = this.state
         let disabled = false 
-        console.log("EVent Modal",this.props.account)
+        
 
         if(this.state.amount < 1 || this.state.amount > this.props.amount - this.props.committed){
             disabled = true
