@@ -60,10 +60,11 @@ class App extends Component
 			block:500000,
 
 		};
-		this.loadBlockchainData = this.loadBlockchainData.bind(this);
+		//this.loadBlockchainData = this.loadBlockchainData.bind(this);
 	}
 
 	componentDidMount(){
+		this.loadBlockchainData()
 		this.fallback()
 	}
 
@@ -94,7 +95,7 @@ class App extends Component
 	}
 
 fallback(){
-	window.web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/72e114745bbf4822b987489c119f858b'));
+	//window.web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/72e114745bbf4822b987489c119f858b'));
 
 }
 
