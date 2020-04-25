@@ -318,7 +318,7 @@ button {
 	background-color: transparent;
 	margin-top: 50px;
 	border-radius: 5px;
-	min-height: 800px;
+	min-height: 400px;
 	max-width: 1600px;
 	padding-left: 0px;
 	padding-right: 0px;
@@ -1336,8 +1336,11 @@ justify-content: center;
 @media(max-width:650px){
   .centerLabel{
   height:100%;
-  width:100%;
-
+  width:130%;
+  margin-left:-15%;
+}
+.centerLabel h5{
+  text-align: center;
 }
 }
 

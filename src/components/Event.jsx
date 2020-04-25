@@ -98,11 +98,14 @@ class Event extends Component {
 		
 		let body = <div className="card"><div className="card-body"><Loading /></div></div>;
 
-		if (typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined' && typeof this.props.contracts['Kadena'].getHospitalStatus[this.hospital] !== 'undefined') {
+		if (typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].callForHelpDetails[this.event].value) {
 			
 			let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
 
-			let hospital = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
+			let hospital = '';
+			if(typeof this.props.contracts['Kadena'].getHospitalStatus[this.hospital] !== 'undefined'){
+				hospital = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
+			}
 			let event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
 			
 
@@ -114,7 +117,8 @@ class Event extends Component {
 
 			let disabled = false;
 			let buttonText =<span><span role="img" aria-label="alert"> </span> Pledge</span>;
-			 
+			let percentage = numeral(event_data.committed*100/event_data.amount).format('0.00')+ "%";
+
 
 			if (event_data[3] !=='undefined'){
 
@@ -143,7 +147,6 @@ class Event extends Component {
       .join(' ');
 
 	  let titleURL = "/event/"+pagetitle+"/" + this.props.id;
-	  let percentage = numeral(event_data.committed*100/event_data.amount).format('0.00')+ "%";
 	  
 			body =
 				<div className="card">

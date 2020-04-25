@@ -15,8 +15,7 @@ class Home extends Component {
 		
 		return(
 			<div className="home-wrapper">
-				
-
+			
 				<div className = "centerLabel">
 				<h1 className = "hopeLabel" style ={{textAlign:"center"}}> How it Works?</h1>
 				<h5 className = "hopeLabel" >
@@ -35,10 +34,6 @@ class Home extends Component {
 				 <br/>
 				 <br/>
 				 
-				
-				 
-
-
 
 				</h5>
 				</div>

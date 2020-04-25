@@ -459,6 +459,8 @@ contract Kadena is Pausable, Destructible {
 		require(_commit <= needHelp[_eventId].amount);
 		require(_commit <= needHelp[_eventId].amount - needHelp[_eventId].committed);
 		require(msg.sender != needHelp[_eventId].owner);
+		require(registered[msg.sender].registered == true && registered[msg.sender].pending == false, "You are Not Registered");
+
 		
 		if(_event.borrow) require(_event.endDate > now);
 		
@@ -498,6 +500,8 @@ contract Kadena is Pausable, Destructible {
 	{
 	    require(_eventId < giveHelp.length);
 	    require(registered[msg.sender].rating >= 20);
+		require(registered[msg.sender].registered == true && registered[msg.sender].pending == false, "You are Not Registered");
+
 	    require(_take > 0);
 		GiveHelp memory _event = giveHelp[_eventId];
 		if(giveHelp[_eventId].amount >= 5 ){
