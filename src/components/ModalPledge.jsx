@@ -23,6 +23,7 @@ componentWillUnmount(){
 constructor(props,context){
     super(props)
     this.contracts = context.drizzle.contracts;
+    this.account = this.props.accounts[0];
     this.state = {
 
         summaryModalShow: false,
@@ -45,7 +46,8 @@ constructor(props,context){
 
 pledge = ()=>{
     console.log("rarara", this.state.amount)
-    let pledge = this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount,{from:this.props.account})
+    console.log("MOdalPage",this.props.account)
+    let pledge = this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount,{from:this.account})
 }
   
 

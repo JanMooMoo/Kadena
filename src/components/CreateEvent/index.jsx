@@ -217,8 +217,7 @@ class CreateEvent extends Component {
 				this.state.callForHelp.borrow === 'true' ? true : false,	
 				this.state.callForHelp.startdate,
 				this.state.callForHelp.enddate,
-				this.state.ipfs,
-				{from:this.props.account})	
+				this.state.ipfs)	
 				this.setState({help:false},()=>console.log(this.state.help))
 			} 
 	
@@ -229,7 +228,7 @@ class CreateEvent extends Component {
 				this.state.data.country,
 				this.state.data.city,
 				this.state.ipfs,
-				{from:this.props.account}
+				
 			)}
 		}).catch((error) => {
 			this.setState({

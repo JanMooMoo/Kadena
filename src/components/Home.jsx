@@ -34,7 +34,7 @@ class Home extends Component {
 				 There are 4 core function that you could do on Kadena.
 				 <br/>
 				 <br/>
-				 1.
+				 
 				
 				 
 

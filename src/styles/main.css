@@ -9,7 +9,7 @@ html {
 }
 
 body {
-  background-image: repeating-linear-gradient(180deg, #11172b, #101526 50%, #11172b);
+  background-image: repeating-linear-gradient(180deg, #11172b, #1b243f 50%, #11172b);
   color:rgb(162, 183, 207);
   font-weight: 300;
   font-family: 'Lato', sans-serif;
@@ -579,6 +579,7 @@ button.read-more:hover {
   margin-left: -50px;
   top: 50%;
   margin-top:50px;
+  
 }
 
 .drop {
@@ -588,10 +589,12 @@ button.read-more:hover {
   margin-left: -18px;
   position: absolute;
   animation: drop 1.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) 0s infinite;
+  
 }
 
 .drop path {
   fill: #169deb;
+  
 }
 
 .drop-outer {
@@ -608,6 +611,7 @@ button.read-more:hover {
   background-clip: padding-box;
   -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
   background: transparent;
+  
 }
 
 .ripple {
@@ -619,6 +623,7 @@ button.read-more:hover {
   left: -70px;
   perspective: 100;
   transform: rotateX(65deg);
+  
 }
 
 .ripple .ripple-svg {
@@ -626,6 +631,7 @@ button.read-more:hover {
   width: 240px;
   height: 240px;
   opacity: 0;
+  
 }
 
 .ripple .ripple-svg circle {
