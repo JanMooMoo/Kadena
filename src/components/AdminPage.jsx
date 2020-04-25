@@ -156,12 +156,15 @@ class AdminPage extends Component
     })}
 
     accept = (address) =>{
-        this.contracts['Kadena'].methods.register.cacheSend(address,true,{from:this.props.account})
-        console.log("accept",address)
+      if(this.props.account.length !== 0){
+      this.contracts['Kadena'].methods.register(address,true).send({from:this.props.account})
+      }
     }
 
     decline = (address) =>{
-        this.contracts['Kadena'].methods.register.cacheSend(address,false,{from:this.props.account})
+      if(this.props.account.length !== 0){
+        this.contracts['Kadena'].methods.register(address,false).send({from:this.props.account})
+      }
     }
 
     parseDate = (Registration_date) => {

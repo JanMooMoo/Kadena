@@ -45,8 +45,10 @@ constructor(props,context){
 
 pledge = ()=>{
     console.log("MOdalPage",this.props.account)
-    let pledge = this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount,{from:this.props.account})
-}
+    if(this.props.account.length !== 0){
+    let pledge = this.contracts['Kadena'].methods.pledge(this.props.id,this.state.amount).send({from:this.props.account})
+    }
+  }
   
 
     render(){
