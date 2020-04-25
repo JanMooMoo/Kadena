@@ -37,6 +37,7 @@ class AdminPage extends Component
 
         Registration:[],
         Kadena:[],
+        account:'',
 
       };
 
@@ -173,7 +174,7 @@ class AdminPage extends Component
 
 	render()
   {
-    
+    let x = this.props.account
     console.log("admin",this.props.account)
     
     let body = '';

@@ -118,17 +118,16 @@ async loadBlockchainData() {
 
 	}
 
-	window.ethereum.on('accountsChanged', function (accounts) {
- 	window.location.reload();
-	})
-
-	window.ethereum.on('networkChanged', function (netId) {
- 	window.location.reload();
-	})
-
 	const accounts = await web3.eth.getAccounts()
 	this.setState({account: accounts[0]});
-	
+	window.ethereum.on('accountsChanged', function (accounts) {
+		window.location.reload();
+	   })
+   
+	   window.ethereum.on('networkChanged', function (netId) {
+		window.location.reload();
+	   })
+	console.log(this.state.account,'details')
 	this.getAccount()
 	}
 
@@ -227,7 +226,7 @@ async loadBlockchainData() {
 					error = {this.state.error}
 					account ={this.state.account}/>}/>
 					<Route path="/how-it-works" component={Home} />
-					<Route path="/admin" component={AdminPage} account ={this.state.account} />
+					<Route path="/admin" render={props =><AdminPage {...props} account = {this.state.account}/>}/>
 					</div>
 			}
 		
@@ -242,7 +241,7 @@ async loadBlockchainData() {
 					error = {this.state.error}
 					account ={this.state.account}/>}/>
 					<Route path="/how-it-works" component={Home} />
-					<Route path="/admin" component={AdminPage} account = {this.state.account} />
+					<Route path="/admin" render={props =><AdminPage {...props} account = {this.state.account}/>}/>
 					
 				</div>
 			;

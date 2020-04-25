@@ -104,8 +104,6 @@ class Event extends Component {
 
 			let hospital = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
 			let event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
-
-			console.log("wahaha",event_data)
 			
 
 			let image = this.getImage();
@@ -134,7 +132,7 @@ class Event extends Component {
 				buttonText = <span><span role="img" aria-label="alert"> </span> Filled</span>;
 			}
 
-			
+			console.log("EVent ",this.props.account)	
 	  //Friendly URL Title
 	  let rawTitle = event_data[0];
       var titleRemovedSpaces = rawTitle;
@@ -191,6 +189,7 @@ class Event extends Component {
 					item = {event_data.item}
 					committed = {event_data.committed}
 					amount = {event_data.amount}
+					account = {this.props.account}
       				/>}
 					</div>
 					

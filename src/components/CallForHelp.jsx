@@ -180,6 +180,7 @@ class CallForHelp extends Component
     if (typeof this.props.contracts['Kadena'].getNeededCount[this.Count] !== 'undefined' && this.state.active_length !== 'undefined') {
       
       let count = this.state.needHelpActive.length
+      console.log("EVent pagination",this.props.account)
      
 			 if (overall === 0 ) {
 				body = <p className="text-center not-found"><span role="img" aria-label="thinking">🤔</span>&nbsp;No events found. <a href="/createevent">Try creating one.</a></p>;

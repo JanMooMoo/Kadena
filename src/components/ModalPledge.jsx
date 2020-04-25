@@ -23,7 +23,6 @@ componentWillUnmount(){
 constructor(props,context){
     super(props)
     this.contracts = context.drizzle.contracts;
-    this.account = this.props.accounts[0];
     this.state = {
 
         summaryModalShow: false,
@@ -40,20 +39,20 @@ constructor(props,context){
     let amount = event.target.value;
     this.setState({
         amount: amount
-    },()=>console.log("amount",this.state.amount));
+    },()=>console.log());
     
 }
 
 pledge = ()=>{
-    console.log("rarara", this.state.amount)
     console.log("MOdalPage",this.props.account)
-    let pledge = this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount,{from:this.account})
+    let pledge = this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount,{from:this.props.account})
 }
   
 
     render(){
         const{loading} = this.state
         let disabled = false 
+        console.log("EVent Modal",this.props.account)
 
         if(this.state.amount < 1 || this.state.amount > this.props.amount - this.props.committed){
             disabled = true
