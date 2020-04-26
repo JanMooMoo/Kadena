@@ -10,6 +10,7 @@ html {
 
 body {
   background-image: repeating-linear-gradient(180deg, #11172b, #1b243f 50%, #11172b);
+  
   color:rgb(162, 183, 207);
   font-weight: 300;
   font-family: 'Lato', sans-serif;
