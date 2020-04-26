@@ -91,8 +91,8 @@ pledge = ()=>{
 		    </div>
 		</div>
     
-            <button className="btn btn-outline-dark" title="Make Your Event Live" onClick={this.pledge} disabled={disabled}>Pledge</button>
-            <button className="btn btn-outline-dark ml-2" title="Make Your Event Live" onClick={this.props.onHide}>Cancel</button>
+            <button className="btn btn-outline-dark" title="Pledge" onClick={this.pledge} disabled={disabled}>Pledge</button>
+            <button className="btn btn-outline-dark ml-2" title="Cancel" onClick={this.props.onHide}>Cancel</button>
        
       
       </Modal.Body>

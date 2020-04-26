@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import HydroLoader from './HydroLoader';
 import Event from './Event';
 import Web3 from 'web3';
-import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 
 
 class CallForHelp extends Component
@@ -31,6 +30,10 @@ class CallForHelp extends Component
         needHelpDeactive:[],
         pledgeModalShow: false,
 
+        dateNow:0,
+        isActive:true,
+        search:"title"
+
       };
 
 	    this.contracts = context.drizzle.contracts;
@@ -50,64 +53,86 @@ class CallForHelp extends Component
     window.scrollTo(0, 0);
   }
 
-  
 
   //Loads Blockhain Data,
   async loadBlockchain(){
    
     const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
-    const Kadena  =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
-    if (this._isMounted){
-    this.setState({Kadena});}
-    
+    const dateTime = Date.now();
+		
     const blockNumber = await web3.eth.getBlockNumber();
     
     if (this._isMounted){
     this.setState({blocks:blockNumber - 50000});
-    this.setState({latestblocks:blockNumber - 1,
-                    needHelpActive:[],
-                    needHelpDeactive:[]});
-    }
-  
-    Kadena.getPastEvents("NeedAHand",{fromBlock: 5000000, toBlock:this.state.latestblocks})
-    .then(events=>{
-    if (this._isMounted){
-    this.setState({loadingchain:true})
-    
-    var newsort= events.concat().sort((a,b)=> 
-    b.blockNumber- a.blockNumber);
-    
-    this.setState({needHelpActive:newsort,event_copy:newsort});
-    this.setState({active_length:this.state.needHelpActive.length})
-    this.setState({loadingchain:false});}
-    console.log(this.state.needHelpActive)}).catch((err)=>console.error(err))
-    
-    //Listens for New Events
-    Kadena.events.NeedAHand({fromBlock: this.state.blockNumber, toBlock:'latest'})
-    .on('data', (log) => setTimeout(()=> {
-    if (this._isMounted){
+    this.setState({latestblocks:blockNumber - 1,dateNow:Math.floor(dateTime / 1000)});
+    this.getActiveEvents()
 
+    this.props.kadena.events.NeedAHand({fromBlock: this.state.blockNumber, toBlock:'latest'})
+    .on('data', (log) => setTimeout(()=> {
+    if(this.state.isActive){
     this.setState({needHelpActive:[...this.state.needHelpActive,log]});
     var newest = this.state.needHelpActive
     var newsort= newest.concat().sort((a,b)=> b.blockNumber- a.blockNumber);
 
     this.setState({needHelpActive:newsort,event_copy:newsort});
     this.setState({active_length:this.state.needHelpActive.length})}
-    },10000))
-    
+     } ,10000))
+    }
+     
+    }
+
+    getActiveEvents(){
+
+    if (this._isMounted){
+      this.setState({needHelpActive:[],active_length:0,loadingchain:true})
+    }
+    this.props.kadena.getPastEvents("NeedAHand",{fromBlock: 5000000, toBlock:this.state.latestblocks})
+    .then(events=>{
+      console.log(events)
+    if (this._isMounted){
+      if(this.state.isActive){
+    var newest = events.filter((activeEvents)=>activeEvents.returnValues.endDate >=(this.state.dateNow));
+      }
+      else {
+        newest = events.filter((activeEvents)=>activeEvents.returnValues.endDate <=(this.state.dateNow));
+      }
+    var newsort= newest.concat().sort((a,b)=> 
+    b.blockNumber- a.blockNumber);
+    this.setState({needHelpActive:newsort,event_copy:newsort});
+    this.setState({active_length:this.state.needHelpActive.length})
+    this.setState({loadingchain:false});}
+    console.log(this.state.needHelpActive)}).catch((err)=>console.error(err))
   }
 
-  searchChange = (e) =>{
-    let {value} = e.target
-    this.setState({filter:value},()=>{
-    if(this.state.filter !== 'all'){
-    var filter = this.state.event_copy;
-    filter = filter.filter((events)=>{
-      return events.returnValues
-    })  
+
+  ActiveEvent=()=>{
+
+		this.setState({
+			isActive: true,
+		},()=>{if(this.state.isActive){
+     
+		this.getActiveEvents()
+		this.props.history.push("/needhelp/"+1)}})
+    }
+    
+  PastEvent=()=>{
+      this.setState({
+        isActive: false,
+      },()=>{if(!this.state.isActive){
+      this.getActiveEvents()
+      this.props.history.push("/needhelp/"+1)}})
       }
-    })
+
+
+  
+  searchChange = (event) =>{
+    let search = event.target.value;
+
+  this.setState({
+    search: search
+    },()=>console.log())
   }
+
  //Search Active Events By Name
   updateSearch=(e)=>{
     let {value} = e.target
@@ -117,50 +142,42 @@ class CallForHelp extends Component
     var filteredEvents = this.state.event_copy;
 
     filteredEvents = filteredEvents.filter((events)=>{
-    return events.returnValues.name.toLowerCase().search(this.state.value.toLowerCase()) !==-1;
+      if(this.state.search === 'title'){
+    return events.returnValues.title.toLowerCase().search(this.state.value.toLowerCase()) !==-1;}
+    else if(this.state.search === 'hospital'){
+      return events.returnValues.hospital.toLowerCase().search(this.state.value.toLowerCase()) !==-1;}
+      else if(this.state.search === 'item'){
+        return events.returnValues.item.toLowerCase().search(this.state.value.toLowerCase()) !==-1;}
+        else
+        return events.returnValues.category.toLowerCase().search(this.state.value.toLowerCase()) !==-1;
+
     })
     }else{ filteredEvents = this.state.event_copy}
 
-  this.setState({Events_Blockchain:filteredEvents});
-    this.props.history.push("/cases/"+1)
+  this.setState({needHelpActive:filteredEvents});
+    this.props.history.push("/needhelp/"+1)
   })}
 
 
-  //Search Active Events By Name
-  searchByName=(e)=>{
-    let {value} = e.target
-    this.setState({value},()=>{
-    if(this.state.value !== ""){
-   
-    var filteredEvents = this.state.event_copy;
-
-    filteredEvents = filteredEvents.filter((events)=>{
-    return events.returnValues.status.toLowerCase().search(this.state.value.toLowerCase()) !==-1;
-    })
-    }else{ filteredEvents = this.state.event_copy}
-
-  this.setState({Events_Blockchain:filteredEvents});
-    this.props.history.push("/cases/"+1)
-  })}
 
   //Sort Active Events By Date(Newest/Oldest)
   toggleSortDate=(e)=>{
     let {value} = e.target
     this.setState({value},()=>{
-    const{Events_Blockchain}=this.state
-    const{ended}=Events_Blockchain
+    const{needHelpActive}=this.state
+    const{ended}=needHelpActive
     var newPolls = ended
 
      if(this.state.isOldestFirst){
-        newPolls = Events_Blockchain.concat().sort((a,b)=> b.returnValues.eventId - a.returnValues.eventId)
+        newPolls = needHelpActive.concat().sort((a,b)=> b.returnValues.eventId - a.returnValues.eventId)
         }
     else {
-        newPolls = Events_Blockchain.concat().sort((a,b)=> a.returnValues.eventId - b.returnValues.eventId)
+        newPolls = needHelpActive.concat().sort((a,b)=> a.returnValues.eventId - b.returnValues.eventId)
       }
 
       this.setState({
       isOldestFirst: !this.state.isOldestFirst,
-      Events_Blockchain:newPolls
+      needHelpActive:newPolls
       });
     })}
 
@@ -173,6 +190,7 @@ class CallForHelp extends Component
     let overall = '';
     
     let body = '';
+    let header = "Active Needs";
     let loader = <HydroLoader/>
 
     
@@ -181,6 +199,10 @@ class CallForHelp extends Component
       
       let count = this.state.needHelpActive.length
       console.log("EVent pagination",this.props.account)
+
+      if(!this.state.isActive){
+        header = "Concluded Needs"
+      }
      
 			 if (overall === 0 ) {
 				body = <p className="text-center not-found"><span role="img" aria-label="thinking">🤔</span>&nbsp;No events found. <a href="/createevent">Try creating one.</a></p>;
@@ -255,7 +277,10 @@ class CallForHelp extends Component
 				}
 
         body =<div >
+          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)}>Active Events</button>
+              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)}>Past Events</button>
 						<div className="row user-list mt-4">
+              
 							{this.state.loadingchain? loader:events_list}
 						</div>
 						{pagination}
@@ -279,7 +304,13 @@ class CallForHelp extends Component
       <div className="input-group input-group-lg">
         <div className="input-group-prepend ">
             
-        <span className="input-group-text search-icon" id="inputGroup-sizing-lg"><i className="fa fa-search"></i>&nbsp;Location</span>
+        <select className="input-group-text search-icon" id="inputGroup-sizing-lg" onChange={this.searchChange}>
+        <option className="black"value="title" key="1">Title</option>
+        <option className="black"value="hospital" key="2">Hospital</option>
+        <option className="black"value="item" key="3">Item</option>
+        <option className="black"value="category" key="4">Category</option>
+        </select>
+
         </div>
         <input type="text" placeholder="Search" value={this.state.value} onChange={this.updateSearch.bind(this)} className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
       </div>
@@ -288,7 +319,7 @@ class CallForHelp extends Component
       <div>
 
         <div className="row row_mobile">
-         <h2 className="col-lg-10 col-md-9 col-sm-8"><i className="fa fa-calendar-alt"></i> Recent Cases</h2>
+         <h2 className="col-lg-10 col-md-9 col-sm-8"><i className="fa fa-calendar-alt"></i> {header}</h2>
          
          <button className="btn sort_button col-lg-2 col-md-3 col-sm-3" value={this.state.value} onClick={this.toggleSortDate} onChange={this.toggleSortDate.bind(this)}>{this.state.isOldestFirst ?'Sort: Oldest':'Sort: Newest'}</button>
         </div>

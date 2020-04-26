@@ -224,8 +224,8 @@ console.log("wondowweb",window.web3)
 			  
 			  body = 
 			  		<div>
-			  		<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account}/>} />
-					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account}/> }  />
+			  		<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>} />
+					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/> }  />
 					<Route path="/createevent" render={props=><CreateEvent  {...props}
 					upload={this.state.upload}
 					done = {this.state.done}
@@ -239,8 +239,8 @@ console.log("wondowweb",window.web3)
 		else {
 			body =
 				<div>
-					<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account}/>} />
-					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account}/>}  />
+					<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>} />
+					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
 					<Route path="/createevent" render={props=><CreateEvent  {...props}
 					upload={this.state.upload}
 					done = {this.state.done}
