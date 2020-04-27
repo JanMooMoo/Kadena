@@ -91,7 +91,7 @@ class CallForHelp extends Component
     }
     this.state.Kadena.getPastEvents("NeedAHand",{fromBlock: 5000000, toBlock:this.state.latestblocks})
     .then(events=>{
-      console.log(events)
+    
     if (this._isMounted){
       if(this.state.isActive){
     var newest = events.filter((activeEvents)=>activeEvents.returnValues.endDate >=(this.state.dateNow));
@@ -104,26 +104,25 @@ class CallForHelp extends Component
     this.setState({needHelpActive:newsort,event_copy:newsort});
     this.setState({active_length:this.state.needHelpActive.length})
     this.setState({loadingchain:false});}
-    console.log(this.state.needHelpActive)}).catch((err)=>console.error(err))
+   }).catch((err)=>console.error(err))
   }
 
 
   ActiveEvent=()=>{
-
 		this.setState({
 			isActive: true,
-		},()=>{if(this.state.isActive){
+		})
      
 		this.getActiveEvents()
-		this.props.history.push("/needhelp/"+1)}})
+		this.props.history.push("/needhelp/"+1)
     }
     
   PastEvent=()=>{
       this.setState({
         isActive: false,
-      },()=>{if(!this.state.isActive){
+      })
       this.getActiveEvents()
-      this.props.history.push("/needhelp/"+1)}})
+      this.props.history.push("/needhelp/"+1)
       }
 
 
@@ -201,7 +200,6 @@ class CallForHelp extends Component
     if (typeof this.props.contracts['Kadena'].getNeededCount[this.Count] !== 'undefined' && this.state.active_length !== 'undefined') {
       
       let count = this.state.needHelpActive.length
-      console.log("EVent pagination",this.props.account)
 
       if(!this.state.isActive){
         header = "Concluded Needs"
@@ -308,10 +306,10 @@ class CallForHelp extends Component
         <div className="input-group-prepend ">
             
         <select className="input-group-text search-icon" id="inputGroup-sizing-lg" onChange={this.searchChange}>
-        <option className="black"value="title" key="1">Title</option>
-        <option className="black"value="hospital" key="2">Hospital</option>
-        <option className="black"value="item" key="3">Item</option>
-        <option className="black"value="category" key="4">Category</option>
+        <option className="blue"value="title" key="1">Title</option>
+        <option className="blue"value="hospital" key="2">Hospital</option>
+        <option className="blue"value="item" key="3">Item</option>
+        <option className="blue"value="category" key="4">Category</option>
         </select>
 
         </div>
@@ -324,7 +322,7 @@ class CallForHelp extends Component
         <div className="row row_mobile">
          <h2 className="col-lg-10 col-md-9 col-sm-8"><i className="fa fa-calendar-alt"></i> {header}</h2>
          
-         <button className="btn sort_button col-lg-2 col-md-3 col-sm-3" value={this.state.value} onChange={this.toggleSortDate.bind(this)}>{this.state.isOldestFirst ?'Sort: Oldest':'Sort: Newest'}</button>
+         <button className="btn sort_button col-lg-2 col-md-3 col-sm-3" value={this.state.value} onClick={this.toggleSortDate.bind(this)}>{this.state.isOldestFirst ?'Sort: Oldest':'Sort: Newest'}</button>
         </div>
         <div className="row row_mobile">
         <span className="col-lg-10 col-md-9 col-sm-8"></span>

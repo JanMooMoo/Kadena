@@ -128,13 +128,8 @@ async loadBlockchainData() {
 
  	else{console.log('No Web3 Detected')
  	window.web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/72e114745bbf4822b987489c119f858b'));
-console.log("wondowweb",window.web3)
 	}
 
-	
-		
-	console.log(this.state.account,'details')
-	
 	}
 
 
@@ -164,7 +159,7 @@ console.log("wondowweb",window.web3)
 				});
 			}
 			if(log.returnValues.pledgedBy === this.state.account){
-				console.log("loooog",log)
+
 				toast(<NotifyPledge hash={log.blockHash} 
 					receiver={log.returnValues.receiver} 
 					item = {log.returnValues.item}

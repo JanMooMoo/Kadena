@@ -9,9 +9,12 @@ import Kadena from './config/Kadena.json';
 
 const options = {
 	web3:{
-		customProvider: new Web3(('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'))
+		customProvider: new Web3(('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')),
+		
 	},
-
+	events: {
+		Kadena: ['Pledged','Taken','Registration','NeedAHand','GiveAHand']
+	},
 	contracts: [Kadena],
 	
 	polls:{

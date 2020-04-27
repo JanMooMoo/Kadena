@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { drizzleConnect } from "drizzle-react";
 import PropTypes from 'prop-types';
-import makeBlockie from 'ethereum-blockies-base64';
 
 import ipfs from '../utils/ipfs';
 import Web3 from 'web3';
@@ -11,29 +10,9 @@ import Loading from './Loading';
 import HospitalNotFound from './HospitalNotFound';
 
 import ActivityPledge from './ActivityPledge';
+import ActivityCallForHelp from './ActivityCallForHelp';
 
-import JwPagination from 'jw-react-pagination';
-import { Link } from 'react-router-dom';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
-
-
-let numeral = require('numeral');
-
-const customStyles = {
-    ul: {
-		border:'rgb(10, 53, 88)'
-        
-    },
-    li: {
-		border:'rgb(10, 53, 88)'
-       
-    },
-    a: {
-		color: '#007bff',
-		
-	},
-	
-};
 
 class HospitalProfile extends Component {
 
@@ -86,10 +65,7 @@ class HospitalProfile extends Component {
 		});
 	}
 
-    
-
   }
-
 
 	updateIPFS = () => {
 		if (
@@ -172,7 +148,6 @@ class HospitalProfile extends Component {
 			} else {
 
                 let hospital_data = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
-                console.log("blala",hospital_data)
                 //let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
                 let image = this.getImage();
                 let description = this.getDescription();
@@ -238,10 +213,16 @@ class HospitalProfile extends Component {
 
 				</div>
 
-			<hr/>
+            <h3 className="col-lg-12 mt-4"><i class="fas fa-users"></i> Activities</h3>
+            <hr/>
             
-            <ActivityPledge Kadena = {this.state.Kadena} blocks = {this.state.latestblocks} account={this.props.match.params.id}/>
-			
+            
+            <ActivityCallForHelp Kadena = {this.state.Kadena} account={this.props.match.params.id} history={this.props.history}/>
+            <ActivityCallForHelp Kadena = {this.state.Kadena} account={this.props.match.params.id} history={this.props.history}/>
+
+            <ActivityPledge Kadena = {this.state.Kadena} account={this.props.match.params.id} history={this.props.history}/>
+            <ActivityPledge Kadena = {this.state.Kadena} account={this.props.match.params.id} history={this.props.history}/>
+
             </div>;
 				}
 				
@@ -268,16 +249,18 @@ class HospitalProfile extends Component {
 	}
 
 	componentDidMount() {
-		this._isMounted = true;
+        this._isMounted = true;
+        this.account = this.props.match.params.id
+        this.page = this.props.match.params.page
 		this.updateIPFS();
 		this.loadblockhain();
 	}
 
-	componentDidUpdate() {
+	componentDidUpdate(prevProps) {
 		this.updateIPFS();
-		//this.afterApprove();
-	}
-
+		
+    }
+    
 	componentWillUnmount() {
 		this.isCancelled = true;
 		this._isMounted = false;

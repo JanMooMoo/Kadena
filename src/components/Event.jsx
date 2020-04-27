@@ -101,13 +101,13 @@ class Event extends Component {
 		if (typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].callForHelpDetails[this.event].value) {
 			
 			let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
-
+			
 			let hospital = '';
 			if(typeof this.props.contracts['Kadena'].getHospitalStatus[this.hospital] !== 'undefined'){
 				hospital = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
 			}
 			let event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
-			
+			console.log("wqaawawawaw")
 
 			let image = this.getImage();
 			let description = this.getDescription();
@@ -138,7 +138,6 @@ class Event extends Component {
 	
 	  //Friendly URL Title
 	  let rawTitle = event_data.title;
-	  console.log("title",rawTitle)
       var titleRemovedSpaces = rawTitle;
 	  titleRemovedSpaces = titleRemovedSpaces.replace(/ /g, '-');
 
@@ -218,6 +217,7 @@ class Event extends Component {
 	componentDidUpdate() {
 		this.updateIPFS();
 	}
+
 
 	componentWillUnmount() {
 		this.isCancelled = true;
