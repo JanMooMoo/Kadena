@@ -44,10 +44,10 @@ constructor(props,context){
 }
 
 pledge = ()=>{
-  if(this.props.account.length !== 0){
+ 
     let pledge = this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount)
     }
-  }
+  
   
 
     render(){

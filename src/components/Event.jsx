@@ -86,7 +86,7 @@ class Event extends Component {
 		let description = <Loading />;
 		if (this.state.ipfs_problem) description = <p className="text-center mb-0 event-description"><span role="img" aria-label="monkey">🙊</span>We can not load description</p>;
 		if (this.state.description !== null) {
-			let text = this.state.description.length > 30 ? this.state.description.slice(0, 90) + '...' : this.state.description;
+			let text = this.state.description.length > 30 ? this.state.description.slice(0, 70) + '...' : this.state.description;
 			description = <strong>{text}</strong>;
 			
 		}
@@ -137,7 +137,8 @@ class Event extends Component {
 			}
 	
 	  //Friendly URL Title
-	  let rawTitle = event_data[0];
+	  let rawTitle = event_data.title;
+	  console.log("title",rawTitle)
       var titleRemovedSpaces = rawTitle;
 	  titleRemovedSpaces = titleRemovedSpaces.replace(/ /g, '-');
 
@@ -150,13 +151,14 @@ class Event extends Component {
 	  
 			body =
 				<div className="card">
-					<div className="image_wrapper">
+					<Link to={titleURL} className="linkDisplay"><div className="image_wrapper">
 					
             <img className="card-img-top event-image" src={image} alt={event_data[0]} />
 		
-		  </div>
+		  </div></Link>
+				<Link to={titleURL} className="linkDisplay">
 					<div className="card-header text-muted event-header ">
-					<p className="small  mb-0 text-center">Hospital: {hospital._hospitalName}</p>
+					<p className="small mb-0 text-center"><strong>Hospital: {hospital._hospitalName}</strong></p>
 						
 					</div>
 
@@ -164,21 +166,22 @@ class Event extends Component {
 						<h5 className="card-title event-title" title={event_data.title} >
 							{event_data.title}
 						</h5>
+						
 						{description}
 						
-					</div>
+					</div></Link>
 
 
+					<Link to={titleURL} className="linkDisplay">
 					<ul className="list-group list-group-flush">
-
 						<li className="list-group-item small"><strong>Item: {event_data.item}</strong></li>
 						<li className="list-group-item small"><strong>Date Needed: {start_date} - {startdate.toLocaleTimeString()}</strong></li>
 						{event_data.borrow && <li className="list-group-item small"><strong>Will Return In: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
 						{!event_data.borrow && <li className="list-group-item small"><strong>Will Close In: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
 						<li className="list-group-item small"><strong>Committed: {event_data.committed}/{event_data.amount}</strong></li>
 						<li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
-
 					</ul>
+					</Link>
 
 					<div className="card-footer text-muted text-center">
 					<button className="btnAlive" disabled={disabled} onClick={() => this.setState({pledgeModalShow:true})}>{buttonText} <i class="far fa-check-circle"></i></button>

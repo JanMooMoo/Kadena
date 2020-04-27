@@ -15,6 +15,7 @@ import Home from './Home';
 import AdminPage from './AdminPage';
 import CreateEvent from './CreateEvent/';
 
+import HospitalProfile from './HospitalProfile';
 import CallForHelp from './CallForHelp';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 
@@ -29,6 +30,8 @@ import NotifyNetwork from './NotifyNetwork';
 
 import NotifyRequest from './NotifyRequest';
 import NotifyPledge from './NotifyPledge';
+
+import PageNeed from './PageNeed';
 
 import NetworkError from './NetworkError';
 import LoadingApp from './LoadingApp';
@@ -178,8 +181,6 @@ console.log("wondowweb",window.web3)
 	
 	}
 
-	
-
 	refresh = () =>{
 		if(this.state.refresh){
 		this.setState({refresh:false},()=>console.log())}
@@ -226,6 +227,8 @@ console.log("wondowweb",window.web3)
 			  		<div>
 			  		<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>} />
 					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/> }  />
+					<Route path="/event/:page/:id"  render={props => <PageNeed {...props} kadena={this.state.Kadena}/>}/>
+					<Route path="/hospital/:page/:id"  render={props => <HospitalProfile {...props}/>}/>
 					<Route path="/createevent" render={props=><CreateEvent  {...props}
 					upload={this.state.upload}
 					done = {this.state.done}
@@ -241,6 +244,8 @@ console.log("wondowweb",window.web3)
 				<div>
 					<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>} />
 					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
+					<Route path="/event/:page/:id"  render={props => <PageNeed {...props} kadena={this.state.Kadena}/>}/>
+					<Route path="/hospital/:page/:id"  render={props => <HospitalProfile {...props}/>}/>
 					<Route path="/createevent" render={props=><CreateEvent  {...props}
 					upload={this.state.upload}
 					done = {this.state.done}

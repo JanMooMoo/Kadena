@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import HydroLoader from './HydroLoader';
 import Event from './Event';
 import Web3 from 'web3';
+import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 
 
 class CallForHelp extends Component
@@ -59,6 +60,8 @@ class CallForHelp extends Component
    
     const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
     const dateTime = Date.now();
+    const Kadena  =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
+		this.setState({Kadena:Kadena});
 		
     const blockNumber = await web3.eth.getBlockNumber();
     
@@ -67,7 +70,7 @@ class CallForHelp extends Component
     this.setState({latestblocks:blockNumber - 1,dateNow:Math.floor(dateTime / 1000)});
     this.getActiveEvents()
 
-    this.props.kadena.events.NeedAHand({fromBlock: this.state.blockNumber, toBlock:'latest'})
+    this.state.Kadena.events.NeedAHand({fromBlock: this.state.blockNumber, toBlock:'latest'})
     .on('data', (log) => setTimeout(()=> {
     if(this.state.isActive){
     this.setState({needHelpActive:[...this.state.needHelpActive,log]});
@@ -86,7 +89,7 @@ class CallForHelp extends Component
     if (this._isMounted){
       this.setState({needHelpActive:[],active_length:0,loadingchain:true})
     }
-    this.props.kadena.getPastEvents("NeedAHand",{fromBlock: 5000000, toBlock:this.state.latestblocks})
+    this.state.Kadena.getPastEvents("NeedAHand",{fromBlock: 5000000, toBlock:this.state.latestblocks})
     .then(events=>{
       console.log(events)
     if (this._isMounted){
@@ -321,11 +324,11 @@ class CallForHelp extends Component
         <div className="row row_mobile">
          <h2 className="col-lg-10 col-md-9 col-sm-8"><i className="fa fa-calendar-alt"></i> {header}</h2>
          
-         <button className="btn sort_button col-lg-2 col-md-3 col-sm-3" value={this.state.value} onClick={this.toggleSortDate} onChange={this.toggleSortDate.bind(this)}>{this.state.isOldestFirst ?'Sort: Oldest':'Sort: Newest'}</button>
+         <button className="btn sort_button col-lg-2 col-md-3 col-sm-3" value={this.state.value} onChange={this.toggleSortDate.bind(this)}>{this.state.isOldestFirst ?'Sort: Oldest':'Sort: Newest'}</button>
         </div>
         <div className="row row_mobile">
         <span className="col-lg-10 col-md-9 col-sm-8"></span>
-        {this.state.Events_Blockchain.length !== this.state.active_length && this.state.Events_Blockchain.length !== 0 && <h5 className="result col-lg-2 col-md-3 col-sm-3">Results: {this.state.Events_Blockchain.length}</h5>}
+        {this.state.needHelpActive.length !== this.state.active_length && this.state.needHelpActive.length !== 0 && <h5 className="result col-lg-2 col-md-3 col-sm-3">Results: {this.state.needHelpActive.length}</h5>}
         <div >
         </div>
         </div>
@@ -336,7 +339,8 @@ class CallForHelp extends Component
       <div className="topics-wrapper">
            
           <br/>
-          <p style ={{textAlign:"center"}}><i class="fas fa-info-circle"></i> Data & information displayed in this site are mock data. It does not represent any real entity or organization. </p>
+          <p style ={{textAlign:"center"}}><i class="fas fa-info-circle"></i> Data & information displayed in this site are mock data. It does not represent or in any way connected to real entity or organization. </p>
+
 
       </div>
   
