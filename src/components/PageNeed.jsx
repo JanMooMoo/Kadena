@@ -78,7 +78,14 @@ class PageNeed extends Component {
 	    latestblocks:blockNumber - 1,
 		commited:[]
 		});
-	}
+    }
+    if (this._isMounted){
+    this.elem = setInterval(async()=>{ 
+    const committed = await Kadena.methods.callForHelpDetails(this.props.match.params.id).call()
+ 
+   
+        this.setState({commits:committed.committed})
+    console.log("commiitit",this.state.commits)},2000)}
 
     Kadena.getPastEvents("Pledged",{filter:{eventId:this.props.match.params.id},fromBlock: 5000000, toBlock:this.state.latestblocks})
     .then(events=>{
@@ -199,8 +206,8 @@ class PageNeed extends Component {
                 
                 let event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
                 let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
-                let percentage = numeral(event_data.committed*100/event_data.amount).format('0.00')+ "%";
-
+                let percentage = numeral(this.state.commits*100/event_data.amount).format('0.00')+ "%";
+                console.log("PageNeed", event_data)
                
 				let image = this.getImage();
                 let description = this.getDescription();
@@ -337,11 +344,12 @@ class PageNeed extends Component {
 	componentDidUpdate() {
 		this.updateIPFS();
 		//this.afterApprove();
-	}
-
+    }
+    
 	componentWillUnmount() {
 		this.isCancelled = true;
-		this._isMounted = false;
+        this._isMounted = false;
+        clearInterval(this.elem)
 	}
 }
 

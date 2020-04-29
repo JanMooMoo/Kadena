@@ -44,14 +44,12 @@ constructor(props,context){
 }
 
 pledge = ()=>{
-
-    let pledge = this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount)
+    this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount)
     }
   
   
 
     render(){
-        const{loading} = this.state
         let disabled = false 
         
 
