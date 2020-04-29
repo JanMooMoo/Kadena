@@ -9,7 +9,8 @@ import Loader from './Loader';
 import Error from './Error';
 import Done from './Done';
 
-import CallForHelp from './CallForHelp'
+import CallForHelp from './CallForHelp';
+import LendAHand from './LendAHand';
 
 class CreateEvent extends Component {
 	constructor(props, context) {
@@ -46,8 +47,21 @@ class CreateEvent extends Component {
 				remarks:null,
 				id:0
 			},
+
+			lendAHand:{
+				title:null,
+				category:null,
+				item:null,
+				amount:0,
+				borrow:false,
+				startdate:0,
+				enddate:0,
+				remarks:null,
+				id:0
+			},
 			
 			help:false,
+			lend:false,
 			editIpfs:false,
 			eventId:null,
 
@@ -67,6 +81,31 @@ class CreateEvent extends Component {
 			stage: 25,
 			title: 'Uploading event image...',
 			callForHelp: {
+				title:title,
+				category:category,
+				item:item,
+				amount:parseInt(amount, 10),
+				borrow:borrow,
+				startdate:startdate,
+				enddate:enddate,
+				remarks:remarks,
+				id: parseInt(id, 10)
+			}
+		}, () => {
+			this.stageUpdater(90);
+			this.readFile(file);
+		});
+	}
+
+	lendAHand = (title,category,item,amount,borrow,startdate,enddate,remarks,file,id) =>{
+		console.log("checking",title,category,item,amount,borrow,startdate,enddate,remarks)
+		this.setState({
+			lend:true,
+			upload: true,
+			redirect:false,
+			stage: 25,
+			title: 'Uploading event image...',
+			lendAHand: {
 				title:title,
 				category:category,
 				item:item,
@@ -108,81 +147,24 @@ class CreateEvent extends Component {
 		});
 	}
 
-	editEvent = (eventId,name, time, nationality,place, description,location,file,id) => {
-		console.log(this.contracts)
-		this.setState({
-			eventId:parseInt(eventId,10),
-			editIpfs:true,
-			upload: true,
-			redirect:false,
-			stage: 25,
-			title: 'Uploading event image...',
-			data: {
-				
-				name: name,
-				time: time,
-				nationality:nationality,
-				place:place,
-				description:description,
-				location:location,
-				id: parseInt(id, 10)
-			}
-		}, () => {
-			this.stageUpdater(90);
-			this.readFile2(file);
-		});
-	}
+	
 
 	readFile = (file) => {
 		let reader = new window.FileReader();
 		console.log(file);
 		reader.readAsDataURL(file);
+		if(this.state.help === true){
+		reader.onloadend = () => this.uploadHelp(reader);	
+		}
+		else if(this.state.lend === true){
+		reader.onloadend = () => this.uploadLend(reader);		
+		}
+		else{
 		reader.onloadend = () => this.convertAndUpload(reader);
+		}
 	}
 
-	readFile2 = (file) => {
-		let reader = new window.FileReader();
-		console.log(file);
-		reader.readAsDataURL(file);
-		reader.onloadend = () => this.convertAndUpload2(reader);
-	}
-
-
-
-
-	convertAndUpload2 = (reader) => {
-		let pinit = process.env.NODE_ENV === 'production';
-
-		let data = JSON.stringify({
-			image: reader.result,
-			text: this.state.data.description,
-			location:this.state.data.location
-		});
-
-		let buffer = Buffer.from(data);
-
-		ipfs.add(buffer, {pin: pinit}).then((hash) => {
-			this.setState({
-				stage: 95,
-				title: 'Creating transaction...',
-				ipfs: hash[0].hash
-			});
-
-		
-			this.contracts['CovidPH'].methods.editCase.cacheSend(this.state.eventId,this.state.data.name,this.state.data.time, this.state.ipfs,this.state.data.nationality,
-				this.state.data.place,{from:this.props.account})
-				
-		}).catch((error) => {
-			this.setState({
-				error: true,
-				error_text: 'IPFS Error'
-			});
-		});
-	};
-
-
-
-    convertAndUpload = (reader) => {
+	uploadHelp = (reader) => {
 		let pinit = process.env.NODE_ENV === 'production';
 		let data = [];
 		if(this.state.help === true){
@@ -191,13 +173,95 @@ class CreateEvent extends Component {
 				remarks: this.state.callForHelp.remarks,
 		})}
 		
-		else{ 
+		let buffer = Buffer.from(data);
+
+		ipfs.add(buffer, {pin: pinit}).then((hash) => {
+			this.setState({
+				stage: 95,
+				title: 'Creating transaction...',
+				ipfs: hash[0].hash
+			});
+			
+			this.transactionHelp();
+			 
+		}).catch((error) => {
+			this.setState({
+				error: true,
+				error_text: 'IPFS Error'
+			});
+		});
+	};
+
+	uploadLend = (reader) => {
+		let pinit = process.env.NODE_ENV === 'production';
+		let data = [];
+		if(this.state.lend === true){
+			 data = JSON.stringify({
+				image: reader.result,
+				remarks: this.state.lendAHand.remarks,
+		})}
+		
+		let buffer = Buffer.from(data);
+
+		ipfs.add(buffer, {pin: pinit}).then((hash) => {
+			this.setState({
+				stage: 95,
+				title: 'Creating transaction...',
+				ipfs: hash[0].hash
+			});
+			
+			this.transactionLend();
+			 
+		}).catch((error) => {
+			this.setState({
+				error: true,
+				error_text: 'IPFS Error'
+			});
+		});
+	};
+
+	transactionHelp = () => {
+		let id = this.contracts['Kadena'].methods.callForHelp.cacheSend( 
+			   this.state.callForHelp.title,
+			   this.state.callForHelp.category,
+			   this.state.callForHelp.item,
+			   this.state.callForHelp.amount,
+			   this.state.callForHelp.borrow === 'true' ? true : false,	
+			   this.state.callForHelp.startdate,
+			   this.state.callForHelp.enddate,
+			   this.state.ipfs)	
+			   this.setState({help:false},()=>console.log(this.state.help))			
+		this.transactionChecker(id)
+		//this.setRedirect();
+	}
+
+	transactionLend = () => {
+		let id = this.contracts['Kadena'].methods.provideAssistance.cacheSend( 
+			this.state.lendAHand.title,
+			this.state.lendAHand.category,
+			this.state.lendAHand.item,
+			this.state.lendAHand.amount,
+			this.state.lendAHand.borrow === 'true' ? true : false,	
+			this.state.lendAHand.startdate,
+			this.state.lendAHand.enddate,
+			this.state.ipfs)	
+			this.setState({lend:false},()=>console.log("dsadasd",this.state.lend))
+			   	
+		this.transactionChecker(id)
+		//this.setRedirect();
+	}
+	
+
+    convertAndUpload = (reader) => {
+		let pinit = process.env.NODE_ENV === 'production';
+		let data = [];
+
 			data = JSON.stringify({
 			image: reader.result,
 			address: this.state.data.address,
 			description: this.state.data.description,
 			contact:this.state.data.contact
-		})};
+		})
 		
 		let buffer = Buffer.from(data);
 
@@ -208,28 +272,10 @@ class CreateEvent extends Component {
 				ipfs: hash[0].hash
 			});
 
-			if(this.state.help === true){
-			this.contracts['Kadena'].methods.callForHelp.cacheSend( 
-				this.state.callForHelp.title,
-				this.state.callForHelp.category,
-				this.state.callForHelp.item,
-				this.state.callForHelp.amount,
-				this.state.callForHelp.borrow === 'true' ? true : false,	
-				this.state.callForHelp.startdate,
-				this.state.callForHelp.enddate,
-				this.state.ipfs)	
-				this.setState({help:false},()=>console.log(this.state.help))
-			} 
-	
-			else{
-			//this.uploadTransaction();
-			this.contracts['Kadena'].methods.registerHospital.cacheSend(
-				this.state.data.name,
-				this.state.data.country,
-				this.state.data.city,
-				this.state.ipfs,
-				
-			)}
+			this.uploadRegistration();
+			 
+			//this.transactionChecker(id)
+
 		}).catch((error) => {
 			this.setState({
 				error: true,
@@ -238,37 +284,22 @@ class CreateEvent extends Component {
 		});
 	};
 
-	uploadTransaction = () => {
-		let id = this.contracts['OpenEvents'].methods.createEvent.cacheSend(
+	uploadRegistration = () => {
+		let id = this.contracts['Kadena'].methods.registerHospital.cacheSend(
 			this.state.data.name,
-			this.state.data.time,
-			this.state.data.price,
-			this.state.data.currency === 'eth' ? false : true,
-			this.state.data.limited,
-			this.state.data.seats,
-			this.state.ipfs,
-			this.state.data.type
-		);
+			this.state.data.country,
+			this.state.data.city,
+			this.state.ipfs)
 
 		this.transactionChecker(id)
 		//this.setRedirect();
 	}
-
-	/*setRedirect=()=>{
-		this.setState({
-			redirect: true
-		  })
-		if(this.state.redirect){
-			return <Redirect to='/'/>
-		}
-	}*/
 
 	createNewEvent= () =>{
 	this.setState({error:false,
 			done:false,
 			upload:false},()=>console.log())
 	}
-
 
 	transactionChecker = (id) => {
 		let tx_checker = setInterval(() => {
@@ -333,10 +364,22 @@ class CreateEvent extends Component {
 			body= <Error message={this.state.error_text} createNewEvent = {this.createNewEvent}/>;
 		}
 
-		if(this.state.txType === "Call for Help"){
+		else if(this.state.txType === "Call for Help"){
 			body = 
+			this.state.upload || this.props.upload ?
+			<Loader progress={this.state.stage} text={this.state.title} /> :
 			<div className="row">	
 			<CallForHelp callForHelp={this.callForHelp}  account={this.props.account}/>
+			</div>
+		}
+
+		else if(this.state.txType === "Lend a Hand"){
+			
+			body = 
+			this.state.upload || this.props.upload ?
+			<Loader progress={this.state.stage} text={this.state.title} /> :
+			<div className="row">	
+			<LendAHand lendAHand={this.lendAHand}  account={this.props.account}/>
 			</div>
 		}
 
@@ -355,7 +398,7 @@ class CreateEvent extends Component {
 				{disabled && <div className = "row alert-connection col-lg-6 mb-6">
 				<div className="connection-box">
                     <p className="mt-1 mb-1">
-                    <span>⚠️ You are on VIEW ONLY mode. You won't be able to submit because you are not connected to a network.</span>
+                    <span role="img" aria-label="halt">⚠️ You are on VIEW ONLY mode. You won't be able to submit because you are not connected to a network.</span>
                     </p>
                 </div>	
 				</div>}

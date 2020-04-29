@@ -11,13 +11,13 @@ import {ModalPledge} from './ModalPledge'
 let numeral = require('numeral');
 
 
-class Event extends Component {
+class EventGive extends Component {
     constructor(props, context) {
 		
 
         super(props);
 		this.contracts = context.drizzle.contracts;
-		this.event = this.contracts['Kadena'].methods.callForHelpDetails.cacheCall(this.props.id);
+		this.event = this.contracts['Kadena'].methods.giveAssistanceDetails.cacheCall(this.props.id);
 		this.hospital = this.contracts['Kadena'].methods.getHospitalStatus.cacheCall(this.props.owner);
 
 		this.account = this.props.accounts[0];
@@ -44,7 +44,7 @@ class Event extends Component {
 
 	updateIPFS = () => {
 
-		if (this.state.loaded === false && this.state.loading === false && typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined') {
+		if (this.state.loaded === false && this.state.loading === false && typeof this.props.contracts['Kadena'].giveAssistanceDetails[this.event] !== 'undefined') {
 			this.setState({
 				loading: true
 			}, () => {
@@ -98,7 +98,7 @@ class Event extends Component {
 		
 		let body = <div className="card"><div className="card-body"><Loading /></div></div>;
 
-		if (typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].callForHelpDetails[this.event].value) {
+		if (typeof this.props.contracts['Kadena'].giveAssistanceDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].giveAssistanceDetails[this.event].value) {
 			
 			let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
 			
@@ -106,8 +106,9 @@ class Event extends Component {
 			if(typeof this.props.contracts['Kadena'].getHospitalStatus[this.hospital] !== 'undefined'){
 				hospital = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
 			}
-			let event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
-			console.log("EVent_data", event_data)
+			let event_data = this.props.contracts['Kadena'].giveAssistanceDetails[this.event].value;
+			console.log("wqaawawawaw")
+
 			let image = this.getImage();
 			let description = this.getDescription();
 		
@@ -145,7 +146,7 @@ class Event extends Component {
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
       .join(' ');
 
-	  let titleURL = "/need/"+pagetitle+"/" + this.props.id;
+	  let titleURL = "/event/"+pagetitle+"/" + this.props.id;
 	  
 			body =
 				<div className="card">
@@ -224,7 +225,7 @@ class Event extends Component {
 	}
 }
 
-Event.contextTypes = {
+EventGive.contextTypes = {
     drizzle: PropTypes.object
 }
 
@@ -236,5 +237,5 @@ const mapStateToProps = state => {
     };
 };
 
-const AppContainer = drizzleConnect(Event, mapStateToProps);
+const AppContainer = drizzleConnect(EventGive, mapStateToProps);
 export default AppContainer;

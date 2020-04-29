@@ -12,6 +12,8 @@ import HospitalNotFound from './HospitalNotFound';
 import ActivityPledge from './ActivityPledge';
 import ActivityCallForHelp from './ActivityCallForHelp';
 
+
+
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 
 class HospitalProfile extends Component {

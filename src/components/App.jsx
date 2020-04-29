@@ -16,7 +16,9 @@ import AdminPage from './AdminPage';
 import CreateEvent from './CreateEvent/';
 
 import HospitalProfile from './HospitalProfile';
+import HospitalList from './HospitalList';
 import CallForHelp from './CallForHelp';
+import LendAHand from './LendAHand';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 
 
@@ -130,6 +132,7 @@ async loadBlockchainData() {
  	window.web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/72e114745bbf4822b987489c119f858b'));
 	}
 
+
 	}
 
 
@@ -222,8 +225,10 @@ async loadBlockchainData() {
 			  		<div>
 			  		<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>} />
 					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/> }  />
-					<Route path="/event/:page/:id"  render={props => <PageNeed {...props} kadena={this.state.Kadena}/>}/>
+					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
+					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} kadena={this.state.Kadena}/>}/>
 					<Route path="/hospital/:page/:id"  render={props => <HospitalProfile {...props}/>}/>
+					<Route path="/hospital-list"  render={props => <HospitalList {...props}/>}/>
 					<Route path="/createevent" render={props=><CreateEvent  {...props}
 					upload={this.state.upload}
 					done = {this.state.done}
@@ -239,8 +244,10 @@ async loadBlockchainData() {
 				<div>
 					<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>} />
 					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
-					<Route path="/event/:page/:id"  render={props => <PageNeed {...props} kadena={this.state.Kadena}/>}/>
+					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
+					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} kadena={this.state.Kadena}/>}/>
 					<Route path="/hospital/:page/:id"  render={props => <HospitalProfile {...props}/>}/>
+					<Route path="/hospital-list"  render={props => <HospitalList {...props}/>}/>
 					<Route path="/createevent" render={props=><CreateEvent  {...props}
 					upload={this.state.upload}
 					done = {this.state.done}
@@ -257,12 +264,17 @@ async loadBlockchainData() {
 			<Router>
 
 				<div id="wrapper" className="toggled">
-
 					<Sidebar connection={!connecting} account={this.state.account} accountDetails = {this.state.accountDetails} connect = {this.loadBlockchainData} refresh = {this.refresh}/>
+			
 					<div id="page-content-wrapper" className="sidebar-open">
-						<div className="branding">
+						
+
+						<div className="branding" style ={{textAlign:"center"}}>
+						<div className="brand-wrapper">
 						<h1>KaDenA</h1>
+						
 						<p>Hospital Alliance</p>
+						</div>
 						</div>
 						<div className="container-fluid">
 							<div className="page-wrapper-inner">

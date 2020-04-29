@@ -6,14 +6,12 @@ import { Link } from 'react-router-dom';
 
 // Import dApp Components
 import HydroLoader from './HydroLoader';
-import Event from './Event';
+import EventGive from './EventGive';
 import Web3 from 'web3';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
-
-class CallForHelp extends Component
+class LendAHand extends Component
 {
   constructor(props, context)
   {
@@ -60,6 +58,7 @@ class CallForHelp extends Component
   //Loads Blockhain Data,
   async loadBlockchain(){
    
+    const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
     const dateTime = Date.now();
     const Kadena  =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
 		this.setState({Kadena:Kadena});
@@ -71,7 +70,7 @@ class CallForHelp extends Component
     this.setState({latestblocks:blockNumber - 1,dateNow:Math.floor(dateTime / 1000)});
     this.getActiveEvents()
 
-    this.state.Kadena.events.NeedAHand({fromBlock: this.state.blockNumber, toBlock:'latest'})
+    this.state.Kadena.events.GiveAHand({fromBlock: this.state.blockNumber, toBlock:'latest'})
     .on('data', (log) => setTimeout(()=> {
     if(this.state.isActive){
     this.setState({needHelpActive:[...this.state.needHelpActive,log]});
@@ -85,18 +84,12 @@ class CallForHelp extends Component
      
     }
 
-    async getActiveEvents(){
+    getActiveEvents(){
 
-      const blockNumber = await web3.eth.getBlockNumber();
-    
-      if (this._isMounted){
-      this.setState({blocks:blockNumber - 50000});
-      this.setState({latestblocks:blockNumber - 1});
-      }
     if (this._isMounted){
       this.setState({needHelpActive:[],active_length:0,loadingchain:true})
     }
-    this.state.Kadena.getPastEvents("NeedAHand",{fromBlock: 5000000, toBlock:this.state.latestblocks})
+    this.state.Kadena.getPastEvents("GiveAHand",{fromBlock: 5000000, toBlock:this.state.latestblocks})
     .then(events=>{
     
     if (this._isMounted){
@@ -109,6 +102,7 @@ class CallForHelp extends Component
     var newsort= newest.concat().sort((a,b)=> 
     b.blockNumber- a.blockNumber);
     this.setState({needHelpActive:newsort,event_copy:newsort});
+    console.log("sdadasdsa",this.state.needHelpActive)
     this.setState({active_length:this.state.needHelpActive.length})
     this.setState({loadingchain:false});}
    }).catch((err)=>console.error(err))
@@ -121,7 +115,7 @@ class CallForHelp extends Component
 		})
      
 		this.getActiveEvents()
-		this.props.history.push("/needhelp/"+1)
+		this.props.history.push("/givehelp/"+1)
     }
     
   PastEvent=()=>{
@@ -129,7 +123,7 @@ class CallForHelp extends Component
         isActive: false,
       })
       this.getActiveEvents()
-      this.props.history.push("/needhelp/"+1)
+      this.props.history.push("/givehelp/"+1)
       }
 
 
@@ -164,7 +158,7 @@ class CallForHelp extends Component
     }else{ filteredEvents = this.state.event_copy}
 
   this.setState({needHelpActive:filteredEvents});
-    this.props.history.push("/needhelp/"+1)
+    this.props.history.push("/givehelp/"+1)
   })}
 
 
@@ -199,7 +193,7 @@ class CallForHelp extends Component
     let overall = '';
     
     let body = '';
-    let header = "Active Needs";
+    let header = "Active Assistance";
     let loader = <HydroLoader/>
 
     
@@ -209,7 +203,7 @@ class CallForHelp extends Component
       let count = this.state.needHelpActive.length
 
       if(!this.state.isActive){
-        header = "Concluded Needs"
+        header = "Concluded Assistance"
       }
      
 			 if (overall === 0 ) {
@@ -229,11 +223,11 @@ class CallForHelp extends Component
         let events_list = [];
         
         for (let i = start; i < end; i++) {
-          events_list.push(<Event inquire={this.props.inquire}
+          events_list.push(<EventGive
             key={this.state.needHelpActive[i].returnValues.eventId}
             id={this.state.needHelpActive[i].returnValues.eventId}
             ipfs={this.state.needHelpActive[i].returnValues.ipfs}
-            owner={this.state.needHelpActive[i].returnValues.ownerNeed} 
+            owner={this.state.needHelpActive[i].returnValues.ownerGive} 
             account = {this.props.account}/>);
         }
         
@@ -249,7 +243,7 @@ class CallForHelp extends Component
                  let active = i === currentPage ? 'active' : '';
                links.push(
                 <li className={"page-item " + active} key={i}>
-								<Link to={"/needhelp/" + i}  className="page-link">{i}</Link>
+								<Link to={"/givehelp/" + i}  className="page-link">{i}</Link>
                 </li>
               );
             } 
@@ -260,7 +254,7 @@ class CallForHelp extends Component
               let active = i === currentPage ? 'active' : '';
               links.push(
                 <li className={"page-item " + active} key={i}>
-								<Link to={"/needhelp/" + i}  className="page-link">{i}</Link>
+								<Link to={"/givehelp/" + i}  className="page-link">{i}</Link>
                 </li>
               );
             } 
@@ -270,7 +264,7 @@ class CallForHelp extends Component
 						let active = i === currentPage ? 'active' : '';
 						links.push(
 							<li className={"page-item " + active} key={i}>
-								<Link to={"/needhelp/" + i}  className="page-link">{i}</Link>
+								<Link to={"/givehelp/" + i}  className="page-link">{i}</Link>
 							</li>
 						);
 					}
@@ -285,8 +279,8 @@ class CallForHelp extends Component
 				}
 
         body =<div >
-          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)}>Active Events</button>
-              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)}>Past Events</button>
+          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)}>Active Assistance</button>
+              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)}>Past Assistance</button>
 						<div className="row user-list mt-4">
               
 							{this.state.loadingchain? loader:events_list}
@@ -344,7 +338,6 @@ class CallForHelp extends Component
       <div className="topics-wrapper">
            
           <br/>
-          
           <p style ={{textAlign:"center"}}><i class="fas fa-info-circle"></i> Data & information displayed in this site are mock data. It does not represent or in any way connected to real entity or organization. </p>
 
 
@@ -372,7 +365,7 @@ class CallForHelp extends Component
 
 }
 
-CallForHelp.contextTypes = {
+LendAHand.contextTypes = {
     drizzle: PropTypes.object
 }
 
@@ -384,5 +377,5 @@ const mapStateToProps = state =>
     };
 };
 
-const AppContainer = drizzleConnect(CallForHelp, mapStateToProps);
+const AppContainer = drizzleConnect(LendAHand, mapStateToProps);
 export default AppContainer;

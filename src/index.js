@@ -13,7 +13,6 @@ const options = {
 		
 	},
 	events: {
-		Kadena: ['Pledged','Taken','Registration','NeedAHand','GiveAHand']
 	},
 	contracts: [Kadena],
 	

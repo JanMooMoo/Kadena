@@ -14,6 +14,7 @@ import JwPagination from 'jw-react-pagination';
 import { Link } from 'react-router-dom';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 import {ModalPledge} from './ModalPledge'
+import HospitalCard from './HospitalCard';
 
 
 let numeral = require('numeral');
@@ -106,7 +107,7 @@ class PageNeed extends Component {
     this.setState({commited:newsort});
     this.setState({active_length:this.state.commited.length})}
     this.setState({load:false});
-    }),15000)
+    }),12000)
   }
 
 
@@ -192,10 +193,8 @@ class PageNeed extends Component {
 
 		
 
-		if (typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined') {
-			if (this.props.contracts['Kadena'].callForHelpDetails[this.event].error) {
-				body = <div className="text-center mt-5"><span role="img" aria-label="warning">🚨</span> Need Help Details Not Found</div>;
-			} else {
+		if (typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].callForHelpDetails[this.event].value) {
+			
 
                 
                 let event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
@@ -207,31 +206,7 @@ class PageNeed extends Component {
                 let description = this.getDescription();
                 
                 let organizer = event_data.owner;
-                let stars ='Hospital Rating:';
-                
-
-                if(typeof this.props.contracts['Kadena'].getHospitalStatus[this.contracts['Kadena'].methods.getHospitalStatus.cacheCall(organizer)] !== 'undefined' &&
-                this.props.contracts['Kadena'].getHospitalStatus[this.contracts['Kadena'].methods.getHospitalStatus.cacheCall(organizer)].value){
-                    
-                    organizer = this.props.contracts['Kadena'].getHospitalStatus[this.contracts['Kadena'].methods.getHospitalStatus.cacheCall(organizer)].value;
-                    
-
-                    if (organizer._rating < 20 ){
-                        stars = <div className="rating">Hospital Rating: <i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
-                    else if (organizer._rating <= 25){
-                        stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
-                    else if (organizer._rating <= 30){
-                        stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
-                    else if (organizer._rating <= 35){
-                        stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
-                    else if (organizer._rating <=40){
-                        stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/></div>}
-                    else {
-                        stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/></div>
-                    };
-              
-                }
-                
+            
                  
 				let buttonText = " Pledge";
 
@@ -299,10 +274,8 @@ class PageNeed extends Component {
 					amount = {event_data.amount}
       				/>}
             	<br />
-				    <p className="small text-truncate mb-0"><strong>Hospital: {organizer._hospitalName}</strong></p>
-				    <p className="small text-truncate mb-0"><strong>Location: {organizer._city}, {organizer._country}</strong></p>
-                    <p className="small text-truncate mb-0" ><strong title={organizer._rating}>{stars}</strong></p>
-				    <p className="small text-truncate mb-0"><strong>Website: www.helloworld.com</strong></p>
+                    <HospitalCard organizer = {organizer} history={this.props.history}/>
+				   
 
            		<br />
 				</div>
@@ -337,7 +310,7 @@ class PageNeed extends Component {
 			else {
 				body = <EventNotFound/>;
 				}
-			}
+			
 			
 		}
 

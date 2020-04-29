@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Link,NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import makeBlockie from 'ethereum-blockies-base64';
-import { drizzleConnect } from 'drizzle-react';
+
 
 class Sidebar extends Component
 {
@@ -143,11 +143,11 @@ class Sidebar extends Component
 						</li>
 
 						<li>
-							<NavLink to="/infographics" className="nav-link" activeClassName="nav-link-active"onClick={() => {this.sidebarClick(this)}} ><i class="fas fa-search-plus" title="Give Help"></i> <span className="toggleHidden"> Give Help Section</span></NavLink>
+							<NavLink to="/givehelp/1" className="nav-link" activeClassName="nav-link-active"onClick={() => {this.sidebarClick(this)}} ><i class="fas fa-search-plus" title="Give Help"></i> <span className="toggleHidden"> Give Help Section</span></NavLink>
 						</li>
 						
 						<li>
-							<NavLink to="/calendar" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-calendar-alt" title = "Calendar"></i> <span className="toggleHidden"> List of Hospitals</span></NavLink>
+							<NavLink to="/hospital-list" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-calendar-alt" title = "Calendar"></i> <span className="toggleHidden"> List of Hospitals</span></NavLink>
 						</li>
 						
 					</ul>
@@ -198,11 +198,10 @@ class Sidebar extends Component
 						</li>
 
 						<li>
-							<NavLink to="/infographics" className="nav-link" activeClassName="nav-link-active"onClick={() => {this.sidebarClick(this)}} ><i class="fas fa-search-plus" title="Give Help"></i> <span className="toggleHidden"> Give Help Section</span></NavLink>
-						</li>
+							<NavLink to="/givehelp/1" className="nav-link" activeClassName="nav-link-active"onClick={() => {this.sidebarClick(this)}} ><i class="fas fa-search-plus" title="Give Help"></i> <span className="toggleHidden"> Give Help Section</span></NavLink>						</li>
 						
 						<li>
-							<NavLink to="/calendar" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-calendar-alt" title = "Calendar"></i> <span className="toggleHidden"> List of Hospitals</span></NavLink>
+							<NavLink to="/hospital-list" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-calendar-alt" title = "Calendar"></i> <span className="toggleHidden"> List of Hospitals</span></NavLink>
 						</li>
 						
 					</ul>
@@ -235,20 +234,9 @@ class Sidebar extends Component
 }
 
 Sidebar.contextTypes = {
-	router: PropTypes.object,
-	drizzle: PropTypes.object
+    router: PropTypes.object
 };
 
-const mapStateToProps = state =>
-{
-    return {
-		contracts: state.contracts,
-		accounts: state.accounts
-    };
-};
-
-const AppContainer = drizzleConnect(Sidebar, mapStateToProps);
-
-export default AppContainer;
+export default Sidebar;
 
 

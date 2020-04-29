@@ -256,7 +256,7 @@ class Form extends Component {
 			</ul>
 
 			<div className="card-footer text-muted text-center">
-				<button className="btn btn-dark" disabled=""><i className="fas fa-ticket-alt"></i> Pledge</button>
+				<button className="btnAlive" disabled=""> Profile</button>
 			</div>
 </div>
 </div>

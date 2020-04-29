@@ -5,7 +5,7 @@ import 'react-datetime/css/react-datetime.css';
 
 let numeral = require('numeral');
 
-class CallForHelp extends Component {
+class LendAHand extends Component {
 	constructor(props) {
 		super(props);
 
@@ -36,7 +36,8 @@ class CallForHelp extends Component {
             organ:["Aortic Valve","Pulmonary Valve","Cornea","Liver","Kidney","Pancreas","Heart","Lung","Bone Marrow"],
             staff:["Medical Surgical Nurse","Intensive Care Unit Nurse","Operating Room Nurse","Radiographers"],
             medicine:["Astrophine Sulfate","Albendazole","Benzathine Penicillin","Cephalosporin","Epenephrine","Insulin","Prednisolone"],
-			
+            event:["Seat","Speaker"],
+            
             dateDisplay:new Date(parseInt('1577952000', 10) * 1000),
             enddateDisplay:new Date(parseInt('1577952000', 10) * 1000)
 		}
@@ -166,7 +167,7 @@ class CallForHelp extends Component {
         });
         
 		if (form_validation.length === 0) {
-			this.props.callForHelp(
+			this.props.lendAHand(
                 this.state.title,
                 this.state.category,
 				this.state.item,
@@ -183,7 +184,7 @@ class CallForHelp extends Component {
 
 	render() {
 		
-        let percentage = numeral(0*100/this.state.amount).format('0.00') + "%";
+        let percentage = numeral(this.state.amount*100/this.state.amount).format('0.00') + "%";
 
 		let file_label = !this.state.wrong_file && this.state.file_name !== '' ? this.state.file_name : 'Select file';
 
@@ -228,11 +229,13 @@ class CallForHelp extends Component {
         else if (this.state.category === "Human Blood"){
             itemOption = this.state.blood.map((blood,index)=>( <option value={blood} key={index}>{blood}</option>))   
         }
-
+        else if (this.state.category === "Event"){
+            itemOption = this.state.event.map((event,index)=>( <option value={event} key={index}>{event}</option>))   
+        }
 		return (
 			<React.Fragment>
 			<div className="home-wrapper mb-5">		
-			<h2><i className="fa fa-edit"></i> Call For Help</h2>
+			<h2><i className="fa fa-edit"></i> Lend A Hand</h2>
 			</div>
 
 			<div className="row">
@@ -252,7 +255,8 @@ class CallForHelp extends Component {
 						<option value="Medicine" key="2">Medicine</option>
                         <option value="Staff" key="3">Staff</option>
                         <option value="Human Organ" key="4">Human Organ</option>
-                        <option value="Human Blood" key="5">Human Blood</option>	
+                        <option value="Human Blood" key="5">Human Blood</option>
+                        <option value="Event" key="6">Event</option>	
 					</select>
 				</div>
 
@@ -317,7 +321,7 @@ class CallForHelp extends Component {
 				<br />
 				{alert}
 				<br />
-				<button type="submit" className="btn btn-outline-dark" title="Call For Help" onClick={this.handleForm} disabled={disabled}>Call For Help</button>
+				<button type="submit" className="btn btn-outline-dark" title="Lend A Hand" onClick={this.handleForm} disabled={disabled}>Lend A Hand</button>
 
 			</form>
 			</div>
@@ -345,14 +349,14 @@ class CallForHelp extends Component {
             <li className="list-group-item"><strong>Item:</strong> {this.state.item} </li>
             <li className="list-group-item"><strong>Date Needed: {this.state.dateDisplay.toLocaleDateString()} at {this.state.dateDisplay.toLocaleTimeString()}</strong>  </li>
             {!this.state.return &&<li className="list-group-item"><strong>Will Close In: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
-            {this.state.return &&<li className="list-group-item"><strong>Will Return On: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
-            <li className="list-group-item"><strong>Amount Filled:</strong> 0/{this.state.amount} </li>
+            {this.state.return &&<li className="list-group-item"><strong>Should Return On or Before: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
+            <li className="list-group-item"><strong>Items Remaining:</strong> {this.state.amount}/{this.state.amount} </li>
             <li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 
             </ul>
 
 			<div className="card-footer text-muted text-center">
-				<button className="btnAlive" disabled="">Pledge</button>
+				<button className="btnAlive" disabled="">Take</button>
 			</div>
 </div>
 </div>
@@ -363,4 +367,4 @@ class CallForHelp extends Component {
 
 }
 
-export default CallForHelp;
+export default LendAHand;

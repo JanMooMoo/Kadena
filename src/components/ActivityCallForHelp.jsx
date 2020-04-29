@@ -18,10 +18,6 @@ class ActivityCallForHelp extends Component {
         
     }
 
-   
-    
-
-    
     async loadblockhain(){
 
         this.props.Kadena.getPastEvents("NeedAHand",{filter:{ownerNeed:this.props.account},fromBlock: 5000000, toBlock:'latest'})

@@ -19,7 +19,12 @@ body {
 
 hr{
   border-top:1px solid rgba(81, 93, 97, 0.74);
+  bacdkground: linear-gradient(to left, rgb(15, 20, 54),rgb(122, 112, 76), rgb(15, 20, 54));
+  height:2px;
+  
 }
+
+
 
 h1, h2, h3, h4 {
 	font-weight: 100;
@@ -285,6 +290,7 @@ button {
   background: repeating-linear-gradient(180deg, #2a355a, #212a49 50%, #11172b); 
   border: 1px solid rgb(206, 188, 127);
   margin-bottom:15px;
+  
 
 }
 
@@ -340,8 +346,7 @@ button {
 .branding {
 	z-index: 7000 !important;
   position: inherit;
-	color: #fff;
-  text-shadow: 2px 2px 24px #000;
+  text-shadow: 1px 1px 2px rgb(0, 0, 0);
   font-family: 'Cinzel Decorative', cursive;
   color:rgb(206, 188, 127);
   border-radius:15px;
@@ -349,16 +354,31 @@ button {
 
 }
 
+.brand-wrapper{
+  border-radius: 15px;
+  font-weight: 100; 
+  display: inline-block;
+  background:transparent;
+  background:rgba(255, 255, 255, 0.733);
+  background:linear-gradient(to left, rgb(7, 9, 19), #b8b0b0a9 50%, rgb(7, 9, 19));
+  backdground:linear-gradient(to left, rgb(7, 9, 19), #9e435aa9 50%, rgb(7, 9, 19));
+    background:linear-gradient(to left, rgb(7, 9, 19), #6f82d873 50%, rgb(7, 9, 19));
+  width:20%;
+  min-width:220px;
+  border-top:1px solid rgb(206, 188, 127);
+  border-bottom:1px solid rgb(206, 188, 127);
+  box-shadow: 0 0 3px rgb(88, 111, 133);
+  
+}
+
 .branding h1{
-  text-shadow: 2px 2px 24px rgb(7, 7, 7);
-  border-radius: 10px;
-  font-weight: 100;
- 
+  margin-top:7px;
 }
 
 .branding p {
   font-size: 0.7rem!important;
-  border-radius: 10px;
+  margin-bottom:5px;
+
 }
 
 #wrapper.toggled #page-content-wrapper {
@@ -1401,7 +1421,7 @@ justify-content: center;
 
 .progress p{
   margin-top:1%;
-  margin-left:45%;
+  margin-left:42%;
   font-size:.9rem;
   color:white;
   z-index:10;
@@ -1664,6 +1684,39 @@ border-bottom:1px solid rgb(206, 188, 127);
   color:rgb(176, 178, 206);
 }
 
+.top-head{
+  background:linear-gradient(to left, rgb(7, 9, 19), #0d213f 50%, rgb(7, 9, 19));
+  background: linear-gradient(to right, rgb(4, 7, 27),rgb(112, 107, 88),rgb(151, 144, 114) 30%, rgb(22, 23, 26));
+
+  font-family: 'Lato', sans-serif;
+  border-right:3px solid rgb(47, 52, 56);
+	color:rgb(162, 183, 207);
+	padding: 20px;
+	box-shadow: 4px 8px 8px rgba(0,0,0,0.4);
+  text-align: left!important;
+  width: 110%;
+  height:10px;
+  padding:20px;
+  z-index:7000;
+  position:fixed;
+}
+
+.top-inner{
+  position:absolute;
+  background:linear-gradient(to left, rgb(7, 9, 19), #081324 50%, rgb(7, 9, 19));
+
+  font-family: 'Lato', sans-serif;
+  border-right:3px solid rgb(47, 52, 56);
+	color:rgb(162, 183, 207);
+	padding: 20px;
+	box-shadow: 4px 8px 8px rgba(0,0,0,0.4);
+  text-align: left!important;
+  width: 100%;
+  margin-top:-25px;
+  height:2px;
+  z-index:7000;
+
+}
 
 
 
