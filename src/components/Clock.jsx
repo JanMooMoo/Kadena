@@ -17,7 +17,7 @@ class Clock extends Component {
 
     componentDidMount(){
         this._isMounted = true;
-        if(this._isMounted){setInterval(()=>this.getTimeUntil(this.props.deadline),1000)}
+        setInterval(()=>this.getTimeUntil(this.props.deadline),1000)
     }
     
     async getTimeUntil(deadline){
@@ -35,6 +35,7 @@ class Clock extends Component {
     
     componentWillUnmount(){
         this._isMounted = false;
+        clearInterval(this.getTimeUntil)
     }
     
     render() {
@@ -44,7 +45,7 @@ class Clock extends Component {
             <div className = "countdownEnded col-lg-3 mb-3">
                 <div className="box">
                     <p className="mt-1 mb-1">
-                    <span>⚠️ This event has already ended.</span>
+                    <span>⚠️ Closed</span>
                     </p>
                 </div>
             </div>             
@@ -54,7 +55,7 @@ class Clock extends Component {
        return (
         <div className = "countdown col-lg-5 col md-5">
            <div className="box"> 
-                <h5 className="mt-2 mb-1">This Event Will Close In</h5>
+                <h5 className="mt-2 mb-1">Open Until</h5>
            </div>
 
             <div className="clock">

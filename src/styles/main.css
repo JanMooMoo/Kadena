@@ -999,66 +999,57 @@ h4.transactions {
 /*Event Countdown style*/
 .countdown{
   text-align:center;
-  color:rgb(58, 58, 58);
-  border-top-left-radius:5px;
-  border-top-right-radius:5px;
   margin-top:20px;
+  margin-bottom:15px;
   overflow:hidden;
-  background:#333940;
-  box-shadow: 0 0 17px rgba(83, 74, 74, 0.5);
-  border:1px solid #343a40;
+  background: repeating-linear-gradient(180deg, #11172b, #1b243f 50%, #11172b);
+  border-radius:10px;
   max-height:90px;
   max-width:360px;
-  min-width:360px;
   float:right;
   position:relative;
   padding-left: 5px;
   padding-right: 5px;
-  margin-top:20px;
-  border: 1px solid rgb(197, 195, 197); 
-  justify-content: center;
+  margin-top:20px; 
+  border-top:1px solid rgb(206, 188, 127);
+  border-bottom:1px solid rgb(206, 188, 127);
+  font-family: 'Roboto', sans-serif;
+  z-index:1000; 
   
 }
 
 .countdownEnded{
   width:100%;
-  text-align:center;
-  color:rgb(58, 58, 58);
-  border-top-left-radius:5px;
-  border-top-right-radius:5px;
+  text-align:center;;
   overflow:hidden;
-  background:#333940;
-  
-  box-shadow: 0 0 17px rgba(83, 74, 74, 0.5);
   max-height:90px;
   float:right;
   position:relative;
   padding-left: 5px;
   padding-right: 5px;
   margin-top:60px;
-  border: 1px solid rgb(197, 195, 197); 
+  border: 1px solid rgb(129, 128, 129); 
+  background: repeating-linear-gradient(to left,#11172b, #394775, #11172b);
 }
+
 .countdownEnded p{
-  font-size:.9rem; 
-  
+  font-size:.9rem;
+  font-weight:bold  
 }
 
 .countdown h5{
   text-align:center;
   text-transform:uppercase;
   font-size:.9rem;
-  font-weight:bold; 
-  
+  font-weight:bold;  
 }
 
 .clock {
 margin:auto;
 display:flex;
-box-shadow: 0 0 17px rgba(224, 224, 224, 0.349);
 margin-top:12px;
 max-width:300px;
 justify-content: center;
- 
 }
 
 .clock p{
@@ -1067,37 +1058,36 @@ justify-content: center;
   width:100%;
   max-width:500px;
   padding: 7px 20px 7px;
-  border:1px solid #343a40;
+  border:1px solid rgb(116, 115, 114);
   font-size:0.8rem;
   display:flex;
   color:rgb(29, 28, 28);
-  background:linear-gradient(to bottom, rgb(255, 255, 255),rgb(146, 144, 144));
-  box-shadow: 0 0 17px rgba(123, 124, 124, 0.5);
   border-radius:5px;
-  border: 1px solid rgb(155, 155, 155);
-  margin:1px;
-  
- 
+  color:rgb(234, 237, 240);
+  margin:2px; 
+  background: repeating-linear-gradient(to bottom,#11172b, #394775, #11172b);
+
+}
+
+@media(max-width:650px){
+  .clock p {
+    padding: 7px 6px 7px;
+  }
 }
 
 .clock p:last-child{
-  background:linear-gradient(to top, rgb(4, 56, 99),rgb(93, 132, 165),rgb(150, 188, 219))!important;
-  color:white;
-  border: 1px solid rgb(32, 76, 172);
+  background: repeating-linear-gradient(to bottom,#c0c0c2, #dedfe2, #75777c);
+  color:#394775;
+  border: 1px solid rgb(206, 188, 127);
 }
 
 .box{
-  background:white;
   border-radius:3px;
-  background:linear-gradient(to right,rgb(235, 235, 235), rgb(255, 255, 255),rgb(218, 216, 216));
+  background:rgba(255, 255, 255, 0);
+  color:rgb(206, 188, 127);
+}
 
-}
 /*check*/
-.myEventStat{
-  margin-left:30%;
-  font-weight: bold;
-  text-decoration: none!important;
-}
 
 .alert-connection{
   width:100%;
@@ -1242,8 +1232,6 @@ justify-content: center;
   .btnAlive:hover{
     border-color: #4f6e8d;
   }
-
-
 
   .topic-find {
     position: absolute;

@@ -7,6 +7,8 @@ import ipfs from '../utils/ipfs';
 
 import Loading from './Loading';
 import {ModalPledge} from './ModalPledge'
+import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
+import Web3 from 'web3';
 
 let numeral = require('numeral');
 
@@ -34,12 +36,44 @@ class Event extends Component {
 			openEvents_address:'',
 			buyticket:'',
 			approve:'',
+
+			commits:0,
+			blocks:'',
+			latestblocks:'',
 			
 			pledgeModalShow:false
 		};
 		this.isCancelled = false;
 	}
 
+	async loadBlockchain(){
+	const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));
+	const Kadena =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
+
+    if (this._isMounted){
+	this.setState({Kadena});}
+	if (this._isMounted){
+        const committed = await Kadena.methods.callForHelpDetails(this.props.id).call()
+    this.setState({commits:committed.committed})}
+
+    const blockNumber = await web3.eth.getBlockNumber();
+    if (this._isMounted){
+    this.setState({
+		blocks:blockNumber - 50000,
+	    latestblocks:blockNumber - 1,
+		});
+    }
+    
+
+	//Drizzle Is Not Updating Real Time, I Use Web3 websocket Instead.
+    Kadena.events.Pledged({filter:{eventId:this.props.id},fromBlock: blockNumber, toBlock:'latest'})
+  	.on('data', (log) =>{
+    if (this._isMounted){  
+	setTimeout(async()=>{const committed = await Kadena.methods.callForHelpDetails(this.props.id).call()
+    this.setState({commits:committed.committed})
+	},10000)}
+    })
+	}
 
 
 	updateIPFS = () => {
@@ -108,7 +142,6 @@ class Event extends Component {
 				hospital = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
 			}
 			event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
-			console.log("EVent_data", event_data)
 			let image = this.getImage();
 			let description = this.getDescription();
 		
@@ -117,7 +150,7 @@ class Event extends Component {
 
 			let disabled = false;
 			let buttonText =<span> Pledge</span>;
-			let percentage = numeral(event_data.committed*100/event_data.amount).format('0.00')+ "%";
+			let percentage = numeral(this.state.commits*100/event_data.amount).format('0.00')+ "%";
 
 
 			if (event_data[3] !=='undefined'){
@@ -131,7 +164,7 @@ class Event extends Component {
 			let end_date = months[enddate.getMonth()]+ ". " + enddate.getDate() + ", " + enddate.getFullYear()
 
 
-			if (Number(event_data.committed) >= Number(event_data.amount)) {
+			if (Number(this.state.commits) >= Number(event_data.amount)) {
 				disabled = true;
 				buttonText = <span><span role="img" aria-label="alert"> </span> Filled</span>;
 			}
@@ -177,7 +210,7 @@ class Event extends Component {
 						<li className="list-group-item small"><strong>Date Needed: {start_date} - {startdate.toLocaleTimeString()}</strong></li>
 						{event_data.borrow && <li className="list-group-item small"><strong>Will Return In: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
 						{!event_data.borrow && <li className="list-group-item small"><strong>Will Close In: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
-						<li className="list-group-item small"><strong>Committed: {event_data.committed}/{event_data.amount}</strong></li>
+						<li className="list-group-item small"><strong>Committed: {this.state.commits}/{event_data.amount}</strong></li>
 						<li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 					</ul>
 					</Link>
@@ -191,7 +224,7 @@ class Event extends Component {
 					id = {this.props.id}
 					hospital = {hospital._hospitalName}
 					item = {event_data.item}
-					committed = {event_data.committed}
+					committed = {this.state.commits}
 					amount = {event_data.amount}
 					account = {this.props.account}
       				/>}
@@ -211,6 +244,7 @@ class Event extends Component {
 	componentDidMount() {
 		this._isMounted = true;
 		this.updateIPFS();
+		this.loadBlockchain();
 
 	}
 

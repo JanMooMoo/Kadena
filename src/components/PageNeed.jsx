@@ -11,7 +11,6 @@ import Loading from './Loading';
 import EventNotFound from './EventNotFound';
 import Clock from './Clock';
 import JwPagination from 'jw-react-pagination';
-import { Link } from 'react-router-dom';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 import {ModalPledge} from './ModalPledge'
 import HospitalCard from './HospitalCard';
@@ -54,7 +53,8 @@ class PageNeed extends Component {
 			  latestblocks:5000000,
 
 			  pledgeModalShow:false,
-			  pageTransactions:[],
+              pageTransactions:[],
+              commits:0
 
 		  };
 		  this.isCancelled = false;
@@ -80,24 +80,27 @@ class PageNeed extends Component {
 		});
     }
     if (this._isMounted){
-    this.elem = setInterval(async()=>{ 
+        const committed = await Kadena.methods.callForHelpDetails(this.props.match.params.id).call()
+    this.setState({commits:committed.committed})
+    console.log("commiitit",this.state.commits)}
+    /*this.elem = setInterval(async()=>{ 
     const committed = await Kadena.methods.callForHelpDetails(this.props.match.params.id).call()
  
    
         this.setState({commits:committed.committed})
-    console.log("commiitit",this.state.commits)},2000)}
+    console.log("commiitit",this.state.commits)},2000)*/
+
 
     Kadena.getPastEvents("Pledged",{filter:{eventId:this.props.match.params.id},fromBlock: 5000000, toBlock:this.state.latestblocks})
     .then(events=>{
-
+     if (this._isMounted){
     this.setState({load:true})
     var newest = events;
     var newsort= newest.concat().sort((a,b)=> b.blockNumber- a.blockNumber);
-    if (this._isMounted){
+   
     this.setState({commited:newsort,check:newsort});
     this.setState({load:false})
     this.setState({active_length:this.state.commited.length});
-        console.log("check",this.state.commited)
   	}
     }).catch((err)=>console.error(err))
 
@@ -109,8 +112,10 @@ class PageNeed extends Component {
     this.setState({commited:[...this.state.commited,log]});
     var newest = this.state.commited
     var newsort= newest.concat().sort((a,b)=> b.blockNumber- a.blockNumber);
-    if (this._isMounted){
-
+    if (this._isMounted){ 
+    setTimeout(async()=>{ 
+    const committed = await Kadena.methods.callForHelpDetails(this.props.match.params.id).call()
+    this.setState({commits:committed.committed})},10000)
     this.setState({commited:newsort});
     this.setState({active_length:this.state.commited.length})}
     this.setState({load:false});
@@ -201,13 +206,10 @@ class PageNeed extends Component {
 		
 
 		if (typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].callForHelpDetails[this.event].value) {
-			
-
-                
+            
                 let event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
                 let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
                 let percentage = numeral(this.state.commits*100/event_data.amount).format('0.00')+ "%";
-                console.log("PageNeed", event_data)
                
 				let image = this.getImage();
                 let description = this.getDescription();
@@ -235,7 +237,7 @@ class PageNeed extends Component {
 				}
                 
 				let commits = true;
-				if (Number(event_data.committed) >= Number(event_data.amount)) {
+				if (Number(this.state.commits) >= Number(event_data.amount)) {
 					disabled = true;
                     buttonText = " Filled"
                     console.log(buttonText)
@@ -277,7 +279,7 @@ class PageNeed extends Component {
 					onHide={pledgeModalClose}
 					id = {this.props.match.params.id }
 					item = {event_data.item}
-					committed = {event_data.committed}
+					committed = {this.state.commits}
 					amount = {event_data.amount}
       				/>}
             	<br />
@@ -291,11 +293,11 @@ class PageNeed extends Component {
 					<li className="list-group-item small">Needed When: {start_date} {startdate.toLocaleTimeString()}</li>
 					<li className="list-group-item small">{symbol} {end_date} at {enddate.toLocaleTimeString()}</li>
 					<li className="list-group-item small">Item Needed: {event_data.item}</li>
-                    <li className="list-group-item small">Committed: {event_data.committed}/{event_data.amount}</li>
+                    <li className="list-group-item small">Committed: {this.state.commits}/{event_data.amount}</li>
 					</ul>
 				</div>
 						
-                {this._isMounted && <Clock deadline = {enddate} event_unix = {event_data[1]}/>}
+                {this._isMounted && <Clock deadline = {enddate} event_unix = {event_data.endDate}/>}
               	<div className="new-transaction-wrapper"><h4 className="transactions"><i class="fas fa-hand-holding-medical"></i> Pledge</h4> 
   					{this.state.load &&<Loading/>}
                     {this.state.pageTransactions.map((pledged,index)=>(<p className="sold_text col-md-12 small" key={index}><img className="float-left blockie" src={makeBlockie(pledged.returnValues.pledgedBy)} title={pledged.returnValues.pledgedBy}/><strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.sender,pledged.returnValues.pledgedBy)}>{pledged.returnValues.sender}</strong> pledged <strong ><a href={"https://rinkeby.etherscan.io/tx/" + pledged.transactionHash} target="blank" className="gold">{pledged.returnValues.committed} {pledged.returnValues.item}</a></strong> to <strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.receiver,pledged.returnValues.pledgeTo)}>{pledged.returnValues.receiver}</strong> <br/><span className="date-right small">on {this.parseDate(pledged.returnValues.date)}</span></p>
@@ -349,7 +351,6 @@ class PageNeed extends Component {
 	componentWillUnmount() {
 		this.isCancelled = true;
         this._isMounted = false;
-        clearInterval(this.elem)
 	}
 }
 
