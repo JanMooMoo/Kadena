@@ -50,7 +50,7 @@ class ActivityCallForHelp extends Component {
           .join(' ');
             
           //window.location.href = "/event/"+pagetitle+"/"+eventId;
-          this.props.history.push("/event/"+pagetitle+"/"+eventId);
+          this.props.history.push("/need/"+pagetitle+"/"+eventId);
     }
 
 render(){

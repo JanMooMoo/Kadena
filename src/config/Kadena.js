@@ -1,6 +1,6 @@
-export const Kadena_Address = '0xc82d09e3e3F2B50B0c1be168ae5d3031A4950c4A';
+export const Kadena_Address = '0x9964D5567665Aedb12F68CEB7dE1C49bD1699f0E';
 
-export const Kadena_ABI =  [
+export const Kadena_ABI =   [
   {
     "constant": false,
     "inputs": [],
@@ -154,7 +154,7 @@ export const Kadena_ABI =  [
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "name": "registeredAs",
         "type": "string"
       },
@@ -639,7 +639,7 @@ export const Kadena_ABI =  [
         "type": "uint256"
       }
     ],
-    "name": "giveAssistanceDetails",
+    "name": "provideAssistanceDetails",
     "outputs": [
       {
         "name": "title",

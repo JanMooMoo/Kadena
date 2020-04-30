@@ -194,7 +194,13 @@ class Form extends Component {
 				
 				<div className="form-group">
 					<label htmlFor="country">Country:</label>
-					<input type="text" className={"form-control " + warning.country} id="country" title="country" onChange={this.countryChange} autoComplete="off" />
+					<select className="form-control" id="country" title="country" onChange={this.countryChange}>
+						<option value="Japan" key="1">Japan</option>
+						<option value="Philippines" key="2">Philippines</option>
+                        <option value="Singapore" key="3">Singapore</option>
+                        <option value="South Korea" key="4">South Korea</option>
+						<option value="South Korea" key="4">Thailand</option>	
+					</select>
 				</div>
 
 				<div className="form-group">
@@ -203,14 +209,16 @@ class Form extends Component {
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="description">Hospital Desription:</label>
-					<textarea className={"form-control " + warning.description} id="description" title="Hospital Description" rows="5" ref={(input) => this.form.description = input} onChange={this.descriptionChange} autoComplete="off"></textarea>
-					<small className="form-text text-muted">{this.state.description_length}/500 characters available.</small>
-				</div>
-				<div className="form-group">
 					<label htmlFor="address">Address:</label>
 					<textarea className={"form-control " + warning.address} id="address" title="Hospital Address" rows="5" ref={(input) => this.form.address = input} onChange={this.addressChange} autoComplete="off"></textarea>
 					<small className="form-text text-muted">{this.state.address_length}/100 characters available.</small>
+				</div>
+
+				
+				<div className="form-group">
+					<label htmlFor="description">Hospital Desription:</label>
+					<textarea className={"form-control " + warning.description} id="description" title="Hospital Description" rows="5" ref={(input) => this.form.description = input} onChange={this.descriptionChange} autoComplete="off"></textarea>
+					<small className="form-text text-muted">{this.state.description_length}/500 characters available.</small>
 				</div>
 
 				<div className="form-group">

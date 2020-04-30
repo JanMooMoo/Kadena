@@ -293,12 +293,12 @@ class CallForHelp extends Component {
 
                 <div className="form-group">
 					<label htmlFor="Start">Date and Time Needed:</label>
-					<Datetime closeOnSelect={true} onChange={this.handleStartDate} inputProps={{className : "form-control " + warning.time, title: "Date and Time Needed"}} autoComplete="off" />
+					<Datetime closeOnSelect={false} onChange={this.handleStartDate} inputProps={{className : "form-control " + warning.time, title: "Date and Time Needed"}} autoComplete="off" />
 				</div>
 
                 <div className="form-group">
 					<label htmlFor="End">End Date and Time:</label>
-					<Datetime closeOnSelect={true} onChange={this.handleEndDate} inputProps={{className : "form-control " + warning.endtime, title: "Open Until"}} autoComplete="off" />
+					<Datetime closeOnSelect={false} onChange={this.handleEndDate} inputProps={{className : "form-control " + warning.endtime, title: "Open Until"}} autoComplete="off" />
 				</div>
 				
                 <div className="form-group">

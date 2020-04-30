@@ -17,7 +17,7 @@ import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 contract Kadena is Pausable, Destructible {
 	using SafeMath for uint;
 
-	address tokenAddress;
+
 	
 	struct Hospital {
 	    address owner;
@@ -74,7 +74,7 @@ contract Kadena is Pausable, Destructible {
 		
     event RegisterHospital(address indexed owner, string hospitalName, string country, string city, string ipfs, uint time, bool pending, bool registered);	
 	
-	event Registration(address Admin, address indexed applicant, string indexed registeredAs, string status, uint time, bool pending, bool indexed registrationStatus, uint rating);
+	event Registration(address Admin, address indexed applicant, string registeredAs, string status, uint time, bool pending, bool indexed registrationStatus, uint rating);
 
 	event NeedAHand(address indexed ownerNeed, uint eventId, string hospital,string title, string category,string item, uint amount, bool borrow, uint startDate, uint endDate, string ipfs);
 	event GiveAHand(address indexed ownerGive, uint eventId, string hospital,string title, string category,string item, uint amount, bool borrow, uint startDate, uint endDate, string ipfs);
@@ -267,11 +267,11 @@ contract Kadena is Pausable, Destructible {
 		});
       	uint _eventId = needHelp.push(_event).sub(1);
 		neededEvents[msg.sender].push(_eventId);
-		if(registered[msg.sender].rating >= 25){
+		if(registered[msg.sender].rating >= 15){
 		uint _subtractedRating = 5;}
-		else _subtractedRating = registered[msg.sender].rating - 20;
+		else _subtractedRating = registered[msg.sender].rating - 10;
 	    
-		if(registered[msg.sender].rating >20){
+		if(registered[msg.sender].rating >10){
 		registered[msg.sender].rating = registered[msg.sender].rating.sub(_subtractedRating);}
 		emit NeedAHand(msg.sender, _eventId,registered[msg.sender].name,_title,_category,_item, _amount, _borrow,_startDate,_endDate,_ipfs); 
 
@@ -356,7 +356,7 @@ contract Kadena is Pausable, Destructible {
 	* @notice Requires that the events exist.
 	*/
 	
-	function giveAssistanceDetails(uint _id)
+	function provideAssistanceDetails(uint _id)
 		public
 		view
 	    returns(
@@ -459,8 +459,6 @@ contract Kadena is Pausable, Destructible {
 		require(_commit <= needHelp[_eventId].amount);
 		require(_commit <= needHelp[_eventId].amount - needHelp[_eventId].committed);
 		require(msg.sender != needHelp[_eventId].owner);
-		require(registered[msg.sender].registered == true && registered[msg.sender].pending == false, "You are Not Registered");
-
 		
 		if(_event.borrow) require(_event.endDate > now);
 		
@@ -500,8 +498,6 @@ contract Kadena is Pausable, Destructible {
 	{
 	    require(_eventId < giveHelp.length);
 	    require(registered[msg.sender].rating >= 20);
-		require(registered[msg.sender].registered == true && registered[msg.sender].pending == false, "You are Not Registered");
-
 	    require(_take > 0);
 		GiveHelp memory _event = giveHelp[_eventId];
 		if(giveHelp[_eventId].amount >= 5 ){
@@ -513,12 +509,12 @@ contract Kadena is Pausable, Destructible {
 		
 		
 		giveHelp[_eventId].committed = giveHelp[_eventId].committed.sub(_take);
-		if (registered[msg.sender].rating >= 23){
+		if (registered[msg.sender].rating >= 13){
 		uint _subtractRating = 3;
 		registered[msg.sender].rating = registered[msg.sender].rating.add(_subtractRating);
 		}
 		else{
-		_subtractRating = registered[msg.sender].rating - 20;
+		_subtractRating = registered[msg.sender].rating - 10;
 		registered[msg.sender].rating = registered[msg.sender].rating.add(_subtractRating);
 		}
 		emit Taken(msg.sender,registered[msg.sender].name, registered[needHelp[_eventId].owner].name,now, _eventId,giveHelp[_eventId].item,_take, giveHelp[_eventId].owner, _subtractRating);

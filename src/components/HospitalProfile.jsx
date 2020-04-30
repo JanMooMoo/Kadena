@@ -127,6 +127,13 @@ class HospitalProfile extends Component {
 	}
 
 	
+    getContact= () => {
+		let contact = '';
+		if (this.state.ipfs_problem) contact = ''
+		if (this.state.contact !== null) contact = this.state.contact;
+		return contact;
+    }
+    
 
 	onChangePage(pageTransactions) {
 		this.setState({ pageTransactions });
@@ -153,7 +160,8 @@ class HospitalProfile extends Component {
                 //let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
                 let image = this.getImage();
                 let description = this.getDescription();
-                let address = this.getAddress();
+				let address = this.getAddress();
+				let contact = this.getContact();
                 let stars = 'Hospital Rating:'
 
                 let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -207,6 +215,7 @@ class HospitalProfile extends Component {
 					<li className="list-group-item small "><strong>Country: {hospital_data._country}</strong> </li>
                     <li className="list-group-item small"><strong>City: {hospital_data._city}</strong> </li>
 					<li className="list-group-item small"><strong>Address: {address} </strong></li>
+					<li className="list-group-item small"><strong>Contact: {contact} </strong></li>
                     <li className="list-group-item small"><strong>Kadena Member Since: {memberSince} </strong></li>
                     <li className="list-group-item small" title={hospital_data._rating}><strong>{stars}</strong></li>
 					</ul> 

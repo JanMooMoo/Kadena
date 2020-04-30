@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ipfs from '../utils/ipfs';
 
 
-class HospitalCard extends Component {
+class HospitalRow extends Component {
 
     constructor(props, context) {
       super(props);
@@ -79,7 +79,6 @@ class HospitalCard extends Component {
 	}
 
 	friendlyUrl = (hospitalName) =>{
-
         let rawTitle = hospitalName;
       	var titleRemovedSpaces = rawTitle;
 	  	titleRemovedSpaces = titleRemovedSpaces.replace(/ /g, '-');
@@ -92,6 +91,12 @@ class HospitalCard extends Component {
           this.props.history.push("/hospital/"+pagetitle+"/"+this.props.organizer);
     }
 
+	getImage = () => {
+		let image = '/images/loading_ipfs.png';
+		if (this.state.ipfs_problem) image = '/images/problem_ipfs.png';
+		if (this.state.image !== null) image = this.state.image;
+		return image;
+	}
 	
 		render() {
 		let body = '';
@@ -103,11 +108,11 @@ class HospitalCard extends Component {
 				body = <div className="text-center mt-5"><span role="img" aria-label="warning">🚨</span> Hospital Profile Not Found</div>;
 			} else {
 
-                let hospital_data = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
-               
+				let hospital_data = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
+				
+				let image = this.getImage();
                 let address = this.getAddress();
-                let contact = this.getContact();
-                let stars = 'Hospital Rating:'
+                let stars = <div className="rating"><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>
 
                 let date = new Date(parseInt(hospital_data._time, 10) * 1000);
                 let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -115,42 +120,42 @@ class HospitalCard extends Component {
                 
                   
                   if (hospital_data._rating < 20 ){
-                    stars = <div className="rating">Hospital Rating: <i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
+                    stars = <div className="rating"><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
                else if (hospital_data._rating <= 25){
-                stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
+                stars = <div className="rating"> <i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
                 else if (hospital_data._rating <= 30){
-                    stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
+                    stars = <div className="rating"> <i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
                 else if (hospital_data._rating <= 35){
-                    stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
+                    stars = <div className="rating"><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
                 else if (hospital_data._rating <=40){
-                    stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/></div>}
+                    stars = <div className="rating"><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="far fa-star"/></div>}
                 else {
-                    stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/></div>
+                    stars = <div className="rating"> <i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/></div>
                 }; 
 
 		
 		 
 				body =
-	
-                <div className="cursor-pointer"  onClick={()=>this.friendlyUrl(hospital_data._hospitalName)}>
-                <p className="small text-truncate mb-0"><strong>Hospital: {hospital_data._hospitalName}</strong></p>
-                <p className="small text-truncate mb-0"><strong>Location: {hospital_data._city}, {hospital_data._country}</strong></p>
-				<p className="small text-truncate mb-0"><strong>Address: {address} </strong></p>
-                <p className="small text-truncate mb-0"><strong>Contact: {contact}</strong></p>
-                <p className="small text-truncate mb-0" ><strong title={hospital_data._rating}>{stars}</strong></p>  
-                </div>;
-                
+					<tr className="cursor-pointer" onClick={()=>this.friendlyUrl(hospital_data._hospitalName)}>  
+						<td>{this.props.count + 1}.
+						<img src={image} className="list-img ml-2"></img>
+
+					</td>        
+      				<td> {hospital_data._hospitalName}</td>
+	  				<td>{hospital_data._country}</td>
+	  				<td>{hospital_data._city}</td>
+	  				<td>{address}</td>
+	  				<td>{stars}</td>
+	  				<td>{memberSince}</td>  
+					</tr>;               
 			}
 			
 		}
 
 		return (
-			<div className="mt-2">
-				<h3><i class="fas fa-hospital-user ml-4"i/> Hospital Profile</h3>
-                <p className="small text-truncate ml-1" ><strong>Kadena Member Since: {memberSince}</strong></p>
-				<hr />
+			<React.Fragment>
 				{body}
-			</div>
+			</React.Fragment>
 		);
 	}
 
@@ -159,7 +164,7 @@ class HospitalCard extends Component {
 		this.updateIPFS();
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate() {
 		this.updateIPFS();
 		
     }
@@ -170,7 +175,7 @@ class HospitalCard extends Component {
 	}
 }
 
-HospitalCard.contextTypes = {
+HospitalRow.contextTypes = {
     drizzle: PropTypes.object
 }
 
@@ -182,5 +187,5 @@ const mapStateToProps = state => {
     };
 };
 
-const AppContainer = drizzleConnect(HospitalCard, mapStateToProps);
+const AppContainer = drizzleConnect(HospitalRow, mapStateToProps);
 export default AppContainer;
