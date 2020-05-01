@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import ipfs from '../utils/ipfs';
 
 import Loading from './Loading';
-import {ModalPledge} from './ModalPledge'
+import {ModalTake} from './ModalTake'
 
 let numeral = require('numeral');
 
@@ -17,7 +17,7 @@ class EventGive extends Component {
 
         super(props);
 		this.contracts = context.drizzle.contracts;
-		this.event = this.contracts['Kadena'].methods.giveAssistanceDetails.cacheCall(this.props.id);
+		this.event = this.contracts['Kadena'].methods.provideAssistanceDetails.cacheCall(this.props.id);
 		this.hospital = this.contracts['Kadena'].methods.getHospitalStatus.cacheCall(this.props.owner);
 
 		this.account = this.props.accounts[0];
@@ -44,7 +44,7 @@ class EventGive extends Component {
 
 	updateIPFS = () => {
 
-		if (this.state.loaded === false && this.state.loading === false && typeof this.props.contracts['Kadena'].giveAssistanceDetails[this.event] !== 'undefined') {
+		if (this.state.loaded === false && this.state.loading === false && typeof this.props.contracts['Kadena'].provideAssistanceDetails[this.event] !== 'undefined') {
 			this.setState({
 				loading: true
 			}, () => {
@@ -92,13 +92,12 @@ class EventGive extends Component {
 		}
 		return description;
 	}
-	//get the location of Events on IPFS
 
 	 render() {
 		
 		let body = <div className="card"><div className="card-body"><Loading /></div></div>;
 
-		if (typeof this.props.contracts['Kadena'].giveAssistanceDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].giveAssistanceDetails[this.event].value) {
+		if (typeof this.props.contracts['Kadena'].provideAssistanceDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].provideAssistanceDetails[this.event].value) {
 			
 			let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
 			
@@ -106,17 +105,13 @@ class EventGive extends Component {
 			if(typeof this.props.contracts['Kadena'].getHospitalStatus[this.hospital] !== 'undefined'){
 				hospital = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
 			}
-			let event_data = this.props.contracts['Kadena'].giveAssistanceDetails[this.event].value;
-			console.log("wqaawawawaw")
+			let event_data = this.props.contracts['Kadena'].provideAssistanceDetails[this.event].value;
 
 			let image = this.getImage();
 			let description = this.getDescription();
-		
-			//let Alive = event_data[5]? 'Alive':'Deceased';
 	
-
 			let disabled = false;
-			let buttonText =<span><span role="img" aria-label="alert"> </span> Pledge</span>;
+			let buttonText =<span><span role="img" aria-label="alert"> </span> Take</span>;
 			let percentage = numeral(event_data.committed*100/event_data.amount).format('0.00')+ "%";
 
 
@@ -124,16 +119,13 @@ class EventGive extends Component {
 
 			let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 			
-			let startdate = new Date(parseInt(event_data.startDate, 10) * 1000);
-			let start_date = months[startdate.getMonth()]+ ". " + startdate.getDate() + ", " + startdate.getFullYear()
-
 			let enddate = new Date(parseInt(event_data.endDate, 10) * 1000);
 			let end_date = months[enddate.getMonth()]+ ". " + enddate.getDate() + ", " + enddate.getFullYear()
 
 
-			if (Number(event_data.committed) >= Number(event_data.amount)) {
+			if (Number(event_data.committed) === 0) {
 				disabled = true;
-				buttonText = <span><span role="img" aria-label="alert"> </span> Filled</span>;
+				buttonText = <span><span role="img" aria-label="alert"> </span> None Left</span>;
 			}
 	
 	  //Friendly URL Title
@@ -146,7 +138,7 @@ class EventGive extends Component {
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
       .join(' ');
 
-	  let titleURL = "/event/"+pagetitle+"/" + this.props.id;
+	  let titleURL = "/give/"+pagetitle+"/" + this.props.id;
 	  
 			body =
 				<div className="card">
@@ -173,19 +165,19 @@ class EventGive extends Component {
 
 					<Link to={titleURL} className="linkDisplay">
 					<ul className="list-group list-group-flush">
-						<li className="list-group-item small"><strong>Item: {event_data.item}</strong></li>
-						<li className="list-group-item small"><strong>Date Needed: {start_date} - {startdate.toLocaleTimeString()}</strong></li>
-						{event_data.borrow && <li className="list-group-item small"><strong>Will Return In: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
-						{!event_data.borrow && <li className="list-group-item small"><strong>Will Close In: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
-						<li className="list-group-item small"><strong>Committed: {event_data.committed}/{event_data.amount}</strong></li>
+						<li className="list-group-item small"><strong>Item: {event_data.item} Items</strong></li>
+						<li className="list-group-item small"><strong>Minimum Take: {event_data[6]}</strong></li>
+						{event_data.borrow && <li className="list-group-item small"><strong>Should return on: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
+						{!event_data.borrow && <li className="list-group-item small"><strong>Will close on: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
+						<li className="list-group-item small"><strong>Item pool: {event_data.committed}/{event_data.amount}</strong></li>
 						<li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 					</ul>
 					</Link>
 
 					<div className="card-footer text-muted text-center">
-					<button className="btnAlive" disabled={disabled} onClick={() => this.setState({pledgeModalShow:true})}>{buttonText} <i class="far fa-check-circle"></i></button>
+					<button className="btnAlive" disabled={disabled} onClick={() => this.setState({pledgeModalShow:true})}>{buttonText}</button>
 					
-					{this.state.pledgeModalShow && <ModalPledge
+					{this.state.pledgeModalShow && <ModalTake
       				show={this.state.pledgeModalShow}
 					onHide={pledgeModalClose}
 					id = {this.props.id}
@@ -194,6 +186,7 @@ class EventGive extends Component {
 					committed = {event_data.committed}
 					amount = {event_data.amount}
 					account = {this.props.account}
+					minimum = {event_data[6]}
       				/>}
 					</div>
 					

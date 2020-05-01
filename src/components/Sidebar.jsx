@@ -27,8 +27,6 @@ class Sidebar extends Component
 			activeClassName = 'nav-item';
 		}
 		
-
-		//console.log(this);
 	}
 
 
@@ -53,9 +51,7 @@ class Sidebar extends Component
 		let rating = 0;
 		
 		if(this.props.connection === true && this.props.account.length !== 0){
-			
-			console.log("Acciunt",this.props.accountDetails)
-			
+						
 			ethAccount = this.props.account.slice(0, 16) + '...';
 			Hospital = this.props.accountDetails[0];
 			rating = this.props.accountDetails[7];
@@ -97,7 +93,6 @@ class Sidebar extends Component
 			stars = <div className="rating" title="Account Rating"><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/></div>
 		};
 
-		
 		
 		let account =
 			<div className="profile">
@@ -145,18 +140,16 @@ class Sidebar extends Component
 						<li>
 							<NavLink to="/givehelp/1" className="nav-link" activeClassName="nav-link-active"onClick={() => {this.sidebarClick(this)}} ><i class="fas fa-search-plus" title="Give Help"></i> <span className="toggleHidden"> Give Help Section</span></NavLink>
 						</li>
-						
-						<li>
-							<NavLink to="/hospital-list" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-list-ul" title="List of Hospitals"></i> <span className="toggleHidden"> List of Hospitals</span></NavLink>
-						</li>
-						
 					</ul>
 					<h5 className="mt-5 toggleHidden">Manage</h5>
 					<ul className="nav flex-column">
+						
 						<li>
-							<NavLink to="/createevent" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-edit"  title="Edit"></i> <span className="toggleHidden">Register/Create Help</span></NavLink>
+							<NavLink to="/register" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-edit"  title="Edit"></i> <span className="toggleHidden">Register/Create Post</span></NavLink>
 						</li>
-
+						<li>
+							<NavLink to="/hospital-list" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-list-ul" title="List of Hospitals"></i> <span className="toggleHidden"> List of Hospitals</span></NavLink>
+						</li>
 					</ul>
 					<h5 className="mt-5 toggleHidden">Tools</h5>
 					<ul className="nav flex-column">
@@ -200,16 +193,21 @@ class Sidebar extends Component
 						<li>
 							<NavLink to="/givehelp/1" className="nav-link" activeClassName="nav-link-active"onClick={() => {this.sidebarClick(this)}} ><i class="fas fa-search-plus" title="Give Help"></i> <span className="toggleHidden"> Give Help Section</span></NavLink>						
 						</li>
+							
+					</ul>
+					<h5 className="mt-5 toggleHidden">Manage </h5>
+					<ul className="nav flex-column">
 						
+						<li>
+							<NavLink to="/myhospital" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-hospital-symbol" title="Hospital Profile"></i> <span className="toggleHidden">Hospital Profile</span></NavLink>
+						</li>
+
+						<li>
+							<NavLink to="/register" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-edit"  title="Edit"></i> <span className="toggleHidden">Register/Create Post</span></NavLink>
+						</li>
+
 						<li>
 							<NavLink to="/hospital-list" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-list-ul" title="List of Hospitals"></i> <span className="toggleHidden"> List of Hospitals</span></NavLink>
-						</li>
-						
-					</ul>
-					<h5 className="mt-5 toggleHidden">Manage Site</h5>
-					<ul className="nav flex-column">
-						<li>
-							<NavLink to="/createevent" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-edit"  title="Edit"></i> <span className="toggleHidden">Register/Create Help</span></NavLink>
 						</li>
 					</ul>
 

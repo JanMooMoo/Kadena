@@ -1,4 +1,4 @@
-export const Kadena_Address = '0x9964D5567665Aedb12F68CEB7dE1C49bD1699f0E';
+export const Kadena_Address = '0x1CA88108503Bc7a8C04b769c3700BA0a34022912';
 
 export const Kadena_ABI =   [
   {
@@ -36,15 +36,6 @@ export const Kadena_ABI =   [
   {
     "constant": false,
     "inputs": [],
-    "name": "destroy",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
     "name": "pause",
     "outputs": [],
     "payable": false,
@@ -74,20 +65,6 @@ export const Kadena_ABI =   [
       }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_recipient",
-        "type": "address"
-      }
-    ],
-    "name": "destroyAndSend",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -232,7 +209,7 @@ export const Kadena_ABI =   [
       },
       {
         "indexed": false,
-        "name": "startDate",
+        "name": "minimumAmount",
         "type": "uint256"
       },
       {
@@ -294,7 +271,7 @@ export const Kadena_ABI =   [
       },
       {
         "indexed": false,
-        "name": "startDate",
+        "name": "minimumAmount",
         "type": "uint256"
       },
       {
@@ -571,7 +548,7 @@ export const Kadena_ABI =   [
         "type": "bool"
       },
       {
-        "name": "_startDate",
+        "name": "_minimumAmount",
         "type": "uint256"
       },
       {
@@ -613,7 +590,7 @@ export const Kadena_ABI =   [
         "type": "bool"
       },
       {
-        "name": "_startDate",
+        "name": "_minimumAmount",
         "type": "uint256"
       },
       {
@@ -666,7 +643,7 @@ export const Kadena_ABI =   [
         "type": "bool"
       },
       {
-        "name": "startDate",
+        "name": "minimum",
         "type": "uint256"
       },
       {
@@ -721,7 +698,7 @@ export const Kadena_ABI =   [
         "type": "bool"
       },
       {
-        "name": "startDate",
+        "name": "minumum",
         "type": "uint256"
       },
       {

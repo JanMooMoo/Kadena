@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
-class ActivityCallForHelp extends Component {
+
+class ActivityLendAHand extends Component {
     constructor(props) {
         super(props);
          
@@ -20,7 +20,7 @@ class ActivityCallForHelp extends Component {
 
     async loadblockhain(){
 
-        this.props.Kadena.getPastEvents("NeedAHand",{filter:{ownerNeed:this.props.account},fromBlock: 5000000, toBlock:'latest'})
+        this.props.Kadena.getPastEvents("GiveAHand",{filter:{ownerGive:this.props.account},fromBlock: 5000000, toBlock:'latest'})
     .then(events=>{
 
     var newest = events;
@@ -49,7 +49,7 @@ class ActivityCallForHelp extends Component {
       	.map((s) => s.charAt(0).toUpperCase() + s.substring(1))
           .join(' ');
             
-          this.props.history.push("/need/"+pagetitle+"/"+eventId);
+          this.props.history.push("/give/"+pagetitle+"/"+eventId);
     }
 
 render(){
@@ -59,11 +59,11 @@ render(){
         <div className="col-lg-3 pb-4 d-flex align-items-stretch" >
               <div className="dashboard-line-card">   
               <div className="dashboard-events-caption" >
-              <h3 title="Pledge Activity"> Call For Help </h3>
+              <h3 title="Pledge Activity"> Lend A Hand </h3>
               </div>
               <div className="dashboard-events">
               <div className="dashboard-events-list">
-              {this.state.commited.map((pledged,index)=>(<h4 className="col-md-12 small" key={index}><strong>{pledged.returnValues.hospital}</strong> called for help for <strong className="gold" onClick={()=>this.friendlyUrl(pledged.returnValues.title,pledged.returnValues.eventId)}>{pledged.returnValues.amount} {pledged.returnValues.item}</strong></h4>
+              {this.state.commited.map((lend,index)=>(<h4 className="col-md-12 small" key={index}><strong>{lend.returnValues.hospital}</strong> lend a hand of <strong className="gold" onClick={()=>this.friendlyUrl(lend.returnValues.title,lend.returnValues.eventId)}>{lend.returnValues.amount} {lend.returnValues.item}</strong></h4>
                 ))}
   					          
               </div>
@@ -75,4 +75,4 @@ render(){
 	);
 }
 }
-export default ActivityCallForHelp;
+export default ActivityLendAHand;

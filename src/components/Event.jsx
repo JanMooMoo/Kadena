@@ -144,9 +144,6 @@ class Event extends Component {
 			event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
 			let image = this.getImage();
 			let description = this.getDescription();
-		
-			//let Alive = event_data[5]? 'Alive':'Deceased';
-	
 
 			let disabled = false;
 			let buttonText =<span> Pledge</span>;
@@ -157,9 +154,6 @@ class Event extends Component {
 
 			let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 			
-			let startdate = new Date(parseInt(event_data.startDate, 10) * 1000);
-			let start_date = months[startdate.getMonth()]+ ". " + startdate.getDate() + ", " + startdate.getFullYear()
-
 			let enddate = new Date(parseInt(event_data.endDate, 10) * 1000);
 			let end_date = months[enddate.getMonth()]+ ". " + enddate.getDate() + ", " + enddate.getFullYear()
 
@@ -207,7 +201,7 @@ class Event extends Component {
 					<Link to={titleURL} className="linkDisplay">
 					<ul className="list-group list-group-flush">
 						<li className="list-group-item small"><strong>Item: {event_data.item}</strong></li>
-						<li className="list-group-item small"><strong>Date Needed: {start_date} - {startdate.toLocaleTimeString()}</strong></li>
+						<li className="list-group-item small"><strong>Minimum Pledge: {event_data[6]} Items</strong></li>
 						{event_data.borrow && <li className="list-group-item small"><strong>Will Return In: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
 						{!event_data.borrow && <li className="list-group-item small"><strong>Will Close In: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
 						<li className="list-group-item small"><strong>Committed: {this.state.commits}/{event_data.amount}</strong></li>
@@ -226,6 +220,7 @@ class Event extends Component {
 					item = {event_data.item}
 					committed = {this.state.commits}
 					amount = {event_data.amount}
+					minimum = {event_data[6]}
 					account = {this.props.account}
       				/>}
 					</div>

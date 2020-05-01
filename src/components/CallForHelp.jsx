@@ -50,12 +50,6 @@ class CallForHelp extends Component
 
   
 
-  readMoreClick(location)
-  {
-    this.props.history.push(location);
-    window.scrollTo(0, 0);
-  }
-
 
   //Loads Blockhain Data,
   async loadBlockchain(){
@@ -285,8 +279,8 @@ class CallForHelp extends Component
 				}
 
         body =<div >
-          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)}>Active Events</button>
-              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)}>Past Events</button>
+          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)}>Active Needs</button>
+              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)}>Past Needs</button>
 						<div className="row user-list mt-4">
               
 							{this.state.loadingchain? loader:events_list}
@@ -327,7 +321,7 @@ class CallForHelp extends Component
       <div>
 
         <div className="row row_mobile">
-         <h2 className="col-lg-10 col-md-9 col-sm-8"><i className="fa fa-calendar-alt"></i> {header}</h2>
+         <h2 className="col-lg-10 col-md-9 col-sm-8 shadow"><i className="fa fa-calendar-alt"></i> {header}</h2>
          
          <button className="btn sort_button col-lg-2 col-md-3 col-sm-3" value={this.state.value} onClick={this.toggleSortDate.bind(this)}>{this.state.isOldestFirst ?'Sort: Oldest':'Sort: Newest'}</button>
         </div>

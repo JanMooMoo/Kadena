@@ -42,7 +42,7 @@ class CreateEvent extends Component {
 				item:null,
 				amount:0,
 				borrow:false,
-				startdate:0,
+				minimum:0,
 				enddate:0,
 				remarks:null,
 				id:0
@@ -54,7 +54,7 @@ class CreateEvent extends Component {
 				item:null,
 				amount:0,
 				borrow:false,
-				startdate:0,
+				minimum:0,
 				enddate:0,
 				remarks:null,
 				id:0
@@ -72,8 +72,8 @@ class CreateEvent extends Component {
 	}
 
 	
-	callForHelp = (title,category,item,amount,borrow,startdate,enddate,remarks,file,id) =>{
-		console.log("checking",title,category,item,amount,borrow,startdate,enddate,remarks)
+	callForHelp = (title,category,item,amount,borrow,minimum,enddate,remarks,file,id) =>{
+		console.log("checking",title,category,item,amount,borrow,minimum,enddate,remarks)
 		this.setState({
 			help:true,
 			upload: true,
@@ -86,7 +86,7 @@ class CreateEvent extends Component {
 				item:item,
 				amount:parseInt(amount, 10),
 				borrow:borrow,
-				startdate:startdate,
+				minimum:minimum,
 				enddate:enddate,
 				remarks:remarks,
 				id: parseInt(id, 10)
@@ -97,8 +97,8 @@ class CreateEvent extends Component {
 		});
 	}
 
-	lendAHand = (title,category,item,amount,borrow,startdate,enddate,remarks,file,id) =>{
-		console.log("checking",title,category,item,amount,borrow,startdate,enddate,remarks)
+	lendAHand = (title,category,item,amount,borrow,minimum,enddate,remarks,file,id) =>{
+		console.log("checking",title,category,item,amount,borrow,minimum,enddate,remarks)
 		this.setState({
 			lend:true,
 			upload: true,
@@ -111,7 +111,7 @@ class CreateEvent extends Component {
 				item:item,
 				amount:parseInt(amount, 10),
 				borrow:borrow,
-				startdate:startdate,
+				minimum:minimum,
 				enddate:enddate,
 				remarks:remarks,
 				id: parseInt(id, 10)
@@ -227,7 +227,7 @@ class CreateEvent extends Component {
 			   this.state.callForHelp.item,
 			   this.state.callForHelp.amount,
 			   this.state.callForHelp.borrow === 'true' ? true : false,	
-			   this.state.callForHelp.startdate,
+			   this.state.callForHelp.minimum,
 			   this.state.callForHelp.enddate,
 			   this.state.ipfs)	
 			   this.setState({help:false},()=>console.log(this.state.help))			
@@ -242,7 +242,7 @@ class CreateEvent extends Component {
 			this.state.lendAHand.item,
 			this.state.lendAHand.amount,
 			this.state.lendAHand.borrow === 'true' ? true : false,	
-			this.state.lendAHand.startdate,
+			this.state.lendAHand.minimum,
 			this.state.lendAHand.enddate,
 			this.state.ipfs)	
 			this.setState({lend:false},()=>console.log("dsadasd",this.state.lend))

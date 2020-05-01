@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
-class ActivityCallForHelp extends Component {
+class ActivityTake extends Component {
     constructor(props) {
         super(props);
          
@@ -18,15 +17,17 @@ class ActivityCallForHelp extends Component {
         
     }
 
+    
     async loadblockhain(){
 
-        this.props.Kadena.getPastEvents("NeedAHand",{filter:{ownerNeed:this.props.account},fromBlock: 5000000, toBlock:'latest'})
+        this.props.Kadena.getPastEvents("Taken",{filter:{takenBy:this.props.account},fromBlock: 5000000, toBlock:'latest'})
     .then(events=>{
 
     var newest = events;
     var newsort= newest.concat().sort((a,b)=> b.blockNumber- a.blockNumber);
     if (this._isMounted){
     this.setState({commited:newsort});
+    
   	}
     }).catch((err)=>console.error(err))
     }
@@ -39,8 +40,8 @@ class ActivityCallForHelp extends Component {
         return pledgeDate    
     }
 
-    friendlyUrl = (page,eventId) =>{
-        let rawTitle = page;
+    friendlyUrl = (hospitalName,EthAddress) =>{
+        let rawTitle = hospitalName;
       	var titleRemovedSpaces = rawTitle;
 	  	titleRemovedSpaces = titleRemovedSpaces.replace(/ /g, '-');
 
@@ -49,22 +50,24 @@ class ActivityCallForHelp extends Component {
       	.map((s) => s.charAt(0).toUpperCase() + s.substring(1))
           .join(' ');
             
-          this.props.history.push("/need/"+pagetitle+"/"+eventId);
+          window.location.href = "/hospital/"+pagetitle+"/"+EthAddress;
+          //this.props.history.push("/hospital/"+pagetitle+"/"+EthAddress);
     }
 
 render(){
+    
     
 
 	return (
         <div className="col-lg-3 pb-4 d-flex align-items-stretch" >
               <div className="dashboard-line-card">   
               <div className="dashboard-events-caption" >
-              <h3 title="Pledge Activity"> Call For Help </h3>
+              <h3 title="Pledge Activity"> Taken </h3>
               </div>
               <div className="dashboard-events">
               <div className="dashboard-events-list">
-              {this.state.commited.map((pledged,index)=>(<h4 className="col-md-12 small" key={index}><strong>{pledged.returnValues.hospital}</strong> called for help for <strong className="gold" onClick={()=>this.friendlyUrl(pledged.returnValues.title,pledged.returnValues.eventId)}>{pledged.returnValues.amount} {pledged.returnValues.item}</strong></h4>
-                ))}
+              {this.state.commited.map((taken,index)=>(<h4 className="col-md-12 small" key={index}><strong>{taken.returnValues.receiver}</strong> took <a href={"https://rinkeby.etherscan.io/tx/" + taken.transactionHash} target="blank" className="gold">{taken.returnValues.received} {taken.returnValues.item}</a> from <strong onClick={()=>this.friendlyUrl(taken.returnValues.sender,taken.returnValues.tookFrom)}>{taken.returnValues.sender}</strong> <br/><span className="date-right small">on {this.parseDate(taken.returnValues.date)}</span></h4>
+                    ))}
   					          
               </div>
             
@@ -75,4 +78,4 @@ render(){
 	);
 }
 }
-export default ActivityCallForHelp;
+export default ActivityTake;

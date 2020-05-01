@@ -1,9 +1,7 @@
 pragma solidity ^0.4.24;
     
 import 'openzeppelin-solidity/contracts/lifecycle/Pausable.sol';
-import 'openzeppelin-solidity/contracts/lifecycle/Destructible.sol';
 import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
-
 
 /**
 * @title Kadena
@@ -14,11 +12,10 @@ import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 * Some features/functions will be unavailable to a registered hospital if their rating drops a certain point.
 */
 
-contract Kadena is Pausable, Destructible {
+contract Kadena is Pausable {
 	using SafeMath for uint;
 
 
-	
 	struct Hospital {
 	    address owner;
 	    string name;
@@ -42,7 +39,7 @@ contract Kadena is Pausable, Destructible {
 		uint amount;
 		uint committed;
 		bool borrow;
-		uint startDate;
+		uint minimum;
 		uint endDate;
 		string ipfs;
 	}
@@ -56,7 +53,7 @@ contract Kadena is Pausable, Destructible {
 		uint amount;
 		uint committed;
 		bool borrow;
-		uint startDate;
+		uint minimum;
 		uint endDate;
 		string ipfs;
 	
@@ -76,8 +73,8 @@ contract Kadena is Pausable, Destructible {
 	
 	event Registration(address Admin, address indexed applicant, string registeredAs, string status, uint time, bool pending, bool indexed registrationStatus, uint rating);
 
-	event NeedAHand(address indexed ownerNeed, uint eventId, string hospital,string title, string category,string item, uint amount, bool borrow, uint startDate, uint endDate, string ipfs);
-	event GiveAHand(address indexed ownerGive, uint eventId, string hospital,string title, string category,string item, uint amount, bool borrow, uint startDate, uint endDate, string ipfs);
+	event NeedAHand(address indexed ownerNeed, uint eventId, string hospital,string title, string category,string item, uint amount, bool borrow, uint minimumAmount, uint endDate, string ipfs);
+	event GiveAHand(address indexed ownerGive, uint eventId, string hospital,string title, string category,string item, uint amount, bool borrow, uint minimumAmount, uint endDate, string ipfs);
 
     event Pledged(address indexed pledgedBy, string sender , string receiver,uint date, uint indexed eventId, string item, uint committed, address indexed pledgeTo, uint addedRating);
     event Taken(address indexed takenBy, string receiver , string sender,uint date, uint indexed eventId,string item,uint received, address indexed tookFrom, uint addedRating);
@@ -211,7 +208,6 @@ contract Kadena is Pausable, Destructible {
 	}
 	
 	
-
     /**
 	* @dev Function creates the event to Call For Help.
 	* @param _title string - The title of the event.
@@ -219,7 +215,7 @@ contract Kadena is Pausable, Destructible {
 	* @param _item string - The name of item.
 	* @param _amount uint - The total amount of items needed.
 	* @param _borrow bool - True if the items is expected to be returned in the future.
-	* @param _startDate - Start date of the event.
+	* @param _minimumAmount - minimum amount to pledge.
 	* @param _endDate - End date of the event.
 	* @param _ipfs - The IPFS hash containing additional information about the event.
 
@@ -236,7 +232,7 @@ contract Kadena is Pausable, Destructible {
 		string _item,
 		uint _amount,
 		bool _borrow,
-		uint _startDate,
+		uint _minimumAmount,
 		uint _endDate,
 		string _ipfs
 	
@@ -245,10 +241,9 @@ contract Kadena is Pausable, Destructible {
 		public
 	{
 	    require(registered[msg.sender].registered == true && registered[msg.sender].pending == false, "You are Not Registered");
-	    require(_startDate > now);
-	    require(_startDate < _endDate);
-	    require(registered[msg.sender].rating >= 20);
-	    require(_amount > 0);
+	    require(now < _endDate);
+	    require(registered[msg.sender].rating > 20);
+	    require(_amount > 0 && _minimumAmount <= _amount);
    
 		NeedHelp memory _event = NeedHelp({
 			owner: msg.sender,
@@ -259,7 +254,7 @@ contract Kadena is Pausable, Destructible {
 			amount: _amount,
 			committed:0,
 			borrow: _borrow,
-			startDate: _startDate,
+			minimum: _minimumAmount,
 			endDate: _endDate,
 			ipfs: _ipfs
 			
@@ -267,13 +262,18 @@ contract Kadena is Pausable, Destructible {
 		});
       	uint _eventId = needHelp.push(_event).sub(1);
 		neededEvents[msg.sender].push(_eventId);
-		if(registered[msg.sender].rating >= 15){
-		uint _subtractedRating = 5;}
-		else _subtractedRating = registered[msg.sender].rating - 10;
+		
+		if(registered[msg.sender].rating >= 25){
+		    uint _subtractedRating = 5;
+		    
+		}
+		else {
+		    _subtractedRating = registered[msg.sender].rating - 20;
+		   
+		}
 	    
-		if(registered[msg.sender].rating >10){
-		registered[msg.sender].rating = registered[msg.sender].rating.sub(_subtractedRating);}
-		emit NeedAHand(msg.sender, _eventId,registered[msg.sender].name,_title,_category,_item, _amount, _borrow,_startDate,_endDate,_ipfs); 
+		registered[msg.sender].rating = registered[msg.sender].rating.sub(_subtractedRating);
+		emit NeedAHand(msg.sender, _eventId,registered[msg.sender].name,_title,_category,_item, _amount, _borrow,_minimumAmount,_endDate,_ipfs); 
 
 	}
 	
@@ -284,7 +284,7 @@ contract Kadena is Pausable, Destructible {
 	* @param _item string - The name of item.
 	* @param _amount uint - The total amount of items to be given.
 	* @param _borrow bool - True if the items is expected to be returned in the future.
-	* @param _startDate - Start date of the event.
+	* @param _minimumAmount - minimum amount to take.
 	* @param _endDate - End date of the event.
 	* @param _ipfs - The IPFS hash containing additional information about the event.
 
@@ -300,7 +300,7 @@ contract Kadena is Pausable, Destructible {
 		string _item,
 		uint _amount,
 		bool _borrow,
-		uint _startDate,
+		uint _minimumAmount,
 		uint _endDate,
 		string _ipfs
 	
@@ -309,9 +309,8 @@ contract Kadena is Pausable, Destructible {
 		public
 	{
 	    require(registered[msg.sender].registered == true && registered[msg.sender].pending == false, "You are Not Registered");
-	    require(_startDate > now);
-	    require(_startDate < _endDate);
-	    require(_amount > 0);
+	    require(now < _endDate);
+	    require(_amount > 0 && _minimumAmount <= _amount);
    
 		GiveHelp memory _event = GiveHelp({
 			owner: msg.sender,
@@ -322,7 +321,7 @@ contract Kadena is Pausable, Destructible {
 			amount: _amount,
 			committed:_amount,
 			borrow: _borrow,
-			startDate: _startDate,
+		    minimum: _minimumAmount,
 			endDate: _endDate,
 			ipfs: _ipfs
 			
@@ -330,12 +329,18 @@ contract Kadena is Pausable, Destructible {
       	uint _eventId = giveHelp.push(_event).sub(1);
 		givenEvents[msg.sender].push(_eventId);
 		if(registered[msg.sender].rating < 55){
-		uint _addedRating = 5;}
-		else _addedRating = 60 - registered[msg.sender].rating;
+		    uint _addedRating = 5;
+		    
+		}
+		else {
+		    _addedRating = 60 - registered[msg.sender].rating;
+		    
+		}
 	    
 		if(registered[msg.sender].rating < 60){
 		registered[msg.sender].rating = registered[msg.sender].rating.add(_addedRating);}
-		emit GiveAHand(msg.sender, _eventId,registered[msg.sender].name,_title,_category,_item, _amount, _borrow,_startDate,_endDate,_ipfs);  
+		
+		emit GiveAHand(msg.sender, _eventId,registered[msg.sender].name,_title,_category,_item, _amount, _borrow,_minimumAmount,_endDate,_ipfs);  
   
 	}
 	
@@ -366,7 +371,7 @@ contract Kadena is Pausable, Destructible {
 	    	uint amount,
 	    	uint committed,
 	    	bool borrow,
-	    	uint startDate,
+	    	uint minimum,
 	    	uint endDate,
 	    	string ipfs,
 	    	address owner
@@ -380,7 +385,7 @@ contract Kadena is Pausable, Destructible {
 			_event.amount,
 			_event.committed,
 			_event.borrow,
-			_event.startDate,
+			_event.minimum,
 			_event.endDate,
 			_event.ipfs,
 			_event.owner
@@ -414,7 +419,7 @@ contract Kadena is Pausable, Destructible {
 	    	uint amount,
 	    	uint committed,
 	    	bool borrow,
-	    	uint startDate,
+	    	uint minumum,
 	    	uint endDate,
 	    	string ipfs,
 	    	address owner
@@ -428,7 +433,7 @@ contract Kadena is Pausable, Destructible {
 			_event.amount,
 			_event.committed,
 			_event.borrow,
-			_event.startDate,
+			_event.minimum,
 			_event.endDate,
 			_event.ipfs,
 			_event.owner
@@ -455,23 +460,22 @@ contract Kadena is Pausable, Destructible {
 	{
 	    require(_eventId < needHelp.length);
 		NeedHelp memory _event = needHelp[_eventId];
-		require(_commit > 0);
-		require(_commit <= needHelp[_eventId].amount);
-		require(_commit <= needHelp[_eventId].amount - needHelp[_eventId].committed);
-		require(msg.sender != needHelp[_eventId].owner);
 		
-		if(_event.borrow) require(_event.endDate > now);
+		require(_commit > 0);
+		require(_commit <= needHelp[_eventId].amount && _commit >= needHelp[_eventId].minimum && _commit <= needHelp[_eventId].amount.sub(needHelp[_eventId].committed));
+		require(msg.sender != needHelp[_eventId].owner);
+		require(needHelp[_eventId].endDate > now);
 		
 		
 		needHelp[_eventId].committed = needHelp[_eventId].committed.add(_commit);
 		if (registered[msg.sender].rating <= 57){
-		uint _addedRating = 3;
-		registered[msg.sender].rating = registered[msg.sender].rating.add(_addedRating);
+		    uint _addedRating = 3;
+	
 		}
 		else{
-		_addedRating = 60 - registered[msg.sender].rating;
-		registered[msg.sender].rating = registered[msg.sender].rating.add(_addedRating);
+		    _addedRating = 60 - registered[msg.sender].rating;
 		}
+		registered[msg.sender].rating = registered[msg.sender].rating.add(_addedRating);
 		emit Pledged(msg.sender,registered[msg.sender].name, registered[needHelp[_eventId].owner].name,now, _eventId,needHelp[_eventId].item, _commit, needHelp[_eventId].owner, _addedRating);
 	}
 	
@@ -482,9 +486,9 @@ contract Kadena is Pausable, Destructible {
 	* @param _take - The amount of the item to take.
 	
     * @notice Requires that the event exist.
-    * @notice Requires that the sender rating is greater than or equal to 20.
+    * @notice Requires that the sender rating is greater than or equal to 10.
     * @notice Requires that the amount to take is greater than 0.
-    * @notice Requires that the amount of items to take is <= 1/3 of the pool if the pool amount is greater than 5.
+    * @notice Requires that the amount to take is greater than minimum.
     * @notice Requires that the amount of items to take is <= current available items in the pool.
     * @notice Requires that the taker is not the creator of the event.
     * @notice Requires that the events hasn't ended yet.
@@ -493,31 +497,29 @@ contract Kadena is Pausable, Destructible {
 	function take(uint _eventId, uint _take)
 	    whenNotPaused()
 		public
-		//eventExist(_eventId)
-		//goodAmount(_event.amount, _event.committed, _commit)
+		
 	{
 	    require(_eventId < giveHelp.length);
-	    require(registered[msg.sender].rating >= 20);
-	    require(_take > 0);
+	  
 		GiveHelp memory _event = giveHelp[_eventId];
-		if(giveHelp[_eventId].amount >= 5 ){
-		require(_take <= giveHelp[_eventId].amount/3);
-		}
-		require(_take <= giveHelp[_eventId].amount - giveHelp[_eventId].committed);
-		require(msg.sender != needHelp[_eventId].owner);
-	    require(_event.endDate > now);
 		
+		require(registered[msg.sender].rating > 10);
+	    require(_take > 0 && _take >= giveHelp[_eventId].minimum && _take <= giveHelp[_eventId].committed);
+		require(msg.sender != giveHelp[_eventId].owner);
+	    require(giveHelp[_eventId].endDate > now);
 		
 		giveHelp[_eventId].committed = giveHelp[_eventId].committed.sub(_take);
+	
 		if (registered[msg.sender].rating >= 13){
-		uint _subtractRating = 3;
-		registered[msg.sender].rating = registered[msg.sender].rating.add(_subtractRating);
+		    uint _subtractRating = 3;
 		}
+		
 		else{
-		_subtractRating = registered[msg.sender].rating - 10;
-		registered[msg.sender].rating = registered[msg.sender].rating.add(_subtractRating);
+		    _subtractRating = registered[msg.sender].rating - 10;
 		}
-		emit Taken(msg.sender,registered[msg.sender].name, registered[needHelp[_eventId].owner].name,now, _eventId,giveHelp[_eventId].item,_take, giveHelp[_eventId].owner, _subtractRating);
+		
+		registered[msg.sender].rating = registered[msg.sender].rating.sub(_subtractRating);
+		emit Taken(msg.sender,registered[msg.sender].name, registered[giveHelp[_eventId].owner].name,now, _eventId,giveHelp[_eventId].item,_take, giveHelp[_eventId].owner, _subtractRating);
 	}
 	
 

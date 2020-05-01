@@ -116,7 +116,7 @@ class HospitalList extends Component
       <div>
 
         <div className="row row_mobile">
-        <h2 className="col-lg-10 col-md-9 col-sm-8"><i class="fas fa-hospital-alt"i/> List of Hospitals</h2>
+        <h2 className="col-lg-10 col-md-9 col-sm-8 shadow"><i class="fas fa-hospital-alt "i/> List of Hospitals</h2>
         </div>
         <hr/>
 

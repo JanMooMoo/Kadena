@@ -62,7 +62,7 @@ render(){
         <div className="col-lg-3 pb-4 d-flex align-items-stretch" >
               <div className="dashboard-line-card">   
               <div className="dashboard-events-caption" >
-              <h3 title="Pledge Activity"><i class="far fa-chart-bar"></i> Pledged </h3>
+              <h3 title="Pledge Activity"> Pledged </h3>
               </div>
               <div className="dashboard-events">
               <div className="dashboard-events-list">

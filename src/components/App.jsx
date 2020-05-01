@@ -16,6 +16,7 @@ import AdminPage from './AdminPage';
 import CreateEvent from './CreateEvent/';
 
 import HospitalProfile from './HospitalProfile';
+import MyHospitalProfile from './MyHospitalProfile';
 import HospitalList from './HospitalList';
 import CallForHelp from './CallForHelp';
 import LendAHand from './LendAHand';
@@ -34,6 +35,7 @@ import NotifyRequest from './NotifyRequest';
 import NotifyPledge from './NotifyPledge';
 
 import PageNeed from './PageNeed';
+import PageGive from './PageGive';
 
 import NetworkError from './NetworkError';
 import LoadingApp from './LoadingApp';
@@ -144,7 +146,7 @@ async loadBlockchainData() {
 		this.setState({Kadena:Kadena});
 		setInterval(async()=>{
 			const get_account = await Kadena.methods.getHospitalStatus(this.state.account).call();
-		this.setState({accountDetails:get_account},()=>console.log)	
+		this.setState({accountDetails:get_account},()=>console.log())	
 		},2000)
 
 		const blockNumber = await web3.eth.getBlockNumber();
@@ -227,9 +229,11 @@ async loadBlockchainData() {
 					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/> }  />
 					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
 					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} kadena={this.state.Kadena}/>}/>
+					<Route path="/give/:page/:id"  render={props => <PageGive {...props} kadena={this.state.Kadena}/>}/>
+					<Route path="/myhospital/" render={props => <MyHospitalProfile {...props} account={this.state.account}/>}/>
 					<Route path="/hospital/:page/:id"  render={props => <HospitalProfile {...props}/>}/>
 					<Route path="/hospital-list"  render={props => <HospitalList {...props}/>}/>
-					<Route path="/createevent" render={props=><CreateEvent  {...props}
+					<Route path="/register" render={props=><CreateEvent  {...props}
 					upload={this.state.upload}
 					done = {this.state.done}
 					error = {this.state.error}
@@ -246,9 +250,11 @@ async loadBlockchainData() {
 					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
 					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
 					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} kadena={this.state.Kadena}/>}/>
+					<Route path="/give/:page/:id"  render={props => <PageGive {...props} kadena={this.state.Kadena}/>}/>
+					<Route path="/myhospital"  render={props => <MyHospitalProfile {...props} account={this.state.account}/>}/>
 					<Route path="/hospital/:page/:id"  render={props => <HospitalProfile {...props}/>}/>
 					<Route path="/hospital-list"  render={props => <HospitalList {...props}/>}/>
-					<Route path="/createevent" render={props=><CreateEvent  {...props}
+					<Route path="/register" render={props=><CreateEvent  {...props}
 					upload={this.state.upload}
 					done = {this.state.done}
 					error = {this.state.error}

@@ -3,15 +3,12 @@ import {Modal} from 'react-bootstrap';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 
-export class ModalPledge extends Component{
+export class ModalTake extends Component{
 
      _isMounted = false; 
 
     componentDidMount(){
         this._isMounted = true;
-        
-        //this.toastinfo();
-        //this.loadBlockchainData();
        
        }
        
@@ -37,14 +34,15 @@ constructor(props,context){
   //amountChange
   amountChange = (event) => {		
     let amount = event.target.value;
+    if(this._isMounted){
     this.setState({
         amount: amount
     },()=>console.log());
-    
+}
 }
 
-pledge = ()=>{
-    this.contracts['Kadena'].methods.pledge.cacheSend(this.props.id,this.state.amount)
+take = ()=>{
+    this.contracts['Kadena'].methods.take.cacheSend(this.props.id,this.state.amount)
     }
   
   
@@ -53,10 +51,11 @@ pledge = ()=>{
         let disabled = false 
         
 
-        if(this.state.amount < 1 || this.state.amount > this.props.amount - this.props.committed){
+        if(this.state.amount > Number(this.props.committed)){
             disabled = true
         }
 
+        
         if(Number(this.state.amount) < Number(this.props.minimum)){
           disabled = true;
         }
@@ -73,29 +72,29 @@ pledge = ()=>{
         
       <Modal.Header className="modalpie" closeButton>
       <Modal.Title id="contained-modal-title-vcenter">
-        <div className="banana3">Pledge to {this.props.hospital}</div>
+        <div className="banana3">Take from {this.props.hospital}</div>
       </Modal.Title>
       </Modal.Header> 
         
       <Modal.Body> 
-      <h5 className="banana3">Item Needed: {this.props.item}</h5>
-      <p className="banana3">Current Amount Committed: {this.props.committed}/{this.props.amount}</p>
+      <h5 className="banana3">Item Pool: {this.props.item}</h5>
+      <p className="banana3">Current Amount In Pool: {this.props.committed}/{this.props.amount}</p>
       
       <div className="form-group row">
 			<div className="col-lg-12">
-				<label htmlFor="amount">You Will Pledge: {this.state.amount}</label>
+				<label htmlFor="amount">You Will Take: {this.state.amount}</label>
 					<div className="input-group mb-3">
 					<div className="input-group-prepend">
 					<span className="input-group-text">Amount</span>
 					</div>
 					<input type="number" min="1" className={"form-control "} id="amount" title={"Amount Needed"} autoComplete="off" onChange={this.amountChange} />
-          
-          </div>
-					<small className="form-text text-muted">Minimum of {this.props.minimum} items to pledge.</small>	
+			    </div>
+					<small className="form-text text-muted">Minimum of {this.props.minimum} items to take.</small>	
+	
 		    </div>
 		</div>
     
-            <button className="btn btn-outline-dark" title="Pledge" onClick={this.pledge} disabled={disabled}>Pledge</button>
+            <button className="btn btn-outline-dark" title="Pledge" onClick={this.take} disabled={disabled}>Take</button>
             <button className="btn btn-outline-dark ml-2" title="Cancel" onClick={this.props.onHide}>Cancel</button>
        
       
@@ -109,7 +108,7 @@ pledge = ()=>{
 
 }
 
-ModalPledge.contextTypes = {
+ModalTake.contextTypes = {
     drizzle: PropTypes.object
 }
 
@@ -121,5 +120,5 @@ const mapStateToProps = state => {
     };
 };
 
-const AppContainer = drizzleConnect(ModalPledge, mapStateToProps);
+const AppContainer = drizzleConnect(ModalTake, mapStateToProps);
 export default AppContainer;

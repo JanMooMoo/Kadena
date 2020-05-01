@@ -10,6 +10,7 @@ import EventGive from './EventGive';
 import Web3 from 'web3';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 
+const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
 
 class LendAHand extends Component
 {
@@ -38,7 +39,7 @@ class LendAHand extends Component
       };
 
 	    this.contracts = context.drizzle.contracts;
-        this.Count = this.contracts['Kadena'].methods.getNeededCount.cacheCall();
+        this.Count = this.contracts['Kadena'].methods.getAssistCount.cacheCall();
 
 
       
@@ -58,7 +59,6 @@ class LendAHand extends Component
   //Loads Blockhain Data,
   async loadBlockchain(){
    
-    const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b')); 
     const dateTime = Date.now();
     const Kadena  =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
 		this.setState({Kadena:Kadena});
@@ -84,7 +84,14 @@ class LendAHand extends Component
      
     }
 
-    getActiveEvents(){
+    async getActiveEvents(){
+
+    const blockNumber = await web3.eth.getBlockNumber();
+
+    if (this._isMounted){
+        this.setState({blocks:blockNumber - 50000});
+        this.setState({latestblocks:blockNumber - 1});
+        }
 
     if (this._isMounted){
       this.setState({needHelpActive:[],active_length:0,loadingchain:true})
@@ -113,7 +120,7 @@ class LendAHand extends Component
 		this.setState({
 			isActive: true,
 		})
-     
+    
 		this.getActiveEvents()
 		this.props.history.push("/givehelp/"+1)
     }
@@ -196,9 +203,8 @@ class LendAHand extends Component
     let header = "Active Assistance";
     let loader = <HydroLoader/>
 
-    
 
-    if (typeof this.props.contracts['Kadena'].getNeededCount[this.Count] !== 'undefined' && this.state.active_length !== 'undefined') {
+    if (typeof this.props.contracts['Kadena'].getAssistCount[this.Count] !== 'undefined' && this.state.active_length !== 'undefined') {
       
       let count = this.state.needHelpActive.length
 
@@ -279,8 +285,8 @@ class LendAHand extends Component
 				}
 
         body =<div >
-          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)}>Active Assistance</button>
-              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)}>Past Assistance</button>
+          <button className="btn btn-outline-dark mt-2" onClick={this.ActiveEvent.bind(this)}>Active Help</button>
+              <button className="btn btn-outline-dark mt-2 ml-3" onClick={this.PastEvent.bind(this)}>Past Help</button>
 						<div className="row user-list mt-4">
               
 							{this.state.loadingchain? loader:events_list}
@@ -321,7 +327,7 @@ class LendAHand extends Component
       <div>
 
         <div className="row row_mobile">
-         <h2 className="col-lg-10 col-md-9 col-sm-8"><i className="fa fa-calendar-alt"></i> {header}</h2>
+         <h2 className="col-lg-10 col-md-9 col-sm-8 shadow"><i className="fa fa-calendar-alt"></i> {header}</h2>
          
          <button className="btn sort_button col-lg-2 col-md-3 col-sm-3" value={this.state.value} onClick={this.toggleSortDate.bind(this)}>{this.state.isOldestFirst ?'Sort: Oldest':'Sort: Newest'}</button>
         </div>

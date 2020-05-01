@@ -28,7 +28,7 @@ class LendAHand extends Component {
             item:"Mask",
             amount:0,
             return:true,
-            time:'',
+            minimum:0,
             endtime:'',
             
             equipment:["Hospital Bed","Mask","Personal Protective Equipment","COVID-19 Test Kit","COVID-19 Convalescent Plasma","Ventilator"],
@@ -99,6 +99,15 @@ class LendAHand extends Component {
 		},()=>console.log());
 		
 	}
+
+	//Minimum amountChange
+    minAmountChange = () => {		
+		let minAmount = this.form.minAmount.value;
+		this.setState({
+			minimum: minAmount
+		},()=>console.log());
+		
+	}
     
     //category
     categoryChange = (event) =>{
@@ -115,7 +124,7 @@ class LendAHand extends Component {
 
 		this.setState({
 			item: item
-		},()=>(console.log(this.state.item)));
+		},()=>(console.log()));
     }
 
     //Return
@@ -124,26 +133,16 @@ class LendAHand extends Component {
         this.setState({
 			return: returns
 			
-		},()=>console.log('gender',this.state.return));
+		},()=>console.log());
     }
 
-    //StartDate
-    handleStartDate = (date) => {
-		if (typeof date === 'object' && date.isValid()) {
-			this.setState({
-                time: date.unix(),
-                dateDisplay: new Date(parseInt(date.unix(), 10) * 1000)		
-            },()=>console.log(this.state.timeForHumans,this.state.dateDisplay,this.state.time))
-		}
-    }
-    
     //EndDate
     handleEndDate = (date) => {
 		if (typeof date === 'object' && date.isValid()) {
 			this.setState({
                 endtime: date.unix(),
                 enddateDisplay: new Date(parseInt(date.unix(), 10) * 1000)		
-            },()=>console.log(this.state.endtimeForHumans,this.state.enddateDisplay,this.state.endtime))
+            },()=>console.log())
 		}
 	}
 
@@ -156,9 +155,9 @@ class LendAHand extends Component {
         if (this.state.category === '') form_validation.push('category');
         if (this.form.description.value === '') form_validation.push('description');
         if (this.state.item === '') form_validation.push('item');
-        if (this.form.amount.value === '') form_validation.push('amount');
+		if (this.form.amount.value === '') form_validation.push('amount');
+		if (this.form.minAmount.value === '') form_validation.push('minAmount');
         if (this.state.return === '') form_validation.push('return');
-        if (this.state.time === '') form_validation.push('Start');
         if (this.state.endtime === '') form_validation.push('End');
 		if (this.state.wrong_file === true || this.state.file === null) form_validation.push('image');
 		
@@ -173,7 +172,7 @@ class LendAHand extends Component {
 				this.state.item,
                 this.state.amount,
                 this.state.return,
-				this.state.time,
+				this.state.minimum,
                 this.state.endtime,
                 this.state.description,
 				this.state.file,
@@ -193,7 +192,7 @@ class LendAHand extends Component {
             category: this.state.form_validation.indexOf('category') === -1 ? '' : 'is-invalid', 
 			item: this.state.form_validation.indexOf('item') === -1 ? '' : 'is-invalid',
 			amount: this.state.form_validation.indexOf('amount') === -1 ? '' : 'is-invalid',
-			time: this.state.form_validation.indexOf('Start') === -1 ? '' : 'is-invalid',
+			minAmount: this.state.form_validation.indexOf('minAmount') === -1 ? '' : 'is-invalid',
             endtime: this.state.form_validation.indexOf('End') === -1 ? '' : 'is-invalid',
             description:this.state.form_validation.indexOf('description') === -1 ? '' : 'is-invalid',
             image: this.state.form_validation.indexOf('image') === -1 && !this.state.wrong_file ? '' : 'is-invalid',
@@ -269,7 +268,7 @@ class LendAHand extends Component {
 
                 <div className="form-group row">
 					<div className="col-lg-6">
-						<label htmlFor="amount">No. of Items Needed</label>
+						<label htmlFor="amount">No. of Items To Give</label>
 						<div className="input-group mb-3">
 							<div className="input-group-prepend">
 								<span className="input-group-text">Amount</span>
@@ -278,6 +277,19 @@ class LendAHand extends Component {
 						</div>
 						
 					</div>
+				</div>
+
+				<div className="form-group row">
+					<div className="col-lg-6">
+						<label htmlFor="minAmount">Minimum Amount Others Could Take</label>
+						<div className="input-group mb-3">
+							<div className="input-group-prepend">
+								<span className="input-group-text">Min. Amount</span>
+							</div>
+							<input type="number" min="1" className={"form-control " + warning.minAmount} id="minAmount" title={"Minimum Amount"} ref={(input) => this.form.minAmount = input} autoComplete="off" onChange={this.minAmountChange} />
+						</div>
+						<small className="form-text text-muted">Should be less than the Amount.</small>
+					</div>	
 				</div>
 
                 <div className="form-group">
@@ -295,17 +307,7 @@ class LendAHand extends Component {
 					<small className="form-text text-muted">{this.state.description_length}/500 characters available.</small>
 				</div>
 
-                <div className="form-group">
-					<label htmlFor="Start">Date and Time Needed:</label>
-					<Datetime closeOnSelect={false} onChange={this.handleStartDate} inputProps={{className : "form-control " + warning.time, title: "Date and Time Needed"}} autoComplete="off" />
-				</div>
-
-                <div className="form-group">
-					<label htmlFor="End">End Date and Time:</label>
-					<Datetime closeOnSelect={false} onChange={this.handleEndDate} inputProps={{className : "form-control " + warning.endtime, title: "Open Until"}} autoComplete="off" />
-				</div>
-				
-                <div className="form-group">
+				<div className="form-group">
 					<p>Borrow only / Will be returned on or before the end date.</p>
 					<div className="custom-control custom-radio custom-control-inline">
 						<input type="radio" id="Yes" name="return" className="custom-control-input" defaultChecked="true" value="true" title="Will be returned" onChange={this.handleReturn} autoComplete="off" />
@@ -317,7 +319,11 @@ class LendAHand extends Component {
 					</div>
 				</div>
 
-
+                <div className="form-group">
+					<label htmlFor="End">End Date and Time:</label>
+					<Datetime closeOnSelect={false} onChange={this.handleEndDate} inputProps={{className : "form-control " + warning.endtime, title: "Open Until"}} autoComplete="off" />
+				</div>
+			
 				<br />
 				{alert}
 				<br />
@@ -347,8 +353,8 @@ class LendAHand extends Component {
 			
 			<ul className="list-group list-group-flush">
             <li className="list-group-item"><strong>Item:</strong> {this.state.item} </li>
-            <li className="list-group-item"><strong>Date Needed: {this.state.dateDisplay.toLocaleDateString()} at {this.state.dateDisplay.toLocaleTimeString()}</strong>  </li>
-            {!this.state.return &&<li className="list-group-item"><strong>Will Close In: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
+            <li className="list-group-item"><strong>Minimum Amount To Take: {this.state.minimum} Items</strong>  </li>
+            {!this.state.return &&<li className="list-group-item"><strong>Will Close On: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
             {this.state.return &&<li className="list-group-item"><strong>Should Return On or Before: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
             <li className="list-group-item"><strong>Items Remaining:</strong> {this.state.amount}/{this.state.amount} </li>
             <li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>

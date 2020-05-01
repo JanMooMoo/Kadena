@@ -7,24 +7,21 @@ import Web3 from 'web3';
 
 
 import Loading from './Loading';
-import HospitalNotFound from './HospitalNotFound';
+import HospitalNotRegistered from './HospitalNotRegistered';
 
 import ActivityPledge from './ActivityPledge';
 import ActivityTake from './ActivityTake';
 import ActivityCallForHelp from './ActivityCallForHelp';
 import ActivityLendAHand from './ActivityLendAHand';
 
-
-
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 
-class HospitalProfile extends Component {
+class MyHospitalProfile extends Component {
 
     constructor(props, context) {
       super(props);
 		  this.contracts = context.drizzle.contracts;
-          //this.event = this.contracts['Kadena'].methods.callForHelpDetails.cacheCall(this.props.match.params.id);
-          this.hospital = this.contracts['Kadena'].methods.getHospitalStatus.cacheCall(this.props.match.params.id);
+          
           this.state = {
 			  load:true,
 			  loading: false,
@@ -41,6 +38,7 @@ class HospitalProfile extends Component {
 			  commited:[],
               latestblocks:5000000,
               Kadena:null,
+              account:[],
 
 			  pledgeModalShow:false,
               pageTransactions:[],
@@ -56,7 +54,8 @@ class HospitalProfile extends Component {
 
 	const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/72e114745bbf4822b987489c119f858b'));
 	const Kadena =  new web3.eth.Contract(Kadena_ABI, Kadena_Address);
-
+    
+    
     if (this._isMounted){
     this.setState({Kadena:Kadena});}
 
@@ -154,11 +153,13 @@ class HospitalProfile extends Component {
 		
 
 		if (typeof this.props.contracts['Kadena'].getHospitalStatus[this.hospital] !== 'undefined') {
-			if (this.props.contracts['Kadena'].getHospitalStatus[this.hospital].error) {
+		
+            if (this.props.contracts['Kadena'].getHospitalStatus[this.hospital].error) {
 				body = <div className="text-center mt-5"><span role="img" aria-label="warning">🚨</span> Hospital Profile Not Found</div>;
 			} else {
-
+                
                 let hospital_data = this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value;
+
                 //let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
                 let image = this.getImage();
                 let description = this.getDescription();
@@ -170,16 +171,7 @@ class HospitalProfile extends Component {
 			
                 let startdate = new Date(parseInt(hospital_data._time, 10) * 1000);
                 let memberSince = months[startdate.getMonth()]+ ". " + startdate.getDate() + ", " + startdate.getFullYear()
-               
-
-                let rawTitle = hospital_data._hospitalName;
-      	        var titleRemovedSpaces = rawTitle;
-	  	        titleRemovedSpaces = titleRemovedSpaces.replace(/ /g, '-');
-
-      	        var pagetitle = titleRemovedSpaces.toLowerCase()
-      	        .split(' ')
-      	        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-                  .join(' ');
+            
                   
                   if (hospital_data._rating < 20 ){
                     stars = <div className="rating">Hospital Rating: <i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/><i class="far fa-star"/></div>}
@@ -195,12 +187,15 @@ class HospitalProfile extends Component {
                     stars = <div className="rating">Hospital Rating: <i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/><i class="fas fa-star"/></div>
                 }; 
 
-		if(this.props.match.params.page === pagetitle){
-		 
+                if(!hospital_data._registered && !hospital_data._pending){
+                    body = <HospitalNotRegistered/>
+                }
+		 else{
 				body =
 				<div className="row">
                 <div className="col-12">
             	<h3>{hospital_data._hospitalName}</h3>
+                {hospital_data._pending && <p className="Pending small"><strong>(Pending Registration)</strong></p>}
                 </div>
                 <div className = "card-hospital-wrapper col-lg-4 col-md-6 col-sm-12 mt-3">
 					<img className="card-hospital-img-top" src={image} alt="Event" />
@@ -209,8 +204,7 @@ class HospitalProfile extends Component {
                 <p>{description}</p>
                 </div>
                  
-				
-               
+			  
 				<div className=" col-12 mt-4">
                 
                 <ul className="list-group list-group-flush profile-list">
@@ -218,7 +212,7 @@ class HospitalProfile extends Component {
                     <li className="list-group-item small"><strong>City: {hospital_data._city}</strong> </li>
 					<li className="list-group-item small"><strong>Address: {address} </strong></li>
 					<li className="list-group-item small"><strong>Contact: {contact} </strong></li>
-                    <li className="list-group-item small"><strong>Kadena Member Since: {memberSince} </strong></li>
+                    {hospital_data._registered && <li className="list-group-item small"><strong>Kadena Member Since: {memberSince} </strong></li>}
                     <li className="list-group-item small" title={hospital_data._rating}><strong>{stars}</strong></li>
 					</ul> 
 				
@@ -230,22 +224,18 @@ class HospitalProfile extends Component {
             <hr/>
             
             
-            <ActivityCallForHelp Kadena = {this.state.Kadena} account={this.props.match.params.id} history={this.props.history}/>
-            <ActivityLendAHand Kadena = {this.state.Kadena} account={this.props.match.params.id} history={this.props.history}/>
+            <ActivityCallForHelp Kadena = {this.state.Kadena} account={this.props.account} history={this.props.history}/>
+            <ActivityLendAHand Kadena = {this.state.Kadena} account={this.props.account} history={this.props.history}/>
 
-            <ActivityPledge Kadena = {this.state.Kadena} account={this.props.match.params.id} history={this.props.history}/>
-            <ActivityTake Kadena = {this.state.Kadena} account={this.props.match.params.id} history={this.props.history}/>
+            <ActivityPledge Kadena = {this.state.Kadena} account={this.props.account} history={this.props.history}/>
+            <ActivityTake Kadena = {this.state.Kadena} account={this.props.account} history={this.props.history}/>
 
             </div>;
-				}
 				
-			else {
-				body = <HospitalNotFound/>;
-				}
-                
+         }   
 			}
 			
-		}
+        }
 
 		return (
 			<div className="event-page-wrapper">
@@ -263,10 +253,10 @@ class HospitalProfile extends Component {
 
 	componentDidMount() {
         this._isMounted = true;
-        this.account = this.props.match.params.id
-        this.page = this.props.match.params.page
+        this.loadblockhain();
+        this.hospital = this.contracts['Kadena'].methods.getHospitalStatus.cacheCall(this.props.account);
 		this.updateIPFS();
-		this.loadblockhain();
+		
 	}
 
 	componentDidUpdate(prevProps) {
@@ -280,7 +270,7 @@ class HospitalProfile extends Component {
 	}
 }
 
-HospitalProfile.contextTypes = {
+MyHospitalProfile.contextTypes = {
     drizzle: PropTypes.object
 }
 
@@ -292,5 +282,5 @@ const mapStateToProps = state => {
     };
 };
 
-const AppContainer = drizzleConnect(HospitalProfile, mapStateToProps);
+const AppContainer = drizzleConnect(MyHospitalProfile, mapStateToProps);
 export default AppContainer;

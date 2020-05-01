@@ -12,7 +12,7 @@ import EventNotFound from './EventNotFound';
 import Clock from './Clock';
 import JwPagination from 'jw-react-pagination';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
-import {ModalPledge} from './ModalPledge'
+import {ModalTake} from './ModalTake'
 import HospitalCard from './HospitalCard';
 
 
@@ -34,12 +34,12 @@ const customStyles = {
 	
 };
 
-class PageNeed extends Component {
+class PageGive extends Component {
 
     constructor(props, context) {
       super(props);
 		  this.contracts = context.drizzle.contracts;
-          this.event = this.contracts['Kadena'].methods.callForHelpDetails.cacheCall(this.props.match.params.id);
+          this.event = this.contracts['Kadena'].methods.provideAssistanceDetails.cacheCall(this.props.match.params.id);
 		  this.state = {
 			  load:true,
 			  loading: false,
@@ -80,7 +80,7 @@ class PageNeed extends Component {
 		});
     }
     if (this._isMounted){
-        const committed = await Kadena.methods.callForHelpDetails(this.props.match.params.id).call()
+        const committed = await Kadena.methods.provideAssistanceDetails(this.props.match.params.id).call()
     this.setState({commits:committed.committed})
     console.log("commiitit",this.state.commits)}
     /*this.elem = setInterval(async()=>{ 
@@ -91,7 +91,7 @@ class PageNeed extends Component {
     console.log("commiitit",this.state.commits)},2000)*/
 
 
-    Kadena.getPastEvents("Pledged",{filter:{eventId:this.props.match.params.id},fromBlock: 5000000, toBlock:this.state.latestblocks})
+    Kadena.getPastEvents("Taken",{filter:{eventId:this.props.match.params.id},fromBlock: 5000000, toBlock:this.state.latestblocks})
     .then(events=>{
      if (this._isMounted){
     this.setState({load:true})
@@ -105,7 +105,7 @@ class PageNeed extends Component {
     }).catch((err)=>console.error(err))
 
 	//Listen for Incoming Sold Tickets
-    Kadena.events.Pledged({filter:{eventId:this.props.match.params.id},fromBlock: blockNumber, toBlock:'latest'})
+    Kadena.events.Taken({filter:{eventId:this.props.match.params.id},fromBlock: blockNumber, toBlock:'latest'})
   	.on('data', (log) =>setTimeout(()=> {
     this.setState({load:true});
 
@@ -114,7 +114,7 @@ class PageNeed extends Component {
     var newsort= newest.concat().sort((a,b)=> b.blockNumber- a.blockNumber);
     if (this._isMounted){ 
     setTimeout(async()=>{ 
-    const committed = await Kadena.methods.callForHelpDetails(this.props.match.params.id).call()
+    const committed = await Kadena.methods.provideAssistanceDetails(this.props.match.params.id).call()
     this.setState({commits:committed.committed})},10000)
     this.setState({commited:newsort});
     this.setState({active_length:this.state.commited.length})}
@@ -127,13 +127,13 @@ class PageNeed extends Component {
 		if (
 			this.state.loaded === false &&
 			this.state.loading === false &&
-			typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined' &&
-			!this.props.contracts['Kadena'].callForHelpDetails[this.event].error
+			typeof this.props.contracts['Kadena'].provideAssistanceDetails[this.event] !== 'undefined' &&
+			!this.props.contracts['Kadena'].provideAssistanceDetails[this.event].error
 		) {
 			this.setState({
 				loading: true
 			}, () => {
-				ipfs.get(this.props.contracts['Kadena'].callForHelpDetails[this.event].value.ipfs).then((file) => {
+				ipfs.get(this.props.contracts['Kadena'].provideAssistanceDetails[this.event].value.ipfs).then((file) => {
 					let data = JSON.parse(file[0].content.toString());
 					if (!this.isCancelled) {
 						this.setState({
@@ -193,11 +193,11 @@ class PageNeed extends Component {
 		this.setState({ pageTransactions });
 	}
 
-    parseDate = (pledge_date) => {
-        let date = new Date(parseInt(pledge_date, 10) * 1000);
+    parseDate = (take_date) => {
+        let date = new Date(parseInt(take_date, 10) * 1000);
         let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-        let pledgeDate = months[date.getMonth()]+ ". " + date.getDate() + ", " + date.getFullYear() 
-        return pledgeDate    
+        let takeDate = months[date.getMonth()]+ ". " + date.getDate() + ", " + date.getFullYear() 
+        return takeDate    
     }
 
 		render() {
@@ -205,9 +205,9 @@ class PageNeed extends Component {
 
 		
 
-		if (typeof this.props.contracts['Kadena'].callForHelpDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].callForHelpDetails[this.event].value) {
+		if (typeof this.props.contracts['Kadena'].provideAssistanceDetails[this.event] !== 'undefined' && this.props.contracts['Kadena'].provideAssistanceDetails[this.event].value) {
             
-                let event_data = this.props.contracts['Kadena'].callForHelpDetails[this.event].value;
+                let event_data = this.props.contracts['Kadena'].provideAssistanceDetails[this.event].value;
                 let pledgeModalClose = () =>this.setState({pledgeModalShow:false});
                 let percentage = numeral(this.state.commits*100/event_data.amount).format('0.00')+ "%";
                
@@ -217,12 +217,12 @@ class PageNeed extends Component {
                 let organizer = event_data.owner;
             
                  
-				let buttonText = " Pledge";
+				let buttonText = " Take";
 
 				let symbol = event_data.borrow? 'Will Return:' : 'Will Close';
                 
-                let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-			    
+				let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+				
                 let enddate = new Date(parseInt(event_data.endDate, 10) * 1000);
                 let end_date = months[enddate.getMonth()]+ ". " + enddate.getDate() + ", " + enddate.getFullYear()
                 let disabled = false;
@@ -234,17 +234,16 @@ class PageNeed extends Component {
 				}
                 
 				let commits = true;
-				if (Number(this.state.commits) >= Number(event_data.amount)) {
+				if (Number(this.state.commits) === 0) {
 					disabled = true;
-                    buttonText = " Filled"
-                    console.log(buttonText)
+                    buttonText = " None Left"
+
 				}
 
 				if(this.state.active_length <= 0){
 					commits=false;
 				}
                 
-            
 		//Friendly URL Title
 		let rawTitle = event_data.title;
       	var titleRemovedSpaces = rawTitle;
@@ -267,11 +266,11 @@ class PageNeed extends Component {
                     <li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 				<div className="card-header event-header">
            		 <br />
-
+            
            		 {description}
 
             	<button className="btn btn-outline-dark mt-2 ml-3" onClick={() => this.setState({pledgeModalShow:true})} disabled={disabled}>{buttonText}</button>
-				{this.state.pledgeModalShow && <ModalPledge
+				{this.state.pledgeModalShow && <ModalTake
       				show={this.state.pledgeModalShow}
 					onHide={pledgeModalClose}
 					id = {this.props.match.params.id }
@@ -288,19 +287,19 @@ class PageNeed extends Component {
 				</div>
 
 				    <ul className="list-group list-group-flush">
-					<li className="list-group-item small">Minimum Pledge: {event_data[6]} Items</li>
+					<li className="list-group-item small">Minimum Take: {event_data[6]} Items</li>
 					<li className="list-group-item small">{symbol} {end_date} at {enddate.toLocaleTimeString()}</li>
-					<li className="list-group-item small">Item Needed: {event_data.item}</li>
-                    <li className="list-group-item small">Committed: {this.state.commits}/{event_data.amount}</li>
+					<li className="list-group-item small">Item Pool: {event_data.item}</li>
+                    <li className="list-group-item small">Amount Left: {this.state.commits}/{event_data.amount}</li>
 					</ul>
 				</div>
 						
                 {this._isMounted && <Clock deadline = {enddate} event_unix = {event_data.endDate}/>}
-              	<div className="new-transaction-wrapper"><h4 className="transactions"><i class="fas fa-hand-holding-medical"></i> Pledge</h4> 
+              	<div className="new-transaction-wrapper"><h4 className="transactions"><i class="fas fa-hand-holding-medical"></i> Take</h4> 
   					{this.state.load &&<Loading/>}
-                    {this.state.pageTransactions.map((pledged,index)=>(<p className="sold_text col-md-12 small" key={index}><img className="float-left blockie" src={makeBlockie(pledged.returnValues.pledgedBy)} title={pledged.returnValues.pledgedBy}/><strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.sender,pledged.returnValues.pledgedBy)}>{pledged.returnValues.sender}</strong> pledged <strong ><a href={"https://rinkeby.etherscan.io/tx/" + pledged.transactionHash} target="blank" className="gold">{pledged.returnValues.committed} {pledged.returnValues.item}</a></strong> to <strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.receiver,pledged.returnValues.pledgeTo)}>{pledged.returnValues.receiver}</strong> <br/><span className="date-right small">on {this.parseDate(pledged.returnValues.date)}</span></p>
+                    {this.state.pageTransactions.map((pledged,index)=>(<p className="sold_text col-md-12 small" key={index}><img className="float-left blockie" src={makeBlockie(pledged.returnValues.takenBy)} title={pledged.returnValues.takenBy}/><strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.receiver,pledged.returnValues.takenBy)}>{pledged.returnValues.receiver}</strong> has taken <strong ><a href={"https://rinkeby.etherscan.io/tx/" + pledged.transactionHash} target="blank" className="gold">{pledged.returnValues.received} {pledged.returnValues.item}</a></strong> from <strong className="black" onClick={()=>this.friendlyUrl(pledged.returnValues.sender,pledged.returnValues.tookFrom)}>{pledged.returnValues.sender}</strong> <br/><span className="date-right small">on {this.parseDate(pledged.returnValues.date)}</span></p>
                     ))}
-  					{!commits &&  <p className="sold_text col-md-12 no-tickets">No hospital has pledged a single item.</p>}
+  					{!commits &&  <p className="sold_text col-md-12 no-tickets">No hospital has taken a single item.</p>}
   					</div>
 
 					<div className="pagination">
@@ -323,7 +322,7 @@ class PageNeed extends Component {
 
 		return (
 			<div className="event-page-wrapper">
-				<h3 className="shadow"><i class="fas fa-laptop-medical"></i> Call For Help</h3>
+				<h3 className="shadow"><i class="fas fa-laptop-medical"></i> Lend A Hand</h3>
 				<hr />
 				{body}
 				<hr/>
@@ -352,7 +351,7 @@ class PageNeed extends Component {
 	}
 }
 
-PageNeed.contextTypes = {
+PageGive.contextTypes = {
     drizzle: PropTypes.object
 }
 
@@ -364,5 +363,5 @@ const mapStateToProps = state => {
     };
 };
 
-const AppContainer = drizzleConnect(PageNeed, mapStateToProps);
+const AppContainer = drizzleConnect(PageGive, mapStateToProps);
 export default AppContainer;
