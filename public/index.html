@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<style>
-	.wrap {
+			.wrap {
   position: relative;
   width: 110px;
   height: 220px;
@@ -13,7 +13,19 @@
   
 }
 
+.drop {
+  width: 50px;
+  height: 50px;
+  left: 50%;
+  margin-left: -18px;
+  position: absolute;
+  animation: drop 1.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) 0s infinite;
+  
+}
 
+.drop path {
+  fill: #429ee9;
+}
 
 .drop-outer {
   position: absolute;
@@ -27,7 +39,7 @@
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
   background-clip: padding-box;
-  background:#1b243f;
+  background:transparent;
 }
 
 .ripple {
@@ -130,7 +142,7 @@
 </style>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="theme-color" content="#050b25">
+		<meta name="theme-color" content="#000000">
 		<!--
 			manifest.json provides metadata used when your web app is added to the
 			homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
@@ -162,7 +174,7 @@
 			<div class="wrap">
 				<div class="drop-outer">
 				  <svg class ="drop" width="100%" viewBox="0 0 30 42">
-				  <path fill="transparent" stroke="##2a96ed" strokeWidth="1.5"
+				  <path fill="transparent" stroke="#2a96ed" strokeWidth="1.5"
 					  d="M15 3
 						 Q16.5 6.8 25 18
 						 A12.8 12.8 0 1 1 5 18
@@ -182,12 +194,7 @@
 				  <circle cx="30" cy="30" r="24"/>
 					</svg>
 				</div>
-				<div className="ripple ripple-3">
-					<svg class="ripple-svg" viewBox="0 0 60 60" version="1.1"
-				  xmlns="http://www.w3.org/2000/svg">
-				  <circle cx="30" cy="30" r="24"/>
-					</svg>
-				</div>
+			
 			  </div>
 		</div>
 		<!--
