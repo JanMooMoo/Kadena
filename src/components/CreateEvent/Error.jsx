@@ -17,9 +17,9 @@ render(){
 			
 			<h3 className="mt-5">Error Uploading Your Data</h3>
 			<div>
-			<img src='/images/ethereum.png'  className="uploadError"></img>
+			<img src='/images/ethereum.png'  className="uploadError" alt="Upload Error"></img>
 			</div>
-			<p>Something went wrong! <Link to="/createevent" onClick={this.createNewEvent}>Please try Again.</Link></p>
+			<p>Something went wrong! <Link to="/register" onClick={this.createNewEvent}>Please try Again.</Link></p>
 			<code>{this.props.message}</code>
 	
 		</div>

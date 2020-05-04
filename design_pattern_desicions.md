@@ -6,19 +6,17 @@ The following Design Patterns were used in the project:
 Some functions in the project can be used only by the owner of the contract. This helps to prevent unwanted changes.
 For example:
 ```javascript
-function chengeToken(address _token) public onlyOwner() {
-	tokenAddress = _token;
-}
+ function register(...) onlyOwner() whenNotPaused() public{
+		....
+	}
 ```
 
-## Mortal
-The project uses OpenZeppelin's contract **Destructible** to provide *Mortal Pattern* functional. It gives an ability for the owner to destroy the contract and move it from blockchain if it is necessary.
 
 ## Circuit Breaker
 The project uses OpenZeppelin's contract **Pausable** to provide *Circuit Breaker Pattern* functional. It gives an ability for the owner to stop some functions in the contract if it is necessary.
 For example:
 ```javascript
-function createEvent(...) whenNotPaused() public {
+function callForHelp(...) whenNotPaused() public {
 	...
 }
 ```

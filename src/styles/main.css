@@ -11,7 +11,6 @@ html {
 
 body {
   background-image: repeating-linear-gradient(180deg, #11172b, #1b243f 50%, #11172b);
-  
   color:rgb(162, 183, 207);
   font-weight: 300;
   font-family: 'Lato', sans-serif;
@@ -19,7 +18,6 @@ body {
 
 hr{
   border-top:1px solid rgba(81, 93, 97, 0.74);
-  bacdkground: linear-gradient(to left, rgb(15, 20, 54),rgb(122, 112, 76), rgb(15, 20, 54));
   height:2px; 
 }
 
@@ -360,11 +358,7 @@ button {
   border-radius: 15px;
   font-weight: 100; 
   display: inline-block;
-  background:transparent;
-  background:rgba(255, 255, 255, 0.733);
-  background:linear-gradient(to left, rgb(7, 9, 19), #b8b0b0a9 50%, rgb(7, 9, 19));
-  backdground:linear-gradient(to left, rgb(7, 9, 19), #9e435aa9 50%, rgb(7, 9, 19));
-    background:linear-gradient(to left, rgb(7, 9, 19), #6f82d873 50%, rgb(7, 9, 19));
+  background:linear-gradient(to left, rgb(7, 9, 19), #6f82d873 50%, rgb(7, 9, 19));
   width:20%;
   min-width:220px;
   border-top:1px solid rgb(206, 188, 127);
@@ -520,28 +514,6 @@ color:#ffffff!important;
 	cursor: pointer;
 }
 
-
-.my-tickets-page .card:before, .create-event .card:before {
-  display: none;
-}
-/*check*/
-button.read-more {
-  padding: 15px 75px;
-  border-radius: 40px;
-  text-align: center;
-  margin: 0 auto;
-  margin-top: 30px;
-  background: repeating-linear-gradient(180deg, #2a355a, #212a49 50%, #11172b);
-  color: #f1da8b;
-	border-color: #f1da8b;
-
-}
-/*check*/
-button.read-more:hover {
-  color: #fff !important;
-  background-color: #212020;
-  cursor: pointer;
-}
 /*check*/
 .branding-logo {
   float: left;
@@ -870,10 +842,6 @@ button.read-more:hover {
   font-size: 20px !important;
 }
 
-.sidebar-closed .sidebar_hydro-logo {
-  margin-right: 0px !important;
-  width: 20px !important;
-}
 
 .pagination {
   margin-top: 35px;
@@ -970,7 +938,6 @@ h4.transactions {
   margin-top: 60px;
   font-size: 1.75rem;
 }
-
 
 .no-tickets {
   padding-left: 5px !important;
@@ -1121,38 +1088,7 @@ justify-content: center;
  color:rgb(172, 193, 206);
 }
 
-/*QR-Code style*/
-/*check*/
-.chart{
-  padding:20px;
-  padding-top:13px;
-  padding-bottom:5px;
-  border: 1px solid rgb(155, 155, 155);
-  color:white;
-  border-radius:5px;
-  background:linear-gradient(139deg, rgb(187, 101, 204),rgb(235, 187, 55))!important;
-  box-shadow: 0 0 15px rgba(8, 8, 8, 0.521);
-  transition: all 0.3s;
-  cursor: pointer;
-  min-width:200px;
-  min-height:190px;
-  margin-right:15px;
-  float:right;
-}
-/*check*/
-.chart:hover{
-  transform: scale(1.07);
-  cursor: pointer;
-  color:rgb(241, 241, 241);
-}
-/*check*/
-@media(max-width:600px){
-  .chart{
-    min-width:none;
-    margin:none;
-    float:none;
-  }
-}
+
 /*check*/
 .side-active{
   color:blue!important;
@@ -1183,45 +1119,6 @@ justify-content: center;
       overflow:hidden;
   }
 
-
-  .dashboard-card:hover {
-    transform: scale(1.1);
-    z-index: 999;
-    cursor: pointer;
-  }
-
-  .dashboard-footer{
-    margin-top:75px;
-    margin-left:8px;
-    text-align:center;
-    text-transform: uppercase;  
-  }  
-
-  .dashboard-data {
-    position: absolute;
-    right: 0;
-    bottom: 0px;
-    left: 0;
-    z-index: 10;
-    padding-top: 70px;
-    padding-bottom: 20px;
-    text-align: center;
-    color: #fff;
-    width: 100%;
-    height: inherit;
-    border-radius: 5px;
-    font-size:3rem !important;
-    text-shadow: 2px 2px 12px #000 !important;
-  }
-
-  .dashboard-caption h3 {
-    text-shadow: 2px 2px 12px #000 !important;
-    font-weight: 400;
-    font-size:1.1rem !important;
-  }
-
-
-  /*End Dashboard Style */
 
 
   .btnAlive{
@@ -1337,7 +1234,8 @@ justify-content: center;
   border-radius:10px;
   border-top:1px solid rgb(206, 188, 127);
   border-bottom:1px solid rgb(206, 188, 127);
-  
+  overflow-y: scroll;
+  height:400px;
 }
 
 .centerLabel{
@@ -1380,9 +1278,25 @@ justify-content: center;
   bottom:.4em;
   min-width:1rem;
   max-width:99%;
-  background: linear-gradient(to left, #6371a0, #6c80c9); 
   background: linear-gradient(to left, black, #0c8f2c,black); 
   background: linear-gradient(to left, #49797a, #6cc6c9,rgb(0, 0, 0));  
+  border-radius:1em;
+  padding:1em;
+  z-index:1;
+  border:1px solid #858ca3;
+  border-right:0;
+  filter: blur(1px);
+}
+
+.progress-inner2{
+  align-items:center;
+  position:absolute;
+  margin-left:0;
+  top: .4em;
+  bottom:.4em;
+  min-width:1rem;
+  max-width:99%; 
+  background: linear-gradient(to left, black, #8f0c49,black); 
   border-radius:1em;
   padding:1em;
   z-index:1;
@@ -1399,9 +1313,6 @@ justify-content: center;
   bottom:.4em;
   min-width:1rem;
   max-width:99%;
-  background: linear-gradient(to left, #6371a0, #6c80c9); 
-  background: linear-gradient(to left, black, #0c8f2c,black); 
-  backgrfound: linear-gradient(to left, #1b1b1b,rgb(41, 41, 41)); 
   background: linear-gradient(to left, #0f151b,rgb(35, 36, 48)); 
   border-radius:1em;
   border:1px solid #858ca3;
@@ -1507,7 +1418,6 @@ justify-content: center;
 }
 
 .modal-content{
-  backgrfound: linear-gradient(to left, rgb(1, 1, 5), rgb(0, 28, 88), rgb(1, 1, 5))!important;
   background:linear-gradient(180deg, rgb(7, 9, 19), #0d213f 50%, rgb(7, 9, 19));
   z-index:10000!important;
   border-radius: 7px;
@@ -1611,7 +1521,6 @@ border-bottom:1px solid rgb(206, 188, 127);
   height: inherit;
   padding-bottom: 25px;
   box-shadow: inset 0px -181px 53px rgba(0, 0, 0, 0.116);
-  badckground:linear-gradient(to top, rgb(51, 64, 104),rgb(41, 60, 75),rgb(13, 13, 14))!important;
   background:linear-gradient(180deg, rgb(7, 9, 19), #0d213f 50%, rgb(7, 9, 19));
 
   border:1px solid rgb(109, 107, 107);
@@ -1760,9 +1669,28 @@ border-bottom:1px solid rgb(206, 188, 127);
   width:40px;
 }
 
-.shadow{
-  text-shadow: 1px 1px 2px rgb(0, 0, 0);
+
+
+.requirements{
+  text-align: center!important;
 }
+
+.spin{
+  animation: spin 0.2s infinite;
+  transform: rotate(30deg) ;
+  color:rgb(162, 183, 207);
+}
+
+@keyframes spin{
+  0%{
+    transform:rotate(0deg)
+  }
+  100%{
+    transform:rotate(360deg);
+  }
+}
+
+
 
 
 

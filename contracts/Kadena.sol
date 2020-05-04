@@ -3,6 +3,7 @@ pragma solidity ^0.4.24;
 import 'openzeppelin-solidity/contracts/lifecycle/Pausable.sol';
 import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 
+
 /**
 * @title Kadena
 * @dev Is a platform that Hospitals could utilize to connect & form alliance with other hospitals.
@@ -14,7 +15,6 @@ import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 
 contract Kadena is Pausable {
 	using SafeMath for uint;
-
 
 	struct Hospital {
 	    address owner;
@@ -73,11 +73,11 @@ contract Kadena is Pausable {
 	
 	event Registration(address Admin, address indexed applicant, string registeredAs, string status, uint time, bool pending, bool indexed registrationStatus, uint rating);
 
-	event NeedAHand(address indexed ownerNeed, uint eventId, string hospital,string title, string category,string item, uint amount, bool borrow, uint minimumAmount, uint endDate, string ipfs);
-	event GiveAHand(address indexed ownerGive, uint eventId, string hospital,string title, string category,string item, uint amount, bool borrow, uint minimumAmount, uint endDate, string ipfs);
+	event NeedAHand(address indexed ownerNeed, uint eventId, string hospital,string title,string item, uint amount, bool borrow, uint endDate, string ipfs);
+	event GiveAHand(address indexed ownerGive, uint eventId, string hospital,string title, string item, uint amount, bool borrow, uint endDate, string ipfs);
 
-    event Pledged(address indexed pledgedBy, string sender , string receiver,uint date, uint indexed eventId, string item, uint committed, address indexed pledgeTo, uint addedRating);
-    event Taken(address indexed takenBy, string receiver , string sender,uint date, uint indexed eventId,string item,uint received, address indexed tookFrom, uint addedRating);
+    event Pledged(address indexed pledgedBy, string sender , string receiver,uint date, uint indexed eventId, string item, uint committed, address indexed pledgeTo,uint endDate,bool borrow, uint addedRating);
+    event Taken(address indexed takenBy, string receiver , string sender,uint date, uint indexed eventId,string item,uint received, address indexed tookFrom,uint endDate,bool borrow, uint addedRating);
 
 
     /**
@@ -145,8 +145,8 @@ contract Kadena is Pausable {
 		whenNotPaused()
 
 	{
-	    require(registered[_applicant].pending , "Status not Pending");
 	    if(_accepted){
+	    require(registered[_applicant].pending , "Status not Pending");
         registered[_applicant].status = "Registered";
 		registered[_applicant].time = now;
         registered[_applicant].pending = false;
@@ -273,7 +273,7 @@ contract Kadena is Pausable {
 		}
 	    
 		registered[msg.sender].rating = registered[msg.sender].rating.sub(_subtractedRating);
-		emit NeedAHand(msg.sender, _eventId,registered[msg.sender].name,_title,_category,_item, _amount, _borrow,_minimumAmount,_endDate,_ipfs); 
+		emit NeedAHand(msg.sender, _eventId,registered[msg.sender].name,_title,_item, _amount, _borrow,_endDate,_ipfs); 
 
 	}
 	
@@ -340,7 +340,7 @@ contract Kadena is Pausable {
 		if(registered[msg.sender].rating < 60){
 		registered[msg.sender].rating = registered[msg.sender].rating.add(_addedRating);}
 		
-		emit GiveAHand(msg.sender, _eventId,registered[msg.sender].name,_title,_category,_item, _amount, _borrow,_minimumAmount,_endDate,_ipfs);  
+		emit GiveAHand(msg.sender, _eventId,registered[msg.sender].name,_title,_item, _amount, _borrow,_endDate,_ipfs);  
   
 	}
 	
@@ -457,12 +457,16 @@ contract Kadena is Pausable {
 	    whenNotPaused()
 		public
 		
-	{
+	{   require(registered[msg.sender].registered == true && registered[msg.sender].pending == false, "You are Not Registered");
 	    require(_eventId < needHelp.length);
 		NeedHelp memory _event = needHelp[_eventId];
 		
 		require(_commit > 0);
-		require(_commit <= needHelp[_eventId].amount && _commit >= needHelp[_eventId].minimum && _commit <= needHelp[_eventId].amount.sub(needHelp[_eventId].committed));
+		require(_commit <= needHelp[_eventId].amount && _commit <= needHelp[_eventId].amount.sub(needHelp[_eventId].committed));
+		
+		 if((needHelp[_eventId].amount - needHelp[_eventId].committed) >= needHelp[_eventId].minimum){
+	      require(_commit >= needHelp[_eventId].minimum);
+	    }
 		require(msg.sender != needHelp[_eventId].owner);
 		require(needHelp[_eventId].endDate > now);
 		
@@ -476,7 +480,7 @@ contract Kadena is Pausable {
 		    _addedRating = 60 - registered[msg.sender].rating;
 		}
 		registered[msg.sender].rating = registered[msg.sender].rating.add(_addedRating);
-		emit Pledged(msg.sender,registered[msg.sender].name, registered[needHelp[_eventId].owner].name,now, _eventId,needHelp[_eventId].item, _commit, needHelp[_eventId].owner, _addedRating);
+		emit Pledged(msg.sender,registered[msg.sender].name, registered[needHelp[_eventId].owner].name,now, _eventId,needHelp[_eventId].item, _commit, needHelp[_eventId].owner,needHelp[_eventId].endDate,needHelp[_eventId].borrow, _addedRating);
 	}
 	
 	
@@ -498,13 +502,17 @@ contract Kadena is Pausable {
 	    whenNotPaused()
 		public
 		
-	{
+	{	require(registered[msg.sender].registered == true && registered[msg.sender].pending == false, "You are Not Registered");
 	    require(_eventId < giveHelp.length);
 	  
 		GiveHelp memory _event = giveHelp[_eventId];
 		
 		require(registered[msg.sender].rating > 10);
-	    require(_take > 0 && _take >= giveHelp[_eventId].minimum && _take <= giveHelp[_eventId].committed);
+	    require(_take > 0 && _take <= giveHelp[_eventId].committed);
+	    
+	    if(giveHelp[_eventId].committed >= giveHelp[_eventId].minimum){
+	      require(_take >= giveHelp[_eventId].minimum);
+	    }
 		require(msg.sender != giveHelp[_eventId].owner);
 	    require(giveHelp[_eventId].endDate > now);
 		
@@ -519,7 +527,7 @@ contract Kadena is Pausable {
 		}
 		
 		registered[msg.sender].rating = registered[msg.sender].rating.sub(_subtractRating);
-		emit Taken(msg.sender,registered[msg.sender].name, registered[giveHelp[_eventId].owner].name,now, _eventId,giveHelp[_eventId].item,_take, giveHelp[_eventId].owner, _subtractRating);
+		emit Taken(msg.sender,registered[msg.sender].name, registered[giveHelp[_eventId].owner].name,now, _eventId,giveHelp[_eventId].item,_take, giveHelp[_eventId].owner,giveHelp[_eventId].endDate,giveHelp[_eventId].borrow, _subtractRating);
 	}
 	
 
@@ -550,8 +558,6 @@ contract Kadena is Pausable {
 		return giveHelp.length;
 	}
 	
-	function getHospitalCount() public view returns(uint) {
-		return hospital.length;
-	}
+
 	
 }

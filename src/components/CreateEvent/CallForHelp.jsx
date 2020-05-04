@@ -27,7 +27,7 @@ class CallForHelp extends Component {
             category:"Equipment",
             item:"Mask",
             amount:0,
-            return:true,
+            return:'',
             minimum:0,
             endtime:'',
             
@@ -183,6 +183,8 @@ class CallForHelp extends Component {
 	render() {
 		
         let percentage = numeral(0*100/this.state.amount).format('0.00') + "%";
+		let dateTime = Date.now();
+		let Now = Math.floor(dateTime / 1000);
 
 		let file_label = !this.state.wrong_file && this.state.file_name !== '' ? this.state.file_name : 'Select file';
 
@@ -199,12 +201,24 @@ class CallForHelp extends Component {
         };
 
 		let alert;
+		let disabled = false;
 
 		if (this.state.form_validation.length > 0) {
 			alert = <div className="alert alert-dark mt-2" role="alert">Required fields are missed.</div>
+			disabled = true
 		}
 
-		let disabled = false;
+		if (Number(this.state.amount) < Number(this.state.minimum)) {
+			alert = <div className="alert alert-dark mt-2" role="alert">Minimum is greater than amount.</div>
+			disabled = true
+		}
+
+		if (Now > this.state.endtime) {
+			alert = <div className="alert alert-dark mt-2" role="alert">End date should be in the future.</div>
+			disabled = true
+		}
+
+		
 		if(this.props.account.length === 0){
 			disabled = true;
         } 
@@ -298,7 +312,7 @@ class CallForHelp extends Component {
 				</div>
 
                 <div className="form-group">
-					<label htmlFor="remarks">Desciption/Remarks:</label>
+					<label htmlFor="remarks">Description/Remarks:</label>
 					<textarea className={"form-control " + warning.description} id="remarks" title="remarks" rows="5" ref={(input) => this.form.description = input} onChange={this.descriptionChange} autoComplete="off"></textarea>
 					<small className="form-text text-muted">{this.state.description_length}/500 characters available.</small>
 				</div>
@@ -306,7 +320,7 @@ class CallForHelp extends Component {
 				<div className="form-group">
 					<p>Borrow only / Will be returned on or before the end date.</p>
 					<div className="custom-control custom-radio custom-control-inline">
-						<input type="radio" id="Yes" name="return" className="custom-control-input" defaultChecked="true" value="true" title="Will be returned" onChange={this.handleReturn} autoComplete="off" />
+						<input type="radio" id="Yes" name="return" className="custom-control-input" value="true" title="Will be returned" onChange={this.handleReturn} autoComplete="off" />
 						<label className="custom-control-label" htmlFor="Yes">Yes</label>
 					</div>
 					<div className="custom-control custom-radio custom-control-inline">
@@ -351,8 +365,8 @@ class CallForHelp extends Component {
 			<ul className="list-group list-group-flush">
             <li className="list-group-item"><strong>Item:</strong> {this.state.item} </li>
             <li className="list-group-item"><strong>Minimum Amount To Pledge: {this.state.minimum} Items</strong>  </li>
-            {!this.state.return &&<li className="list-group-item"><strong>Will Close On: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
-            {this.state.return &&<li className="list-group-item"><strong>Will Return On or Before: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
+            {this.state.return === 'false'&&<li className="list-group-item"><strong>Will Close On: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
+            {this.state.return === 'true' &&<li className="list-group-item"><strong>Will Return On or Before: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
             <li className="list-group-item"><strong>Amount Filled:</strong> 0/{this.state.amount} </li>
             <li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 

@@ -39,7 +39,7 @@ class HospitalCard extends Component {
 			}, () => {
 				ipfs.get(this.props.contracts['Kadena'].getHospitalStatus[this.hospital].value._ipfs).then((file) => {
 					let data = JSON.parse(file[0].content.toString());
-					if (!this.isCancelled) {
+					if (!this.isCancelled && this._isMounted) {
 						this.setState({
 							loading: false,
 							loaded: true,
@@ -51,7 +51,7 @@ class HospitalCard extends Component {
 						});
 					}
 				}).catch(() => {
-					if (!this.isCancelled) {
+					if (!this.isCancelled && this._isMounted) {
 						this.setState({
 							loading: false,
 							loaded: true,
@@ -146,7 +146,7 @@ class HospitalCard extends Component {
 
 		return (
 			<div className="mt-2">
-				<h3><i class="fas fa-hospital-user ml-4"i/> Hospital Profile</h3>
+				<h3><i class="fas fa-hospital-user ml-4"/> Hospital Profile</h3>
                 <p className="small text-truncate ml-1" ><strong>Kadena Member Since: {memberSince}</strong></p>
 				<hr />
 				{body}

@@ -25,7 +25,7 @@ class Form extends Component {
 			description:'',
 			address:'',
 			contact:'',
-			country:'',
+			country:'Japan',
 			city:'',
 			
 			dateDisplay:new Date(parseInt('1577952000', 10) * 1000)
@@ -199,7 +199,7 @@ class Form extends Component {
 						<option value="Philippines" key="2">Philippines</option>
                         <option value="Singapore" key="3">Singapore</option>
                         <option value="South Korea" key="4">South Korea</option>
-						<option value="South Korea" key="4">Thailand</option>	
+						<option value="Thailand" key="5">Thailand</option>	
 					</select>
 				</div>
 
@@ -216,7 +216,7 @@ class Form extends Component {
 
 				
 				<div className="form-group">
-					<label htmlFor="description">Hospital Desription:</label>
+					<label htmlFor="description">Hospital Description:</label>
 					<textarea className={"form-control " + warning.description} id="description" title="Hospital Description" rows="5" ref={(input) => this.form.description = input} onChange={this.descriptionChange} autoComplete="off"></textarea>
 					<small className="form-text text-muted">{this.state.description_length}/500 characters available.</small>
 				</div>

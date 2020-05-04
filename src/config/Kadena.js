@@ -1,4 +1,4 @@
-export const Kadena_Address = '0x1CA88108503Bc7a8C04b769c3700BA0a34022912';
+export const Kadena_Address = '0xC7CDa21e8132ec2C1509436F3feb007a0F2fCF68';
 
 export const Kadena_ABI =   [
   {
@@ -189,11 +189,6 @@ export const Kadena_ABI =   [
       },
       {
         "indexed": false,
-        "name": "category",
-        "type": "string"
-      },
-      {
-        "indexed": false,
         "name": "item",
         "type": "string"
       },
@@ -206,11 +201,6 @@ export const Kadena_ABI =   [
         "indexed": false,
         "name": "borrow",
         "type": "bool"
-      },
-      {
-        "indexed": false,
-        "name": "minimumAmount",
-        "type": "uint256"
       },
       {
         "indexed": false,
@@ -251,11 +241,6 @@ export const Kadena_ABI =   [
       },
       {
         "indexed": false,
-        "name": "category",
-        "type": "string"
-      },
-      {
-        "indexed": false,
         "name": "item",
         "type": "string"
       },
@@ -268,11 +253,6 @@ export const Kadena_ABI =   [
         "indexed": false,
         "name": "borrow",
         "type": "bool"
-      },
-      {
-        "indexed": false,
-        "name": "minimumAmount",
-        "type": "uint256"
       },
       {
         "indexed": false,
@@ -333,6 +313,16 @@ export const Kadena_ABI =   [
       },
       {
         "indexed": false,
+        "name": "endDate",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "borrow",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
         "name": "addedRating",
         "type": "uint256"
       }
@@ -382,6 +372,16 @@ export const Kadena_ABI =   [
         "indexed": true,
         "name": "tookFrom",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "endDate",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "borrow",
+        "type": "bool"
       },
       {
         "indexed": false,
@@ -810,20 +810,6 @@ export const Kadena_ABI =   [
     "constant": true,
     "inputs": [],
     "name": "getAssistCount",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getHospitalCount",
     "outputs": [
       {
         "name": "",

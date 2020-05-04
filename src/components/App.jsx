@@ -11,34 +11,43 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../styles/main.css';
 
 import Sidebar from './Sidebar';
-import Home from './Home';
-import AdminPage from './AdminPage';
+import Home from './Tools/Home';
+import AdminPage from './Tools/AdminPage';
 import CreateEvent from './CreateEvent/';
 
-import HospitalProfile from './HospitalProfile';
-import MyHospitalProfile from './MyHospitalProfile';
-import HospitalList from './HospitalList';
-import CallForHelp from './CallForHelp';
-import LendAHand from './LendAHand';
+import HospitalProfile from './HospitalProfile/HospitalProfile';
+import MyHospitalProfile from './HospitalProfile/MyHospitalProfile';
+import HospitalList from './HospitalProfile/HospitalList';
+import CallForHelp from './Events/CallForHelp';
+import LendAHand from './Events/LendAHand';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 
 
 
-import Notify from './Notify';
+import Notify from './Norifications/Notify';
 
-import NotifyEventSuccess from './NotifyEventSuccess';
 
-import NotifyError from './NotifyError';
-import NotifyNetwork from './NotifyNetwork';
 
-import NotifyRequest from './NotifyRequest';
-import NotifyPledge from './NotifyPledge';
+import NotifyError from './Norifications/NotifyError';
+import NotifyNetwork from './Norifications/NotifyNetwork';
 
-import PageNeed from './PageNeed';
-import PageGive from './PageGive';
+import NotifyLendAHand from './Norifications/NotifyLendAHand';
+import NotifyCallForHelp from './Norifications/NotifyCallForHelp';
 
-import NetworkError from './NetworkError';
-import LoadingApp from './LoadingApp';
+import NotifyRequest from './Norifications/NotifyRequest';
+import NotifyPledge from './Norifications/NotifyPledge';
+import NotifyTake from './Norifications/NotifyTake';
+import NotifyApproved from './Norifications/NotifyApproved';
+
+import PageNeed from './Events/PageNeed';
+import PageGive from './Events/PageGive';
+
+import NetworkError from './ErrorHandling/NetworkError';
+import ChangeNetwork from './ErrorHandling/ChangeNetwork';
+import HowItWorks from './Tools/HowItWorks';
+import Requirements from './Tools/Requirements';
+import About from './Tools/About';
+import LoadingApp from './Loaders/LoadingApp';
 
 let ethereum= window.ethereum;
 let web3=window.web3;
@@ -53,16 +62,7 @@ class App extends Component
 			showSidebar: true,
 			account:[],
 
-
-			createEvent:'',
-			upload:false,
-			done:false,
-			error:false,
-			afterApprove:false,
-
 			refresh:false,
-
-
 			accountDetails:[],
 			block:500000,
 
@@ -72,7 +72,6 @@ class App extends Component
 
 	componentDidMount(){
 		this.loadBlockchainData()
-		this.fallback()
 	}
 
 	componentWillUpdate() {
@@ -81,10 +80,7 @@ class App extends Component
 		for (let i = 0; i < this.props.transactionStack.length; i++) {
 			if (sent_tx.indexOf(this.props.transactionStack[i]) === -1) {
 				sent_tx.push(this.props.transactionStack[i]);
-				this.setState({
-					upload:false,
-					done:true
-				});
+
 				toast(<Notify hash={this.props.transactionStack[i]} />, {
 					position: "bottom-right",
 					autoClose: true,
@@ -101,10 +97,6 @@ class App extends Component
 		}
 	}
 
-fallback(){
-	//window.web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/72e114745bbf4822b987489c119f858b'));
-
-}
 
 //Get Account
 async loadBlockchainData() {
@@ -177,6 +169,59 @@ async loadBlockchainData() {
 				});
 		
 			}
+			if(log.returnValues.takenBy === this.state.account){
+
+				toast(<NotifyTake hash={log.blockHash} 
+					sender={log.returnValues.sender} 
+					item = {log.returnValues.item}
+					received = {log.returnValues.received}/>, 
+					{
+					position: "bottom-right",
+					autoClose: true,
+					pauseOnHover: true
+		
+				});
+		
+			}
+			if(log.returnValues.applicant === this.state.account){
+
+				toast(<NotifyApproved hash={log.blockHash} hospital={log.returnValues.registeredAs}/>, {
+					position: "bottom-right",
+					autoClose: true,
+					pauseOnHover: true
+
+				});
+			}
+
+			if(log.returnValues.ownerGive === this.state.account){
+
+				toast(<NotifyLendAHand hash={log.blockHash} 
+					title={log.returnValues.title} 
+					item={log.returnValues.item} 
+					amount={log.returnValues.amount}
+					eventId={log.returnValues.eventId}/>, {
+
+					position: "bottom-right",
+					autoClose: true,
+					pauseOnHover: true
+
+				});
+			}
+
+			if(log.returnValues.ownerNeed === this.state.account){
+
+				toast(<NotifyCallForHelp hash={log.blockHash} 
+					title={log.returnValues.title} 
+					item={log.returnValues.item} 
+					amount={log.returnValues.amount}
+					eventId={log.returnValues.eventId}/>, {
+
+					position: "bottom-right",
+					autoClose: true,
+					pauseOnHover: true
+
+				});
+			}
 		})	
 	
 	}
@@ -210,7 +255,7 @@ async loadBlockchainData() {
 			body =
 				<div>
 					<Switch>
-						<Route exact path="/" component={Home} />
+						<Route exact path="/" component={ChangeNetwork} />
 						<Route component={NetworkError} />
 					</Switch>
 				</div>
@@ -225,41 +270,40 @@ async loadBlockchainData() {
 			  
 			  body = 
 			  		<div>
-			  		<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>} />
-					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/> }  />
-					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
-					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} kadena={this.state.Kadena}/>}/>
-					<Route path="/give/:page/:id"  render={props => <PageGive {...props} kadena={this.state.Kadena}/>}/>
+			  		<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account} />} />
+					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} /> }  />
+					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account}/>}  />
+					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} />}/>
+					<Route path="/give/:page/:id"  render={props => <PageGive {...props}/>}/>
 					<Route path="/myhospital/" render={props => <MyHospitalProfile {...props} account={this.state.account}/>}/>
 					<Route path="/hospital/:page/:id"  render={props => <HospitalProfile {...props}/>}/>
 					<Route path="/hospital-list"  render={props => <HospitalList {...props}/>}/>
 					<Route path="/register" render={props=><CreateEvent  {...props}
-					upload={this.state.upload}
-					done = {this.state.done}
-					error = {this.state.error}
 					account ={this.state.account}/>}/>
-					<Route path="/how-it-works" component={Home} />
+					<Route path="/requirements" component={Requirements} />
+					<Route path="/about" component={About} />
+					<Route path="/how-it-works" component={HowItWorks}/>
 					<Route path="/admin" render={props =><AdminPage {...props} account = {this.state.account}/>}/>
 					</div>
-			}
+			
+				}
 		
 		else {
 			body =
 				<div>
-					<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>} />
-					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
-					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} block={this.state.block} kadena={this.state.Kadena}/>}  />
-					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} kadena={this.state.Kadena}/>}/>
-					<Route path="/give/:page/:id"  render={props => <PageGive {...props} kadena={this.state.Kadena}/>}/>
+					<Route exact path="/" render={props => <CallForHelp  {...props} account ={this.state.account}/>} />
+					<Route path="/needhelp/:page"  render={props => <CallForHelp  {...props} account ={this.state.account} />}  />
+					<Route path="/givehelp/:page"  render={props => <LendAHand  {...props} account ={this.state.account} />}  />
+					<Route path="/need/:page/:id"  render={props => <PageNeed {...props} />}/>
+					<Route path="/give/:page/:id"  render={props => <PageGive {...props}/>}/>
 					<Route path="/myhospital"  render={props => <MyHospitalProfile {...props} account={this.state.account}/>}/>
 					<Route path="/hospital/:page/:id"  render={props => <HospitalProfile {...props}/>}/>
 					<Route path="/hospital-list"  render={props => <HospitalList {...props}/>}/>
 					<Route path="/register" render={props=><CreateEvent  {...props}
-					upload={this.state.upload}
-					done = {this.state.done}
-					error = {this.state.error}
 					account ={this.state.account}/>}/>
-					<Route path="/how-it-works" component={Home} />
+					<Route path="/requirements" component={Requirements} />
+					<Route path="/about" component={About} />
+					<Route path="/how-it-works" component={HowItWorks}/>
 					<Route path="/admin" render={props =><AdminPage {...props} account = {this.state.account}/>}/>
 					
 				</div>
@@ -268,7 +312,7 @@ async loadBlockchainData() {
 
 		return(
 			<Router>
-
+				
 				<div id="wrapper" className="toggled">
 					<Sidebar connection={!connecting} account={this.state.account} accountDetails = {this.state.accountDetails} connect = {this.loadBlockchainData} refresh = {this.refresh}/>
 			

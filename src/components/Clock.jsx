@@ -45,7 +45,7 @@ class Clock extends Component {
             <div className = "countdownEnded col-lg-3 mb-3">
                 <div className="box">
                     <p className="mt-1 mb-1">
-                    <span>⚠️ Closed</span>
+                    <span aria-label="close" role="img">⚠️ Closed</span>
                     </p>
                 </div>
             </div>             

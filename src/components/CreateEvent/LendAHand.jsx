@@ -27,7 +27,7 @@ class LendAHand extends Component {
             category:"Equipment",
             item:"Mask",
             amount:0,
-            return:true,
+            return:'',
             minimum:0,
             endtime:'',
             
@@ -183,7 +183,9 @@ class LendAHand extends Component {
 
 	render() {
 		
-        let percentage = numeral(this.state.amount*100/this.state.amount).format('0.00') + "%";
+		let percentage = numeral(this.state.amount*100/this.state.amount).format('0.00') + "%";
+		let dateTime = Date.now();
+		let Now = Math.floor(dateTime / 1000);
 
 		let file_label = !this.state.wrong_file && this.state.file_name !== '' ? this.state.file_name : 'Select file';
 
@@ -196,20 +198,30 @@ class LendAHand extends Component {
             endtime: this.state.form_validation.indexOf('End') === -1 ? '' : 'is-invalid',
             description:this.state.form_validation.indexOf('description') === -1 ? '' : 'is-invalid',
             image: this.state.form_validation.indexOf('image') === -1 && !this.state.wrong_file ? '' : 'is-invalid',
-            goodtime: this.state.form_validation.indexOf('End') < this.state.form_validation.indexOf('Start')? '' : 'is-invalid',
         };
 
 		let alert;
-
+		let disabled = false;
 		if (this.state.form_validation.length > 0) {
 			alert = <div className="alert alert-dark mt-2" role="alert">Required fields are missed.</div>
+			disabled = true
 		}
 
-		let disabled = false;
+		if (Number(this.state.amount) < Number(this.state.minimum)) {
+			alert = <div className="alert alert-dark mt-2" role="alert">Minimum is greater than amount.</div>
+			disabled = true
+		}
+
+		if (Now > this.state.endtime) {
+			alert = <div className="alert alert-dark mt-2" role="alert">End date should be in the future.</div>
+			disabled = true
+		}
+
+		
 		if(this.props.account.length === 0){
 			disabled = true;
         } 
-        
+		
         let itemOption = ''
         
         if (this.state.category === "Equipment"){
@@ -302,7 +314,7 @@ class LendAHand extends Component {
 				</div>
 
                 <div className="form-group">
-					<label htmlFor="remarks">Desciption/Remarks:</label>
+					<label htmlFor="remarks">Description/Remarks:</label>
 					<textarea className={"form-control " + warning.description} id="remarks" title="remarks" rows="5" ref={(input) => this.form.description = input} onChange={this.descriptionChange} autoComplete="off"></textarea>
 					<small className="form-text text-muted">{this.state.description_length}/500 characters available.</small>
 				</div>
@@ -310,11 +322,11 @@ class LendAHand extends Component {
 				<div className="form-group">
 					<p>Borrow only / Will be returned on or before the end date.</p>
 					<div className="custom-control custom-radio custom-control-inline">
-						<input type="radio" id="Yes" name="return" className="custom-control-input" defaultChecked="true" value="true" title="Will be returned" onChange={this.handleReturn} autoComplete="off" />
+						<input type="radio" id="Yes" name="return" className="custom-control-input"  value="true" title="Will be returned" onChange={this.handleReturn} autoComplete="off" />
 						<label className="custom-control-label" htmlFor="Yes">Yes</label>
 					</div>
 					<div className="custom-control custom-radio custom-control-inline">
-						<input type="radio" id="No" name="return" className="custom-control-input" value="false" title="Will not be returned" onChange={this.handleReturn} autoComplete="off" />
+						<input type="radio" id="No" name="return" className="custom-control-input" value="false"  title="Will not be returned" onChange={this.handleReturn} autoComplete="off" />
 						<label className="custom-control-label" htmlFor="No">No</label>
 					</div>
 				</div>
@@ -354,8 +366,8 @@ class LendAHand extends Component {
 			<ul className="list-group list-group-flush">
             <li className="list-group-item"><strong>Item:</strong> {this.state.item} </li>
             <li className="list-group-item"><strong>Minimum Amount To Take: {this.state.minimum} Items</strong>  </li>
-            {!this.state.return &&<li className="list-group-item"><strong>Will Close On: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
-            {this.state.return &&<li className="list-group-item"><strong>Should Return On or Before: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
+            {this.state.return === 'false' &&<li className="list-group-item"><strong>Will Close On: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
+            {this.state.return === 'true' && <li className="list-group-item"><strong>Should Return On or Before: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
             <li className="list-group-item"><strong>Items Remaining:</strong> {this.state.amount}/{this.state.amount} </li>
             <li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 

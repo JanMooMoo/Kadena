@@ -226,11 +226,11 @@ class CreateEvent extends Component {
 			   this.state.callForHelp.category,
 			   this.state.callForHelp.item,
 			   this.state.callForHelp.amount,
-			   this.state.callForHelp.borrow === 'true' ? true : false,	
+			   this.state.callForHelp.borrow === 'true' ? true:false,	
 			   this.state.callForHelp.minimum,
 			   this.state.callForHelp.enddate,
 			   this.state.ipfs)	
-			   this.setState({help:false},()=>console.log(this.state.help))			
+			   this.setState({help:false},()=>console.log())			
 		this.transactionChecker(id)
 		//this.setRedirect();
 	}
@@ -241,11 +241,11 @@ class CreateEvent extends Component {
 			this.state.lendAHand.category,
 			this.state.lendAHand.item,
 			this.state.lendAHand.amount,
-			this.state.lendAHand.borrow === 'true' ? true : false,	
+			this.state.lendAHand.borrow === 'true' ? true:false,	
 			this.state.lendAHand.minimum,
 			this.state.lendAHand.enddate,
 			this.state.ipfs)	
-			this.setState({lend:false},()=>console.log("dsadasd",this.state.lend))
+			this.setState({lend:false},()=>console.log())
 			   	
 		this.transactionChecker(id)
 		//this.setRedirect();
@@ -351,7 +351,7 @@ class CreateEvent extends Component {
 		}
 
 		let body =
-			this.state.upload || this.props.upload ?
+			this.state.upload ?
 				<Loader progress={this.state.stage} text={this.state.title} /> :
 				<React.Fragment>
 					<div className="row">
@@ -360,13 +360,13 @@ class CreateEvent extends Component {
 				</React.Fragment>
 		;
 
-		if (this.state.error || this.props.error) {
+		if (this.state.error ) {
 			body= <Error message={this.state.error_text} createNewEvent = {this.createNewEvent}/>;
 		}
 
 		else if(this.state.txType === "Call for Help"){
 			body = 
-			this.state.upload || this.props.upload ?
+			this.state.upload ?
 			<Loader progress={this.state.stage} text={this.state.title} /> :
 			<div className="row">	
 			<CallForHelp callForHelp={this.callForHelp}  account={this.props.account}/>
@@ -376,7 +376,7 @@ class CreateEvent extends Component {
 		else if(this.state.txType === "Lend a Hand"){
 			
 			body = 
-			this.state.upload || this.props.upload ?
+			this.state.upload  ?
 			<Loader progress={this.state.stage} text={this.state.title} /> :
 			<div className="row">	
 			<LendAHand lendAHand={this.lendAHand}  account={this.props.account}/>

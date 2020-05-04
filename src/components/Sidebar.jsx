@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link,NavLink } from 'react-router-dom';
+import {NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import makeBlockie from 'ethereum-blockies-base64';
 
@@ -21,7 +21,7 @@ class Sidebar extends Component
 		var activeClassName = "";
 		var linkLocation = this.props.to;
 
-		if (isActive == linkLocation) {
+		if (isActive === linkLocation) {
 			activeClassName = 'nav-item active';
 		} else {
 			activeClassName = 'nav-item';
@@ -50,8 +50,7 @@ class Sidebar extends Component
 		let Hospital = "Unknown"
 		let rating = 0;
 		
-		if(this.props.connection === true && this.props.account.length !== 0){
-						
+		if(this.props.connection === true && this.props.account.length !== 0){			
 			ethAccount = this.props.account.slice(0, 16) + '...';
 			Hospital = this.props.accountDetails[0];
 			rating = this.props.accountDetails[7];
@@ -71,7 +70,7 @@ class Sidebar extends Component
 		let user =
 			<div>
 				<div className="user-status-icon">
-				<img src='/images/FlagPH2.png'></img>
+				<img src='/images/FlagPH2.png' alt="flag"></img>
 				</div>
 			</div>
 		;
@@ -152,10 +151,21 @@ class Sidebar extends Component
 						</li>
 					</ul>
 					<h5 className="mt-5 toggleHidden">Tools</h5>
+
 					<ul className="nav flex-column">
+
+					<li>
+						<NavLink to="/about" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-dice-d20" title="About"></i> <span className="toggleHidden">About</span></NavLink>
+					</li>
+					
 					<li>
 						<NavLink to="/how-it-works" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-question-circle" title="How It Works"></i> <span className="toggleHidden">How It Works</span></NavLink>
 					</li>
+					
+					<li>
+							<NavLink to="/requirements" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-prescription" title = "Requirements"></i> <span className="toggleHidden">Requirements</span></NavLink>
+						</li>
+
 					<li >
 					<div className="nav-link" onClick={() => {this.props.connect()}}><i className="fas fa-plug" title="Connect Eth Account"></i> <span className="toggleHidden"> Connect Wallet</span></div>
 					</li>	
@@ -213,8 +223,17 @@ class Sidebar extends Component
 
 					<h5 className="mt-5 toggleHidden">Tools</h5>
 					<ul className="nav flex-column">
+
+						<li>
+							<NavLink to="/about" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-dice-d20" title="About"></i> <span className="toggleHidden">About</span></NavLink>
+						</li>
+
 						<li>
 							<NavLink to="/how-it-works" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i className="fa fa-question-circle" title="How It Works"></i> <span className="toggleHidden">How It Works</span></NavLink>
+						</li>
+						
+						<li>
+							<NavLink to="/requirements" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-prescription" title = "Requirements"></i> <span className="toggleHidden">Requirements</span></NavLink>
 						</li>
 
 						<li>
