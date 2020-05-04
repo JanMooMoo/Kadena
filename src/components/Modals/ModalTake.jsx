@@ -47,18 +47,25 @@ take = ()=>{
   
 
     render(){
-        let disabled = false 
-        
-
+        let disabled = false;
+        let minimum = this.props.minimum;
+     
         if(this.state.amount > Number(this.props.committed)){
-            disabled = true
+            disabled = true;
+        }
+      
+        if(Number(this.props.committed) >=Number(this.props.minimum)){
+          if(Number(this.state.amount) < Number(this.props.minimum)){
+            disabled = true;
+          }
         }
 
-        
-        if(Number(this.state.amount) < Number(this.props.minimum)){
-          disabled = true;
-        }
-
+        else{
+          minimum = Number(this.props.committed)
+          if(Number(this.state.amount) !== Number(minimum)){
+            disabled = true;
+           }
+          }
     return( 
       
       <Modal
@@ -88,7 +95,7 @@ take = ()=>{
 					</div>
 					<input type="number" min="1" className={"form-control "} id="amount" title={"Amount Needed"} autoComplete="off" onChange={this.amountChange} />
 			    </div>
-					<small className="form-text text-muted">Minimum of {this.props.minimum} items to take.</small>	
+					<small className="form-text text-muted">Minimum of {minimum} items to take.</small>	
 	
 		    </div>
 		</div>

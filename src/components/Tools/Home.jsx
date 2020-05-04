@@ -16,7 +16,7 @@ class Home extends Component {
 			<div className="home-wrapper">
 			
 				<div className = "centerLabel">
-				<h1 className = "hopeLabel" style ={{textAlign:"center"}}> How it Works?</h1>
+				<h1 className = "hopeLabel" style ={{textAlign:"center"}}> What is Kadena?</h1>
 				<h5 className = "hopeLabel" >
 				 Kadena is a proof of concept platform on which hospitals could register & exchange vital equipments & form alliance with other hospitals.
 				 The goal of Kadena is to strengthen the healthcare system by encouraging collaboration & sharing of resources with each other

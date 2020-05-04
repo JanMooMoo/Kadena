@@ -203,7 +203,7 @@ class Event extends Component {
 					</Link>
 
 					<div className="card-footer text-muted text-center">
-					<button className="btnAlive" disabled={disabled} onClick={() => this.setState({pledgeModalShow:true})}>{buttonText} <i class="far fa-check-circle"></i></button>
+					<button className="btnAlive" disabled={disabled} onClick={() => this.setState({pledgeModalShow:true})}>{buttonText} </button>
 					
 					{this.state.pledgeModalShow && <ModalPledge
       				show={this.state.pledgeModalShow}

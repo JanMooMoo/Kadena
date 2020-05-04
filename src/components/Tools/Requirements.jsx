@@ -15,14 +15,14 @@ class Requirements extends Component {
                     <a href="https://metamask.io/download.html" target="blank">
                     1. Metamask <img className="list-img mb-3 mt-3" src="/images/Metamask.png" alt ="Metamask"/> </a>
                     <p >
-                    MetaMask is used by browser so you’re ready to interact & connect to blockchained based applications like Kadena.
+                    MetaMask is used by browser so you’re ready to interact & connect to blockchain based applications like Kadena.
                     </p>
                     <a href="https://faucet.rinkeby.io/" target="blank">                 
                      2. Rinkeby Test Ether <img className="list-img mb-3 mt-3" src="/images/ethereum2.png" alt ="Rinkeby"/>       
                     </a>
                     <p >
                     Rinkeby Test Ether is a test-net token that is used in ethereum rinkeby network to be able to write on blockchain or transact on 
-                    the network. It does now have monetary value & is used mainly for testing purposes.                   
+                    the network. It does not have monetary value & is used mainly for testing purposes.                   
                     </p>
 				</h5>
                

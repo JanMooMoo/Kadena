@@ -47,23 +47,21 @@ class HospitalList extends Component
     .then(events=>{
 
     if (this._isMounted){
-       
+ 
       var newest = events;
       var newsort= newest.concat().sort((a,b)=> 
-      b.returnValues.registeredAs- a.returnValues.registeredAs);
+      a.returnValues.registeredAs.localeCompare(b.returnValues.registeredAs));
       this.setState({registerdHospital:newsort});
       this.setState({active_length:this.state.registerdHospital.length})
       this.setState({loadingchain:false});}
      }).catch((err)=>console.error(err))
      
      
-    
-
      this.state.Kadena.events.Registration({fromBlock: this.state.blockNumber, toBlock:'latest'})
     .on('data', (log) => setTimeout(()=> {
     this.setState({registerdHospital:[...this.state.registerdHospital,log]});
     var newest = this.state.registerdHospital
-    var newsort= newest.concat().sort((a,b)=> b.returnValues.registeredAs - a.returnValues.registeredAs);
+    var newsort= newest.concat().sort((a,b)=>a.returnValues.registeredAs.localeCompare(b.returnValues.registeredAs));
 
     this.setState({registerdHospital:newsort});
     this.setState({active_length:this.state.registerdHospital.length})

@@ -163,7 +163,7 @@ class EventGive extends Component {
 						<li className="list-group-item small"><strong>Minimum Take: {event_data[6]} Items</strong></li>
 						{event_data.borrow && <li className="list-group-item small"><strong>Should return on: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
 						{!event_data.borrow && <li className="list-group-item small"><strong>Will close on: {end_date} - {enddate.toLocaleTimeString()}</strong></li>}
-						<li className="list-group-item small"><strong>Item pool: {event_data.committed}/{event_data.amount}</strong></li>
+						<li className="list-group-item small"><strong>Items Left: {event_data.committed}/{event_data.amount}</strong></li>
 						<li className="list-group-item small"><div class="progress"><div class="progress-inner2" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 					</ul>
 					</Link>

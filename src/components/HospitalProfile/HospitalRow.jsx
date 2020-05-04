@@ -25,8 +25,6 @@ class HospitalRow extends Component {
 		  this.isCancelled = false;
 	}
 
-
-
 	updateIPFS = () => {
 		if (
 			this.state.loaded === false &&

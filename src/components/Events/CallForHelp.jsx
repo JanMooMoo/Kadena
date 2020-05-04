@@ -3,7 +3,6 @@ import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-
 // Import dApp Components
 import HydroLoader from '../Loaders/HydroLoader';
 import Event from './Event';

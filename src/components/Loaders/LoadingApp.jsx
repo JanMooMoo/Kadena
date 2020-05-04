@@ -7,6 +7,8 @@ function LoadingApp() {
 			<div className="home-wrapper">
 			
 				<div className = "centerLabel">
+				<p className="mt-1 Pending">Web3 Detected! Please Make Sure You are on Rinkeby Network to Continue.</p>
+
 				<h1 className = "hopeLabel" style ={{textAlign:"center"}}>Loading App!</h1>
 				<h5 className = "hopeLabel" >
 				 Kadena is a proof of concept platform on which hospitals could register & exchange vital equipments & form alliance with other hospitals.
@@ -16,7 +18,7 @@ function LoadingApp() {
 				 <br/>
 				</h5>
 				</div>
-				<p className="mt-1">Fetching Blockchain Data.....</p>
+				<p className="mt-1 Pending">Fetching Blockchain Data.....</p>
 				<hr />
 				
 			</div>

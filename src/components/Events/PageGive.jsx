@@ -202,7 +202,7 @@ class PageGive extends Component {
                
 				let image = this.getImage();
                 let description = this.getDescription();
-                
+				
                 let organizer = event_data.owner;
             
                  

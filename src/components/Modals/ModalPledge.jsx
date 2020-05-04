@@ -45,16 +45,24 @@ pledge = ()=>{
   
 
     render(){
+      let minimum = this.props.minimum
         let disabled = false 
-
+      
         if(this.state.amount < 1 || this.state.amount > this.props.amount - this.props.committed){
             disabled = true
         }
-
-        if(Number(this.state.amount) < Number(this.props.minimum)){
-          disabled = true;
-        }
-
+        if(Number(this.props.amount) - Number(this.props.committed) >=Number(this.props.minimum)){
+            if(Number(this.state.amount) < Number(this.props.minimum)){
+             disabled = true;
+            }
+        
+          }
+          else{
+            minimum = Number(this.props.amount) - Number(this.props.committed)
+            if(Number(this.state.amount) !== Number(minimum)){
+              disabled = true;
+             }
+            }
     return( 
       
       <Modal
@@ -85,7 +93,7 @@ pledge = ()=>{
 					<input type="number" min="1" className={"form-control "} id="amount" title={"Amount Needed"} autoComplete="off" onChange={this.amountChange} />
           
           </div>
-					<small className="form-text text-muted">Minimum of {this.props.minimum} items to pledge.</small>	
+					<small className="form-text text-muted">Minimum of {minimum} items to pledge.</small>	
 		    </div>
 		</div>
     
