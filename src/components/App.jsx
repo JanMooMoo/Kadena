@@ -22,15 +22,7 @@ import CallForHelp from './Events/CallForHelp';
 import LendAHand from './Events/LendAHand';
 import {Kadena_ABI, Kadena_Address} from '../config/Kadena';
 
-
-
 import Notify from './Norifications/Notify';
-
-
-
-import NotifyError from './Norifications/NotifyError';
-import NotifyNetwork from './Norifications/NotifyNetwork';
-
 import NotifyLendAHand from './Norifications/NotifyLendAHand';
 import NotifyCallForHelp from './Norifications/NotifyCallForHelp';
 
