@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {NavLink } from 'react-router-dom';
+import {Link, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import makeBlockie from 'ethereum-blockies-base64';
 
@@ -139,6 +139,9 @@ class Sidebar extends Component
 						<li>
 							<NavLink to="/givehelp/1" className="nav-link" activeClassName="nav-link-active"onClick={() => {this.sidebarClick(this)}} ><i class="fas fa-search-plus" title="Give Help"></i> <span className="toggleHidden"> Give Help Section</span></NavLink>
 						</li>
+						<li>
+							<a href="http://covid-19-ph-app.herokuapp.com/" target ="blank" className="nav-link"><i class="fas fa-map-marker-alt" title="Covid-19 Philippines"></i> <span className="toggleHidden"> Covid-19 Cases Philippines</span></a>
+						</li>
 					</ul>
 					<h5 className="mt-5 toggleHidden">Manage</h5>
 					<ul className="nav flex-column">
@@ -149,6 +152,7 @@ class Sidebar extends Component
 						<li>
 							<NavLink to="/hospital-list" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-list-ul" title="List of Hospitals"></i> <span className="toggleHidden"> List of Hospitals</span></NavLink>
 						</li>
+						
 					</ul>
 					<h5 className="mt-5 toggleHidden">Tools</h5>
 
@@ -203,6 +207,9 @@ class Sidebar extends Component
 						<li>
 							<NavLink to="/givehelp/1" className="nav-link" activeClassName="nav-link-active"onClick={() => {this.sidebarClick(this)}} ><i class="fas fa-search-plus" title="Give Help"></i> <span className="toggleHidden"> Give Help Section</span></NavLink>						
 						</li>
+						<li>
+							<a href="http://covid-19-ph-app.herokuapp.com/" target ="blank" className="nav-link"><i class="fas fa-map-marker-alt" title="Covid-19 Philippines"></i> <span className="toggleHidden"> Covid-19 Cases Philippines</span></a>
+						</li>
 							
 					</ul>
 					<h5 className="mt-5 toggleHidden">Manage </h5>
@@ -218,12 +225,13 @@ class Sidebar extends Component
 
 						<li>
 							<NavLink to="/hospital-list" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-list-ul" title="List of Hospitals"></i> <span className="toggleHidden"> List of Hospitals</span></NavLink>
-						</li>
+						</li>						
+
 					</ul>
 
 					<h5 className="mt-5 toggleHidden">Tools</h5>
 					<ul className="nav flex-column">
-
+						
 						<li>
 							<NavLink to="/about" className="nav-link" activeClassName="nav-link-active" onClick={() => {this.sidebarClick(this)}}><i class="fas fa-dice-d20" title="About"></i> <span className="toggleHidden">About</span></NavLink>
 						</li>
