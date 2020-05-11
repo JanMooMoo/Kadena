@@ -2,9 +2,9 @@
 ## Stop COVID-19 Hackathon Deliverables
 
 1. Website <br />
-* [Try it here] (https://kadena-platform.netlify.app/) <br />
+* [Try it here](https://kadena-platform.netlify.app/) <br />
 2. Demo & Pitch PDF <br />
-* [Video (YouTube)] (https://www.youtube.com/watch?v=-u1JTVj126M) <br />
+* [Video (YouTube)](https://www.youtube.com/watch?v=-u1JTVj126M) <br />
 * [Kadena Pitch](kadenapitch.pdf)<br />
 
 
@@ -32,10 +32,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 
 ## Tools & Technology used
-*Solidity - Smart Contract          <br/>
-*Truffle - Smart Contract Compilation       <br/>
-*Ganace-CLI - Smart Contract Deployment     <br/>
-*Drizzle - Reactive User Interface    <br/>
-*Web3.js - Blockchain Connection      <br/>
-*Infura API - Blockchain Connection    <br/>
-*Infura IPFS - Decentralized storage   <br/>
+* Solidity - Smart Contract          <br/>
+* Truffle - Smart Contract Compilation       <br/>
+* Ganace-CLI - Smart Contract Deployment     <br/>
+* Drizzle - Reactive User Interface    <br/>
+* Web3.js - Blockchain Connection      <br/>
+* Infura API - Blockchain Connection    <br/>
+* Infura IPFS - Decentralized storage   <br/>
