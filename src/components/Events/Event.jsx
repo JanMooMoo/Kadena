@@ -114,7 +114,7 @@ class Event extends Component {
 		let description = <Loading />;
 		if (this.state.ipfs_problem) description = <p className="text-center mb-0 event-description"><span role="img" aria-label="monkey">🙊</span>We can not load description</p>;
 		if (this.state.description !== null) {
-			let text = this.state.description.length > 30 ? this.state.description.slice(0, 70) + '...' : this.state.description;
+			let text = this.state.description.length > 30 ? this.state.description.slice(0, 65) + '...' : this.state.description;
 			description = <strong>{text}</strong>;
 			
 		}
@@ -190,7 +190,7 @@ class Event extends Component {
 						
 					</div></Link>
 
-
+					<div className="card-list">
 					<Link to={titleURL} className="linkDisplay">
 					<ul className="list-group list-group-flush">
 						<li className="list-group-item small"><strong>Item: {event_data.item}</strong></li>
@@ -201,7 +201,7 @@ class Event extends Component {
 						<li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 					</ul>
 					</Link>
-
+					</div>
 					<div className="card-footer text-muted text-center">
 					<button className="btnAlive" disabled={disabled} onClick={() => this.setState({pledgeModalShow:true})}>{buttonText} </button>
 					

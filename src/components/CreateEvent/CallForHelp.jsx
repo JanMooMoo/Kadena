@@ -355,7 +355,7 @@ class CallForHelp extends Component {
 				<p className="small text-truncate mb-0"></p>
 			</div>
 
-			<div className="card-body">
+			<div className="card-body-form">
                         <h5 className="card-title event-title" title={this.state.title} >
 							{this.state.title}
 						</h5>
@@ -363,16 +363,16 @@ class CallForHelp extends Component {
 			</div>
 			
 			<ul className="list-group list-group-flush">
-            <li className="list-group-item"><strong>Item:</strong> {this.state.item} </li>
-            <li className="list-group-item"><strong>Minimum Amount To Pledge: {this.state.minimum} Items</strong>  </li>
-            {this.state.return === 'false'&&<li className="list-group-item"><strong>Will Close On: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
-            {this.state.return === 'true' &&<li className="list-group-item"><strong>Will Return On or Before: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
-            <li className="list-group-item"><strong>Amount Filled:</strong> 0/{this.state.amount} </li>
-            <li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
+            <li className="list-group-item-page"><strong>Item:</strong> {this.state.item} </li>
+            <li className="list-group-item-page"><strong>Minimum Amount To Pledge: {this.state.minimum} Items</strong>  </li>
+            {this.state.return === 'false'&&<li className="list-group-item-page"><strong>Will Close On: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
+            {this.state.return === 'true' &&<li className="list-group-item-page"><strong>Will Return On or Before: {this.state.enddateDisplay.toLocaleDateString()} at {this.state.enddateDisplay.toLocaleTimeString()}</strong></li>}
+            <li className="list-group-item-page"><strong>Amount Filled:</strong> 0/{this.state.amount} </li>
+            <li className="list-group-item-page small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 
             </ul>
 
-			<div className="card-footer text-muted text-center">
+			<div className="card-footer-form text-muted text-center">
 				<button className="btnAlive" disabled="">Pledge</button>
 			</div>
 </div>

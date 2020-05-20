@@ -253,7 +253,7 @@ class PageNeed extends Component {
 
                 <div className="card event-hero-sidebar mt-4">
 					<img className="card-img-top event-image" src={image} alt="Event" />
-                    <li className="list-group-item small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
+                    <li className="list-group-item-page small"><div class="progress"><div class="progress-inner" style={{"width":percentage }}></div><div class="progress-outer" style={{"width":"100%" }}></div><p className="  mb-0 text-center">{percentage}</p></div></li>
 				<div className="card-header event-header">
            		 <br />
 
@@ -277,10 +277,10 @@ class PageNeed extends Component {
 				</div>
 
 				    <ul className="list-group list-group-flush">
-					<li className="list-group-item small">Minimum Pledge: {event_data[6]} Items</li>
-					<li className="list-group-item small">{symbol} {end_date} at {enddate.toLocaleTimeString()}</li>
-					<li className="list-group-item small">Item Needed: {event_data.item}</li>
-                    <li className="list-group-item small">Committed: {this.state.commits}/{event_data.amount}</li>
+					<li className="list-group-item-page small">Minimum Pledge: {event_data[6]} Items</li>
+					<li className="list-group-item-page small">{symbol} {end_date} at {enddate.toLocaleTimeString()}</li>
+					<li className="list-group-item-page small">Item Needed: {event_data.item}</li>
+                    <li className="list-group-item-page small">Committed: {this.state.commits}/{event_data.amount}</li>
 					</ul>
 				</div>
 						

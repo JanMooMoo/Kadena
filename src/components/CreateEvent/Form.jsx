@@ -251,19 +251,19 @@ class Form extends Component {
 				<img className="card-img-top event-image" src={this.state.fileImg} alt="Placeholder Event" />
 			</div>
 
-			<div className="card-body">
+			<div className="card-body-form">
 				{this.state.description}
 			</div>
 			
 			<ul className="list-group list-group-flush">
-			<li className="list-group-item"><strong>Hospital Name: {this.state.title}</strong>  </li>
-			<li className="list-group-item"><strong>Country:</strong> {this.state.country} </li>
-			<li className="list-group-item"><strong>City:</strong> {this.state.city} </li>
-			<li className="list-group-item"><strong>Address:</strong> {this.state.address} </li>
-			<li className="list-group-item"><strong>Contact:</strong> {this.state.contact} </li>
+			<li className="list-group-item-page"><strong>Hospital Name: {this.state.title}</strong>  </li>
+			<li className="list-group-item-page"><strong>Country:</strong> {this.state.country} </li>
+			<li className="list-group-item-page"><strong>City:</strong> {this.state.city} </li>
+			<li className="list-group-item-page"><strong>Address:</strong> {this.state.address} </li>
+			<li className="list-group-item-page"><strong>Contact:</strong> {this.state.contact} </li>
 			</ul>
 
-			<div className="card-footer text-muted text-center">
+			<div className="card-footer-form text-muted text-center">
 				<button className="btnAlive" disabled=""> Profile</button>
 			</div>
 </div>

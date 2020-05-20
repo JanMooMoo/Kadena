@@ -187,25 +187,25 @@ button {
 
 
 .card{
-  transition: all 0.3s;
+  transition: all 0.20s;
   font-family: 'Lato', sans-serif;
   background:transparent!important;
-  border:1px solid rgba(219, 189, 81, 0.438);
-  border-left:2px solid rgba(219, 189, 81, 0.432);
-  border-right:2px solid rgba(219, 189, 81, 0.418);
   border-radius:15px;
-
+  border:none;
+  
+ 
 }
 
 .image_wrapper{
   overflow:hidden;
   position:relative;
   z-index:1;
-  padding:20px;
   background:linear-gradient(to right, rgba(7, 9, 19, 0.671), #0d213f98, rgba(7, 9, 19, 0.671));
   border-top-left-radius:15px;
   border-top-right-radius:15px;
-
+  border-left:2px solid rgba(219, 189, 81, 0.432);
+  border-right:2px solid rgba(219, 189, 81, 0.418);
+  border-top:1px solid rgba(219, 189, 81, 0.438);
 }
 
 .card-header {
@@ -213,8 +213,9 @@ button {
   background:linear-gradient(to right, rgba(0, 4, 19, 0.87), #060e1b98, rgba(7, 9, 19, 0.849));
   border-top:1px solid rgba(206, 188, 127, 0.349);
   border-bottom:1px solid rgba(206, 188, 127, 0.342);
-   color:rgb(142, 157, 175)!important;
-
+  color:rgb(142, 157, 175)!important;
+  border-left:2px solid rgba(219, 189, 81, 0.432);
+  border-right:2px solid rgba(219, 189, 81, 0.418);
 }
 
 .card-footer {
@@ -222,31 +223,111 @@ button {
   background:linear-gradient(to right, rgba(7, 9, 19, 0.671), #0d213f98, rgba(7, 9, 19, 0.671));
   border-bottom-left-radius:15px!important;
   border-bottom-right-radius:15px!important;
+  margin-top:-231px!important;
+  border-left:2px solid rgba(219, 189, 81, 0.432);
+  border-right:2px solid rgba(219, 189, 81, 0.418);
+  border-bottom:2px solid rgba(219, 189, 81, 0.432);
+  border-top:1px solid rgba(219, 189, 81, 0.432);
+  transition: all .30s ease-in-out;
 }
+
+
+.card-footer-form {
+  padding: 1rem 1.25rem;
+  background:linear-gradient(to right, rgba(7, 9, 19, 0.671), #0d213f98, rgba(7, 9, 19, 0.671));
+  border-bottom-left-radius:15px!important;
+  border-bottom-right-radius:15px!important;
+  border-left:2px solid rgba(219, 189, 81, 0.432);
+  border-right:2px solid rgba(219, 189, 81, 0.418);
+  border-bottom:2px solid rgba(219, 189, 81, 0.432);
+}
+
+@media(max-width:411px){
+  .card-footer {
+    margin-top: -251px!important;
+  }
+}
+
 
 .card-body{
   background:linear-gradient(to right, rgba(7, 9, 19, 0.671), #0d213f98, rgba(7, 9, 19, 0.671));
+  border-left:2px solid rgba(219, 189, 81, 0.432);
+  border-right:2px solid rgba(219, 189, 81, 0.418);
+}
 
+.card-body-form{
+  background:linear-gradient(to right, rgba(7, 9, 19, 0.671), #0d213f98, rgba(7, 9, 19, 0.671));
+  border-left:2px solid rgba(219, 189, 81, 0.432);
+  border-right:2px solid rgba(219, 189, 81, 0.418);
+  padding:20px;
+}
+
+.card-body-form h5{
+    font-weight: 900;
+    color:rgb(236, 236, 236);
+    font-family: 'Roboto', sans-serif;
+    z-index: 1000 !important;
+  
 }
 
 .card-body h5  {
 	font-weight: 900;
   color:rgb(236, 236, 236);
   font-family: 'Roboto', sans-serif;
+  z-index: 1000 !important;
+}
+
+
+.card:hover .list-group-item{
+  max-height:100%;
+  z-index: 999 !important;
+  display:block;
+  visibility: visible;
+  top:0px;
+  border-left:2px solid rgba(219, 189, 81, 0.432);
+  border-right:2px solid rgba(219, 189, 81, 0.418);
+  z-index: -1000 !important;
+}
+
+.card:hover .card-list{
+  max-height:100%;
+  display:block;
+  visibility: visible;
+  top:0px;
+  z-index: -1000 !important;
   
 }
 
-.card:hover {
-	transform: scale(1.05);
-	z-index: 999 !important;
+.card:hover .card-footer{
+  margin-top:0px!important;
+  border-top:1px solid rgb(47, 52, 56);
 }
 
-.list-group-item{
+.card-list {
+  top:-100px;
+  visibility:hidden;
+  transition: all .40s ease-in-out;
+  z-index: -1000 !important;
+}
+
+.list-group-item {
   background:linear-gradient(to right, rgba(7, 9, 19, 0.671), #0d213f98, rgba(7, 9, 19, 0.671));
   border:1px solid rgb(47, 52, 56);
   color:rgb(142, 157, 175);
+  top:-0px;
+  visibility:hidden;
+  transition: all .1s ease-in-out;
+  z-index:-1000;
 }
 
+.list-group-item-page{
+  list-style-type: none;
+  padding:11px 19px 12px; 
+  background:linear-gradient(to right, rgba(7, 9, 19, 0.671), #0d213f98, rgba(7, 9, 19, 0.671));
+  border:1px solid rgb(47, 52, 56);
+  border-left:2px solid rgba(219, 189, 81, 0.432);
+  border-right:2px solid rgba(219, 189, 81, 0.418);
+}
 
 .event_creator-link {
 	color: #636363;
@@ -444,6 +525,11 @@ color:#ffffff!important;
 }
 
 .card-footer button {
+	padding: 5px 30px 5px 30px;
+  border-radius: 20px;
+}
+
+.card-footer-form button {
 	padding: 5px 30px 5px 30px;
   border-radius: 20px;
 }
@@ -1466,11 +1552,11 @@ justify-content: center;
  
 }
 
-
 .card-hospital-wrapper :hover{ 
   transform: scale(1.05);
   cursor: pointer!important;
 }
+
 .profile-list{
   border-top:1px solid rgb(206, 188, 127);
   border-bottom:1px solid rgb(206, 188, 127);
@@ -1478,6 +1564,7 @@ justify-content: center;
   background:linear-gradient(180deg, rgb(7, 9, 19), #0d213f 50%, rgb(7, 9, 19));
   width:101%;
 }
+
 .profile-list li {
 background:transparent;
 border:1px solid rgba(82, 81, 81, 0.329);

@@ -221,12 +221,12 @@ class HospitalProfile extends Component {
 				<div className=" col-12 mt-4">
                 
                 <ul className="list-group list-group-flush profile-list">
-					<li className="list-group-item small "><strong>Country: {hospital_data._country}</strong> </li>
-                    <li className="list-group-item small"><strong>City: {hospital_data._city}</strong> </li>
-					<li className="list-group-item small"><strong>Address: {address} </strong></li>
-					<li className="list-group-item small"><strong>Contact: {contact} </strong></li>
-                    <li className="list-group-item small"><strong>Kadena Member Since: {memberSince} </strong></li>
-                    <li className="list-group-item small" title={hospital_data._rating}><strong>{stars}</strong></li>
+					<li className="list-group-item-page small "><strong>Country: {hospital_data._country}</strong> </li>
+                    <li className="list-group-item-page small"><strong>City: {hospital_data._city}</strong> </li>
+					<li className="list-group-item-page small"><strong>Address: {address} </strong></li>
+					<li className="list-group-item-page small"><strong>Contact: {contact} </strong></li>
+                    <li className="list-group-item-page small"><strong>Kadena Member Since: {memberSince} </strong></li>
+                    <li className="list-group-item-page small" title={hospital_data._rating}><strong>{stars}</strong></li>
 					</ul>      
 
 				</div>
